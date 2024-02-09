@@ -1,0 +1,3 @@
+[submodule "MyRef"]
+	path = MyRef
+	url = git@github.com:G-Ohara/MyRef.git

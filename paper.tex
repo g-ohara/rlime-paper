@@ -20,17 +20,18 @@
 %
 \begin{document}
 %
-\title{Contribution Title\thanks{Supported by organization x.}}
+\title{R-LIME: Rectangular Constraints and Optimization for Local Interpretable
+Model-agnostic Explanation Methods\thanks{Supported by organization x.}}
 %
 %\titlerunning{Abbreviated paper title}
 % If the paper title is too long for the running head, you can set
 % an abbreviated paper title here
 %
-\author{First Author\inst{1}\orcidID{0000-1111-2222-3333} \and
-Second Author\inst{2,3}\orcidID{1111-2222-3333-4444} \and
-Third Author\inst{3}\orcidID{2222--3333-4444-5555}}
+\author{Genji Ohara\inst{1}\orcidID{0000-1111-2222-3333} \and
+Keigo Kimura\inst{2,3}\orcidID{1111-2222-3333-4444} \and
+Mineichi Kudo\inst{3}\orcidID{2222--3333-4444-5555}}
 %
-\authorrunning{F. Author et al.}
+\authorrunning{G. Ohara et al.}
 % First names are abbreviated in the running head.
 % If there are more than two authors, 'et al.' is used.
 %
@@ -43,16 +44,41 @@ ABC Institute, Rupert-Karls-University Heidelberg, Heidelberg, Germany\\
 %
 \maketitle              % typeset the header of the contribution
 %
+% The abstract should briefly summarize the contents of the paper in
+% 150--250 words.
 \begin{abstract}
-The abstract should briefly summarize the contents of the paper in
-150--250 words.
-
-\keywords{First keyword  \and Second keyword \and Another keyword.}
+    In recent years, complex machine learning models such as deep neural network or random forests are used in many situations because of their high accuracy.
+    However, complexity of the models leads to difficulty for introducing them in sensitive context because users cannot understand the reason why the models output the specific results.
+    We propose a new method to generate explanations about the complex classifier and its particular output, that is called R-LIME.
+    R-LIME approximizes a complex decision boundary by a linear classifier locally and maximizes the approximation region as long as the accuracy of the linear model is higher than given threshold.
+% 102 words
+\keywords{Interpretable machine learning \and Local surrogate model}
 \end{abstract}
-%
-%
-%
-\section{First Section}
+
+\section{Introduction}
+In recent years, complex machine learning models such as deep neural network or random forests are used in many situations because of their high accuracy.
+However, complexity of the models leads to difficulty for introducing them in sensitive context because users cannot understand the reason why the models output the specific results.
+To solve this problem, many explanation methods have been proposed.
+
+In this paper, we focus on local and model-agnostic explanation methods.
+LIME (Local Interpretable Model-agnostic Explanation) \cite{ribeiro2016why} is one of the most popular explanation methods.
+LIME approximizes a complex decision boundary by a linear classifier locally.
+But users cannot evaluate generality of LIME explanations because it does not provide the approximation region.
+To solve this problem, we propose a new method, R-LIME.
+R-LIME approximizes a complex decision boundary by a linear classifier locally and maximizes the approximation region as long as the accuracy of the linear model is higher than given threshold.
+Moreover, R-LIME provides the approximation region as conjunction of predicates, that is called anchor \cite{ribeiro2018anchors}.
+\section{Related Works}
+\subsection{LIME}
+\subsection{Anchor}
+\subsection{BELLA}
+\section{Proposed Method}
+\subsection{Overview}
+\subsection{Algorithm}
+\section{Experiments}
+\subsection{Qualitative Evaluation}
+\subsection{Quantitative Evaluation}
+\section{Future Works}
+\section{Conclusion}
 \subsection{A Subsection Sample}
 Please note that the first paragraph of a section or subsection is
 not indented. The first paragraph that follows a table, figure,
@@ -134,8 +160,8 @@ the end of the paper, preceded by an unnumbered run-in heading (i.e.
 % BibTeX users should specify bibliography style 'splncs04'.
 % References will then be sorted and formatted in the correct style.
 %
-% \bibliographystyle{splncs04}
-% \bibliography{mybibliography}
+\bibliographystyle{splncs04}
+\bibliography{MyRef/ref}
 %
 \begin{thebibliography}{8}
 \bibitem{ref_article1}
