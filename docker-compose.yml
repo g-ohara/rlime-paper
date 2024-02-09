@@ -1,0 +1,14 @@
+services:
+  latex:
+    image: genjiohara/latex
+    container_name: ICPR2024
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./:/root/workspace
+      - /tmp/.X11-unix:/tmp/.X11-unix
+    environment:
+      - DISPLAY=$DISPLAY
+    working_dir: /root/workspace
+    tty: true
