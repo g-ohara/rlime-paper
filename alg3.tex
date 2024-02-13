@@ -1,0 +1,30 @@
+\caption{%
+  Selecting $B$ best rules with highest accuracy
+  (KL-LUCB \cite{kaufmann2013information})
+}\label{alg:best_cands}
+\begin{algorithmic}[1]
+  \Function{B-BestCands}{$\cands,\mathcal{D},B,\epsilon,\delta$}
+  \State\textbf{initialize} $\Prec,\Prec_{u},\Prec_{l}$ for $\forall A\in\cands$
+  \State$\mathcal{A}\gets\Call{B-ProvisionallyBestCands}{\cands}$
+  \Comment{$B$ rules with highest accuracy}
+  \State$A\gets\arg\min_{A\in\mathcal{A}}\Prec_{l}(A,\delta)$
+  \Comment{The rule with the smallest lower bound}
+  \State$A'\gets\arg\max_{A'\notin(\cands\setminus\mathcal{A})}\Prec_{u}(A',\delta)$
+  \Comment{The rule with the largest upper bound}
+  \While{$~\Prec_{u}(A',\delta)-\Prec_{l}(A,\delta)>\epsilon$}
+  \State\textbf{sample} $z\sim\mathcal{D}(z|A),z'\sim\mathcal{D}(z'|A')$
+  \State\textbf{update} $\Prec,\Prec_{u},\Prec_{l}$ for $A$ and $A'$
+  \State$\mathcal{A}\gets\Call{B-ProvisionallyBestCands}{\cands}$
+  \State$A\gets\arg\min_{A\in\mathcal{A}}\Prec_{l}(A,\delta)$
+  \State$A'\gets\arg\max_{A'\notin(\cands\setminus\mathcal{A})}\Prec_{u}(A',\delta)$
+  \EndWhile%
+  % \State\algorithmicdo%
+  % \State\myidt$\mathcal{A}\gets\Call{B-ProvisionallyBestCands}{\cands}$
+  % \State\myidt$A\gets\arg\min_{A\in\mathcal{A}}\Prec_{l}(A)$
+  % \State\myidt$A'\gets\arg\max_{A'\notin(\cands\setminus\mathcal{A})}\Prec_{u}(A')$
+  % \State\myidt\textbf{sample} $z\sim\mathcal{D}(z|A),z'\sim\mathcal{D}(z'|A')$
+  % \State\myidt\textbf{update} $\Prec,\Prec_{u},\Prec_{l}$ for $A$ and $A'$
+  % \State\algorithmicwhile$~\Prec_{u}(A')-\Prec_{l}(A)>\epsilon$
+  \State\Return{$\mathcal{A}$}
+  \EndFunction%
+\end{algorithmic}

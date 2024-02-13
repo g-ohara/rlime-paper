@@ -1,0 +1,13 @@
+\caption{Generating candidate rules}\label{alg:generate_cands}
+\begin{algorithmic}[1]
+  \Function{GenerateCands}{$\mathcal{A},x$}
+  \IIf{$\mathcal{A}=\emptyset$}{\Return{$\{\emptyset\}$}}
+  \State$\cands\gets\emptyset$
+  \ForAll{$A\in\mathcal{A}$}
+  \ForAll{$a_i\in (T(x)\setminus A)$}
+  \State$\cands\gets\bar{\mathcal{A}}\cup(A\wedge a_i)$
+  \EndFor%
+  \EndFor%
+  \State\Return{$\cands$}
+  \EndFunction%
+\end{algorithmic}

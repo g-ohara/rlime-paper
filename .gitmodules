@@ -1,3 +1,6 @@
 [submodule "MyRef"]
 	path = MyRef
 	url = git@github.com:G-Ohara/MyRef.git
+[submodule "python/NewLIME"]
+	path = python/NewLIME
+	url = git@github.com:G-Ohara/NewLIME.git
