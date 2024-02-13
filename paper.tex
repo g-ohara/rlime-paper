@@ -1,101 +1,114 @@
-% This is samplepaper.tex, a sample chapter demonstrating the
-% LLNCS macro package for Springer Computer Science proceedings;
-% Version 2.21 of 2022/01/12
-%
-
 % We import package amsmath before the documentclass to avoid the warning.
 % Command '\usepackage{amsmath}' results in the following warning:
 % Package amsmath Warning: Unable to redefine math accent \vec.
 \RequirePackage{amsmath} % for environments such as align
 
 \documentclass[runningheads]{llncs}
-%
-\usepackage[T1]{fontenc}
-% T1 fonts will be used to generate the final print and online PDFs,
-% so please use T1 fonts in your manuscript whenever possible.
-% Other font encondings may result in incorrect characters.
-%
-\usepackage{graphicx}
-% Used for displaying a sample figure. If possible, figure files should
-% be included in EPS format.
-%
+
+% If possible, figure files should be included in EPS format.
+
 % If you use the hyperref package, please uncomment the following two lines
 % to display URLs in blue roman font according to Springer's eBook style:
 %\usepackage{color}
 %\renewcommand\UrlFont{\color{blue}\rmfamily}
-%
 
-
-\usepackage{amssymb} % for \mathbb
-\usepackage{cleveref} % for \cref
-\usepackage{bbm} % for \mathbbm
-\usepackage{booktabs} % for \toprule, \midrule, \bottomrule
-\usepackage{pgffor} % for \foreach
-\usepackage{csvsimple} % for \csvreader
-\usepackage{array} % for m column type
-
-% Fig. 1a -> Fig. 1(a)
-\usepackage[labelformat=simple]{subcaption}
-\graphicspath{{./data/}{./python/data/}}
-\renewcommand\thesubfigure{(\alph{subfigure})}
+% The following code is used to remove the warning with subcaption package:
+% ------------------------------
+% Package caption Warning: Unknown document class (or package),
+% standard defaults will be used.
+% ------------------------------
+% cf. https://teratail.com/questions/q2vuwf6skm5hph
 \makeatletter
-\def\caption@documentclass{elsarticle}%
+\def\caption@documentclass{elsarticle}
 \makeatother
-
 
 \usepackage{algorithm}
 \usepackage{algpseudocode}
+\usepackage{amssymb} % for \mathbb
+\usepackage{array} % for m column type
+\usepackage{bbm} % for \mathbbm
+\usepackage{booktabs} % for \toprule, \midrule, \bottomrule
+\usepackage{cleveref} % for \cref
+\usepackage{csvsimple} % for \csvreader
+\usepackage[T1]{fontenc} % for T1 font encoding
+\usepackage{graphicx} % for \includegraphics
+\usepackage{pgffor} % for \foreach
+\usepackage[labelformat=simple]{subcaption} % for subfigure environment
 
+% The following code is used to remove the warning with bibliography:
+% ------------------------------
+% Underfull \hbox (badness 2653) in paragraph at lines 28--34
+% ------------------------------
+% cf. https://tex.stackexchange.com/questions/10924/underfull-hbox-in-bibliography
+\apptocmd{\sloppy}{\hbadness 10000\relax}{}{}
+
+
+% set the path for figures
+\graphicspath{{./data/}{./python/data/}}
+
+% set the label format for subcaption
+\renewcommand\thesubfigure{(\alph{subfigure})}
+
+% settings for cleveref
+\crefname{figure}{Fig.}{Figs.}
+\crefname{table}{Tab.}{Tabs.}
+
+% import the TeX file containing macro definitions
 \input{macro}
 
 \begin{document}
-%
+
+% Authentic title
 \title{%
   R-LIME: Rectangular Constraints and Optimization for Local Interpretable
   Model-agnostic Explanation Methods}
-%
+
+% Abbreviated title for the running head
 \titlerunning{%
   R-LIME: Rectangular Constraints and Optimization for LIME Methods
 }
-% If the paper title is too long for the running head, you can set
-% an abbreviated paper title here
-%
+
+% Author names and ORCID IDs
 \author{Genji Ohara\inst{1}\orcidID{0009-0000-5854-2820} \and
   Keigo Kimura\inst{1}\orcidID{0000-0002-3614-6568} \and
   Mineichi Kudo\inst{1}\orcidID{0000-0003-1013-3870}
 }
-%
-\authorrunning{G. Ohara et al.}
-% First names are abbreviated in the running head.
+
+% Abbreviated author list for the running head (First names are abbreviated)
 % If there are more than two authors, 'et al.' is used.
-%
+\authorrunning{G. Ohara et al.}
+
+% The authors' affiliations
 \institute{Division of Computer Science and Information Technology\\
   Graduate School of Information Sci.\ and Tech.,
   Hokkaido University\\
   Sapporo 060-0814, JAPAN,\\
   \email{\{genji-ohara, kimura5, mine\}@ist.hokudai.ac.jp}}
 
-\maketitle              % typeset the header of the contribution
-%
+% typeset the header of the contribution
+\maketitle              %
+
 % The abstract should briefly summarize the contents of the paper in
 % 150--250 words.
-
 \begin{abstract}
   In recent years, complex machine learning models such as deep neural networks
   have been used in various industrial fields due to their high accuracy.
   However, its complexity has been a major obstacle to implementation
   in decision-making situations where transparency of the decision process is required.
-  In order to solve this problem,
+  In order to address this problem,
   various post-hoc explanation methods have been proposed,
   but they have not been able to achieve interpretability of
   both the explanation and its scope.
-  We propose a new method that interprets complex models in an interpretable
-  approximation region.
-  R-LIME locally approximizes a complex decision boundary with a linear classifier
-  and maximizes the approximation region as long as the accuracy of the linear
-  model is higher than a specified threshold.
-  We demonstrate the effectiveness of the proposed method through a qualitative
-  and quantitative evaluation using a real-world dataset.
+  We propose a new method, R-LIME,
+  which interprets complex classifiers in an interpretable scope.
+  R-LIME locally approximizes a complex decision boundary linearly
+  in a rectangular region
+  and maximizes the region as long as the accuracy of the linear
+  classifier is higher than a specified threshold.
+  The resulting rectangular region is interpretable for users because it is
+  expressed as a conjunction of feature predicates.
+  We demonstrate the effectiveness of the proposed method through qualitative
+  and quantitative experiments using a real-world dataset.
   Finally, we discuss limitations and future work of the proposed method.
   % 148 words
   \keywords{Interpretable machine learning \and Local surrogate model}
@@ -108,20 +121,32 @@ due to their significant improvement in accuracy in recent years.
 However,
 the increasing complexity and black-box nature of these models pose challenges,
 particularly in critical decision-making scenarios like healthcare and finance,
-where the opacity of decision rationale becomes a major obstacle to 
+where the opacity of decision rationale becomes a major obstacle to
 implementation.
 Consequently,
 there has been extensive research in the field of post hoc explanation
 for machine learning models \cite{%
   ribeiro2016why,ribeiro2018anchors,radulovic2023bella,guidotti2018local}.
 
-Existing studies on post hoc explanations categorize into model-dependent and
+Existing methods on post hoc explanations categorize into model-dependent and
 model-agnostic methods,
-depending on their dependence on the model's structure.
+based on their dependence on the model's structure.
 Model-dependent methods primarily focus on deep neural networks and
-explain the model's behavior using internal parameters.
-While they allow a direct approach to the model, 
-applying the same method to models with different structures is often challenging. On the other hand, model-agnostic methods do not rely on internal parameters and utilize only the model's output. Although they provide high generality, their information is constrained, making them more versatile. Model-agnostic methods further classify into global and local methods based on their treatment of input space. Global methods aim to explain the model's behavior across the entire input space, seeking explanations valid for any input. However, providing global explanations becomes challenging as the model's complexity increases. Local methods, in contrast, explain the model's output for a specific input (focus point) in the vicinity of that input. While local methods offer simple and accurate explanations compared to global methods, their applicability is limited.
+explain the models' behavior using their parameters.
+While they allow a direct approach to the model,
+applying the same method to models with different structures is often challenging.
+On the other hand,
+model-agnostic methods do not rely on the models' parameters and utilize only their output.
+Although they are applicable to any model, available information is limited.
+Model-agnostic methods further classify into global and local methods
+based on their treatment of input space.
+Global methods aim to explain the model's behavior across the entire input space,
+seeking explanations valid for any input.
+However, providing global explanations becomes challenging as the model's complexity increases.
+Local methods, in contrast, explain the model's output for a specific input
+(focus point) in the vicinity of that input.
+While local methods offer more simple and accurate explanations than global methods,
+the scope of the explanation is limited to the vicinity of the focus point.
 
 This paper specifically focuses on model-agnostic and local methods. For instance, Local Interpretable Model-agnostic Explanations (LIME) \cite{ribeiro2016why} approximates the complex model's decision boundary locally using a simpler model. Although LIME enables users to interpret the local behavior of complex models, it has been criticized for not optimizing the approximation region \cite{radulovic2023bella} and not presenting the approximation region in an interpretable form \cite{ribeiro2018anchors}.
 
@@ -132,8 +157,8 @@ taking inspiration from another explanation method called Anchor
 \cite{ribeiro2018anchors}.
 Our proposed method maximizes the accuracy of the learned approximation model
 within a rectangular approximation region under lower-bound constraints.
-The resulting rectangular region is expressed as a conjunction of predicates
-related to features, enhancing interpretability for the user.
+The resulting rectangular region is expressed as a conjunction of feature predicates,
+enhancing interpretability for the user.
 
 \section{Related Work}
 The figures presented visually compare three methods: LIME, Anchor, and BELLA.
@@ -178,22 +203,26 @@ LIME is a method for locally approximating a trained black-box classifier $f: \m
 LIME provides valuable insights into the local behavior of the model by showing the contribution of each feature to the output $f(x)$. However, due to not explicitly indicating the perturbation region, users cannot assess the effective scope of the explanation \cite{ribeiro2018anchors}. An example explanation for an LSTM sentiment prediction model using LIME is illustrated in \cref{fig:lime_vs_anchor_exp_b}. The left explanation suggests that the word "not" contributes to the model's positive prediction, which does not apply to the instance on the right. However, without the explicit perturbation region, users might mistakenly apply the left explanation to the right instance, potentially leading to a misunderstanding of the black-box model's behavior \cite{ribeiro2018anchors}.
 
 \subsection{Anchor \cite{ribeiro2018anchors}}\label{sec:anchor}
-Anchor represents a rectangular region, expressed as a conjunction of predicates (rules) related to features, that maximizes the probability of the black-box classifier $f$ outputting $f(x)$ within the region. It aims to highlight important features contributing significantly to the output (\cref{fig:anchor}).
+Anchor represents a rectangular region,
+expressed as a conjunction of feature predicates (rules),
+that maximizes the probability of the black-box classifier $f$ outputting $f(x)$ within the region. It aims to highlight important features contributing significantly to the output (\cref{fig:anchor}).
 
-For a discrete $m$-dimensional input space $\ispace$ with a trained black-box classifier $f: \ispace \to \{0,1\}$, an instance $x \in \ispace$, and a distribution $\mathcal{D}$ over the input space, a rule $A(z) = a_{i_1}(z) \wedge a_{i_2}(z) \wedge \dots \wedge a_{i_t}(z)$ is defined. The predicates $a_i(z)$ evaluate to true ($=1$) when $z_i = x_i$ and false ($=0$) otherwise. The precision $\Prec(A)$ and coverage $\Cov(A)$ of the rule $A$ are defined as follows:
+For a discrete $m$-dimensional input space $\ispace$ with a trained black-box classifier $f: \ispace \to \{0,1\}$, an instance $x \in \ispace$, and a distribution $\mathcal{D}$ over the input space, a rule $A(z) = a_{i_1}(z) \wedge a_{i_2}(z) \wedge \dots \wedge a_{i_t}(z)$ is defined.
+The predicates $a_i(z)$ evaluate to true ($=1$) when $z_i = x_i$ and false ($=0$) otherwise.
+The accuracy $\Prec(A)$ and coverage $\Cov(A)$ of the rule $A$ are defined as follows:
 \begin{align}
   \Prec(A) & =\mathbb{E}_{z\sim\mathcal{D}(z|A)}
   [\mathbbm{1}_{f(z)=f(x)}], \label{eq:anchor_def_prec} \\
   \Cov(A)  & =\mathbb{E}_{z\sim\mathcal{D}(z)}[A(z)].
 \end{align}
 
-Here, $\mathcal{D}(z|A)$ is the conditional distribution in the region where the rule $A$ is true.
+where $\mathcal{D}(z|A)$ is the conditional distribution in the region where the rule $A$ is true.
 % When sampling the perturbation vector $z$ according to the distribution $\mathcal{D}$,
 $\Prec(A)$ represents the probability that the output of $f$ matches between the perturbation $z$ and the focal point $x$ in the region $A$, and $\Cov(A)$ expresses the probability that the perturbation $z$ fits into $A$.
 
-An Anchor maximizes coverage within the given threshold $\tau$ while maintaining precision.
+An Anchor maximizes coverage within the given threshold $\tau$ while maintaining accuracy.
 However, direct computation of \cref{eq:anchor_def_prec} is not feasible, and it is evaluated using PAC (Probably Approximately Correct) through sampling.
-Introducing a confidence level $1-\delta$ $(0\le\delta\le1)$, the precision constraint is relaxed as follows:
+Introducing a confidence level $1-\delta$ $(0\le\delta\le1)$, the accuracy constraint is relaxed as follows:
 \begin{equation}
   \label{eq:const_prec}
   P(\Prec(A)\ge\tau)\ge1-\delta.
@@ -201,7 +230,7 @@ Introducing a confidence level $1-\delta$ $(0\le\delta\le1)$, the precision cons
 Thus, the following optimization problem is solved:
 \begin{equation}
   \label{eq:main_problem}
-  A^*=\underset{A \text{ s.t. } P(\Prec(A)\ge\tau)\ge1-\delta\wedge A(x)=1}
+  A^*=\underset{A \text{~s.t. } P(\Prec(A)\ge\tau)\ge1-\delta\wedge A(x)=1}
   {\arg\max}\Cov(A).
 \end{equation}
 
@@ -225,13 +254,13 @@ BELLA aims to enhance the reliability of explanations by optimizing the approxim
     \centering
     \includegraphics[width=\textwidth]{lime}
     \caption{%
-      LIME: Locally approximates decision boundaries around the focal point.}\label{fig:lime}
+      LIME: Locally approximates the decision boundary around the focal point.}\label{fig:lime}
   \end{subfigure}%
   \hfill
   \begin{subfigure}[t]{0.45\textwidth}
     \centering
     \includegraphics[width=\textwidth]{anchor}
-    \caption{Anchor: Maximizes coverage of a rectangular region containing the focal point under precision constraints.}\label{fig:anchor}
+    \caption{Anchor: Maximizes coverage of a rectangular region containing the focal point under accuracy constraints.}\label{fig:anchor}
   \end{subfigure}
   \hfill
   \begin{subfigure}[t]{0.45\textwidth}
@@ -255,14 +284,27 @@ BELLA aims to enhance the reliability of explanations by optimizing the approxim
 \end{figure}
 
 \subsection{Overview}
-The proposed method aims to overcome the limitations of LIME \cite{ribeiro2016why} and its improvement methods such as Anchor \cite{ribeiro2018anchors} and BELLA \cite{radulovic2023bella}. Similar to LIME, the proposed method locally approximates the given black-box classifier $f$ around the focal point $x$ using a linear model $g$. However, by adopting a rectangular perturbation region similar to Anchor, it represents predicates (rules) concerning features. The accuracy of explanations is defined as the "accuracy" of rules, and the "coverage" of rules defines the generality of explanations. The proposed method maximizes coverage under lower constraints on accuracy (\cref{fig:rlime}).
+We propose R-LIME,
+a method that aims to address the limitations of LIME \cite{ribeiro2016why}
+and its improvement methods such as
+Anchor \cite{ribeiro2018anchors} and BELLA \cite{radulovic2023bella}.
+Similar to LIME,
+the proposed method locally approximates the given black-box classifier $f$
+around the focal point $x$ by a linear model $g$.
+However,
+by adopting a rectangular perturbation region similar to Anchor,
+it represents feature predicates (rules).
+The accuracy of explanations is defined as the "accuracy" of rules,
+and the "coverage" of rules defines the generality of explanations.
+The proposed method maximizes coverage under lower constraints on accuracy
+(\cref{fig:rlime}).
 
 Anchor maximizes the coverage of region $A$ within which the output of the black-box classifier $f$ matches $f(x)$ with respect to the probability under lower constraints. The proposed method, on the other hand, learns an approximation model $g$ within the rectangular region $A$ and maximizes the coverage of $A$ under lower constraints on the accuracy of $g$. We modify the definition of accuracy using \cref{eq:anchor_def_prec} as follows:
 \begin{equation}
   \Prec(A)=\underset{g\in G}{\max}\ \mathbb{E}_{z\sim\mathcal{D}(z|A)}
   [\mathbbm{1}_{f(z)=g(z)}]. \label{eq:def_prec}
 \end{equation}
-Here, $G$ represents the set of possible linear approximation models. By solving the optimization problem in \cref{eq:main_problem} under this modified accuracy definition, we can select rules that learn high-accuracy approximation models, among which the coverage is maximized. The proposed method's algorithm, shown in \cref{sec:alg}, is largely based on the algorithms used in Anchor.
+where $G$ represents the set of possible linear approximation models. By solving the optimization problem in \cref{eq:main_problem} under this modified accuracy definition, we can select rules that learn high-accuracy approximation models, among which the coverage is maximized. The proposed method's algorithm, shown in \cref{sec:alg}, is largely based on the algorithms used in Anchor.
 
 In this paper, we refer to the proposed method as "R-LIME" (Ruled LIME). The characteristics of R-LIME are listed below:
 \begin{itemize}
@@ -279,8 +321,16 @@ In this paper, we refer to the proposed method as "R-LIME" (Ruled LIME). The cha
     \includegraphics[width=0.32\textwidth]{rlime1}
     \includegraphics[width=0.32\textwidth]{rlime2}
     \includegraphics[width=0.32\textwidth]{rlime3}
-    \caption[Overview of the R-LIME Algorithm]{%
-      Overview of the R-LIME algorithm. The progression of the algorithm from left to right is illustrated. The solid red line represents the rectangular region $A$, and the red dashed line represents the linear approximation model $g$ learned within $A$. The initial value of $A$ is an empty rule (entire input space), and predicates are added to $A$, reducing coverage. The process continues until $\Prec(A)\ge\tau$, at which point the rule with the maximum coverage is output.
+    \caption{%
+      Overview of the R-LIME algorithm.
+      The progression of the algorithm from left to right is illustrated.
+      The solid line represents the rectangular region $A$,
+      and the dashed line represents the linear approximation model $g$
+      learned within $A$.
+      The initial value of $A$ is an empty rule (entire input space),
+      and predicates are added to $A$, reducing coverage.
+      The process continues until $\Prec(A)\ge\tau$,
+      at which point the rule with the maximum coverage is output.
     }
   \end{figure}
   \begin{algorithm}[p]
@@ -300,19 +350,23 @@ In this paper, we refer to the proposed method as "R-LIME" (Ruled LIME). The cha
 For non-convex optimization problems like \cref{eq:main_problem}, greedy methods are often employed. However, greedy methods tend to converge to local optima, and to address this, the proposed method utilizes beam search, which selects multiple candidates at each iteration. The pseudocode is shown in \cref{alg:greedy_search}.
 
 \subsubsection{Candidate Rule Generation}
-To generate new candidate rules, one additional predicate is added to each of the $B$ candidate rules obtained in the previous iteration. The pseudocode is shown in \cref{alg:generate_cands}. Here, $T(x)$ represents the set of attribute-value pairs (predicates) that $x$ possesses, and $T(x)\setminus A$ represents the conjunction of predicates in $T(x)$ not included in rule $A$.
+To generate new candidate rules, one additional predicate is added to each of the $B$ candidate rules obtained in the previous iteration. The pseudocode is shown in \cref{alg:generate_cands}. $T(x)$ represents the set of attribute-value pairs (predicates) that $x$ possesses, and $T(x)\setminus A$ represents the conjunction of predicates in $T(x)$ not included in rule $A$.
 
 \subsubsection{Selection of Candidate Rule with Maximum Accuracy}
 Given the set of generated candidate rules $\cands$, the algorithm selects the top $B$ candidates with the highest accuracy. This is treated as an optimal arm identification problem in the multi-armed bandit framework. Each candidate rule $A_i\in\cands$ is considered an arm, and their accuracy $\Prec(A_i)$ is treated as the distribution of rewards. By sampling $z\sim\mathcal{D}(\cdot|A_i)$ and obtaining the reward $\mathbbm{1}_{f(z)=g_i(z)}$ for each trial, the algorithm updates $g_i$ using the sampled perturbation vector $z$ and the pseudo-label $f(z)$ immediately after each trial. To efficiently select the rule (arm) with the highest accuracy, the KL-LUCB algorithm \cite{kaufmann2013information} is employed. The pseudocode is shown in \cref{alg:best_cands}. The KL-LUCB algorithm assumes that the reward distribution for each arm remains unchanged, while the proposed method updates the approximation model $g_i$ with each sampling, which may not satisfy this assumption. This issue is discussed further in \cref{sec:reward}.
 
-\subsubsection{Selection of Rule with Maximum Coverage Meeting Constraints}
-To meet the constraint in \cref{eq:const_prec}, rule $A$ must satisfy the lower constraint
+\subsubsection{Selection of the Rule with Maximum Coverage Meeting the Constraint}
+To satisfy the constraint imposed by \cref{eq:const_prec}, rule $A$ needs to fulfill the lower bound constraint:
 \begin{equation}
-  \label{eq:stop_condition}
   \Prec_{l}(A,\delta)>\tau
+  \label{eq:stop_condition}
 \end{equation}
-where $\Prec_{l}(A,\delta)$ is the lower bound on accuracy and $\delta$ is a small positive value. To check this condition, the algorithm performs a binary search on $\delta$ to find the smallest $\delta$ that satisfies \cref{eq:stop_condition}. The pseudocode is shown in \cref{alg:largest_valid_cand}.
-\newline
+where $\Prec_{l}(A,\delta)$ represents the lower limit of the $100(1-\delta)$\% confidence interval for $\Prec(A)$.
+If the received set of candidate rules, $\mathcal{A}$, includes a rule satisfying \cref{eq:stop_condition},
+the one with the maximum coverage among them is selected, and the iteration is concluded.
+If $\mathcal{A}$ does not contain any rule satisfying \cref{eq:stop_condition}, it returns \textbf{null},
+and proceeds to the next iteration.
+The pseudocode is presented in \cref{alg:largest_valid_cand}.
 
 The algorithmic procedure outlined above approximates the solution to the optimization problem in \cref{eq:main_problem} under the definition of accuracy in \cref{eq:def_prec}. It iteratively selects a rectangular region (rule) with the learned approximation model's accuracy exceeding a given threshold while maximizing coverage. The selected rule, with the maximum coverage meeting accuracy constraints, is output after each iteration.
 
@@ -325,8 +379,10 @@ To verify the effectiveness of the proposed method, LIME and R-LIME were compare
   \renewcommand{\arraystretch}{1.05}
   \begin{table}[tbp]
     \centering
-    \caption[Attributes and overview of the recidivism dataset used in the experiments]{%
-      Attributes and overview of the recidivism dataset used in the experiments. Continuous features are discretized, and only binary and ordinal features are considered.
+    \caption{%
+      Attributes of the recidivism dataset used in the experiments.
+      Continuous features are all discretized
+      and only binary and ordinal features are considered.
     }\label{tab:rcdv}
     \begin{tabular}{llc}
       \toprule
@@ -361,20 +417,15 @@ The dataset, after removing missing values, was split into training data (7,639 
 The beam width was set to $B=10$, the confidence coefficient to $1-\delta=0.95$, and the tolerance of the KL-LUCB algorithm to $\epsilon=0.05$. Accuracy thresholds $\tau$ were set to $\tau=0.70,0.80,0.90$.
 
   {%
-    \def\vval{0pt}
+    
     \def\dir{python/exp1}
     \def\Asample{0012}
     \def\Bsample{0011}
-    \def\AB#1{\ifnum#1=0 A\else B\fi}
-    
-    % \def\rcdvIdx#1{\ifnum#1=0 0253\else 0599\fi}
     \def\index#1{\ifnum#1=0 \Asample \else \Bsample \fi}
     
-    \def\dataset#1{\ifnum#1=0 recidivism\else adult\fi}
-    \def\taulist{60, 70, 80}
-    % Tables
-    % \foreach\d in {0,1}{\foreach\a in {0,1}{\instancetab{\d}{\a}}}
     {%
+      \def\AB#1{\ifnum#1=0 A\else B\fi}
+      \def\mylabel#1{\ifnum#1=0 \label{fig:A-instance}\else \label{fig:B-instance}\fi}
       \renewcommand{\arraystretch}{1.02}
       \begin{figure}[tbp]
         \foreach\a in {0,1}{%
@@ -390,7 +441,7 @@ The beam width was set to $B=10$, the confidence coefficient to $1-\delta=0.95$,
                 }
                 \bottomrule
               \end{tabular}
-              \caption{Instance~\AB{\a}}\label{fig:\AB{\a}-instance}
+              \caption{Instance~\AB{\a}}\mylabel{\a}
               \vspace{15pt}
             \end{subfigure}
           }
@@ -398,49 +449,75 @@ The beam width was set to $B=10$, the confidence coefficient to $1-\delta=0.95$,
         \caption{Two instances sampled from recidivism dataset.}\label{fig:instance}
       \end{figure}
     }
-    \begin{figure}[p]
-      \def\scale{0.3}
-      \def\imgwidth{0.49\textwidth}
-      \begin{subfigure}[t]{\imgwidth}
-        \includegraphics[scale=\scale]{\dir/lime-\Asample}
-        \caption{LIME}\label{fig:A-lime}
-      \end{subfigure}
-      \begin{subfigure}[t]{\imgwidth}
-        \hspace{1.3em}
-        \includegraphics[scale=\scale]{\dir/newlime-\Asample-70}
-        \caption{R-LIME ($\tau=0.70$)}\label{fig:A-rlime-70}
-      \end{subfigure}
-      \begin{subfigure}[t]{\imgwidth}
-        \includegraphics[scale=\scale]{\dir/newlime-\Asample-80}
-        \caption{R-LIME ($\tau=0.80$)}\label{fig:A-rlime-80}
-      \end{subfigure}
-      \begin{subfigure}[t]{\imgwidth}
-        \includegraphics[scale=\scale]{\dir/newlime-\Asample-90}
-        \caption{R-LIME ($\tau=0.90$)}\label{fig:A-rlime-90}
-      \end{subfigure}
-      \caption{Explanation for Instance A by LIME and R-LIME.}\label{fig:A}
-    \end{figure}
-    \begin{figure}[p]
-      \def\scale{0.3}
-      \def\imgwidth{0.5\textwidth}
-      \begin{subfigure}[t]{\imgwidth}
-        \includegraphics[scale=\scale]{\dir/lime-\Bsample}
-        \caption{LIME}\label{fig:B-lime}
-      \end{subfigure}
-      \begin{subfigure}[t]{\imgwidth}
-        \includegraphics[scale=\scale]{\dir/newlime-\Bsample-70}
-        \caption{R-LIME ($\tau=0.70$)}\label{fig:B-rlime-70}
-      \end{subfigure}
-      \begin{subfigure}[t]{\imgwidth}
-        \includegraphics[scale=\scale]{\dir/newlime-\Bsample-80}
-        \caption{R-LIME ($\tau=0.80$)}\label{fig:B-rlime-80}
-      \end{subfigure}
-      \begin{subfigure}[t]{\imgwidth}
-        \includegraphics[scale=\scale]{\dir/newlime-\Bsample-90}
-        \caption{R-LIME ($\tau=0.90$)}\label{fig:B-rlime-90}
-      \end{subfigure}
-      \caption{Explanation for Instance B by LIME and R-LIME}\label{fig:B}
-    \end{figure}
+    {%
+      \def\scale{0.315}
+      \def\imgwidth{0.495\textwidth}
+      \def\hspacebase{\hspace{-1.5em}}
+      \def\vspacebase{\vspace{0.5em}}
+      \def\vspacebeforecaption{\vspace{-0.4em}}
+      \begin{figure}[p]
+        \centering
+        \begin{subfigure}[t]{\imgwidth}
+          \hspacebase
+          \includegraphics[scale=\scale]{\dir/lime-\Asample}
+          \vspacebeforecaption
+          \caption{LIME}\label{fig:A-lime}
+          \vspacebase
+        \end{subfigure}
+        \begin{subfigure}[t]{\imgwidth}
+          \hspacebase
+          \hspace{1.0em}
+          \includegraphics[scale=\scale]{\dir/newlime-\Asample-70}
+          \vspacebeforecaption
+          \caption{R-LIME ($\tau=0.70$)}\label{fig:A-rlime-70}
+          \vspacebase
+        \end{subfigure}
+        \begin{subfigure}[t]{\imgwidth}
+          \hspacebase
+          \includegraphics[scale=\scale]{\dir/newlime-\Asample-80}
+          \vspacebeforecaption
+          \caption{R-LIME ($\tau=0.80$)}\label{fig:A-rlime-80}
+        \end{subfigure}
+        \begin{subfigure}[t]{\imgwidth}
+          \hspacebase
+          \includegraphics[scale=\scale]{\dir/newlime-\Asample-90}
+          \vspacebeforecaption
+          \caption{R-LIME ($\tau=0.90$)}\label{fig:A-rlime-90}
+        \end{subfigure}
+        \caption{Explanation for Instance A by LIME and R-LIME.}\label{fig:A}
+      \end{figure}
+      \begin{figure}[p]
+        \centering
+        \begin{subfigure}[t]{\imgwidth}
+          \hspacebase
+          \includegraphics[scale=\scale]{\dir/lime-\Bsample}
+          \vspacebeforecaption
+          \caption{LIME}\label{fig:B-lime}
+          \vspacebase
+        \end{subfigure}
+        \begin{subfigure}[t]{\imgwidth}
+          \hspacebase
+          \includegraphics[scale=\scale]{\dir/newlime-\Bsample-70}
+          \vspacebeforecaption
+          \caption{R-LIME ($\tau=0.70$)}\label{fig:B-rlime-70}
+          \vspacebase
+        \end{subfigure}
+        \begin{subfigure}[t]{\imgwidth}
+          \hspacebase
+          \includegraphics[scale=\scale]{\dir/newlime-\Bsample-80}
+          \vspacebeforecaption
+          \caption{R-LIME ($\tau=0.80$)}\label{fig:B-rlime-80}
+        \end{subfigure}
+        \begin{subfigure}[t]{\imgwidth}
+          \hspacebase
+          \hspace{0em}
+          \includegraphics[scale=\scale]{\dir/newlime-\Bsample-90}
+          \vspacebeforecaption
+          \caption{R-LIME ($\tau=0.90$)}\label{fig:B-rlime-90}
+        \end{subfigure}
+        \caption{Explanation for Instance B by LIME and R-LIME}\label{fig:B}
+      \end{figure}
+    }
   }
 \subsubsection{Experimental Results}
 The results of the experiment are shown in \cref{fig:A,fig:B}.
@@ -460,7 +537,7 @@ explanations are.
 For example, the coverage of the explanation for instance B under $\tau=0.90$
 (\cref{fig:B-rlime-90}) is 0.002,
 indicating that the decision boundaries around instance B are complex,
-making it challenging to obtain a high-precision linear approximation.
+making it challenging to obtain a high-accuracy linear approximation.
 This allows users to discern that the application scope of this explanation is
 very narrow, limiting its utility.
 
@@ -486,7 +563,7 @@ We then sampled 10,000 instances within the rectangular region obtained by R-LIM
   }\label{fig:box_plot}
 \end{figure}
 The results are presented in \cref{fig:box_plot}, showcasing the distribution of the accuracy of the linear approximation models obtained by LIME and R-LIME.
-R-LIME exhibits higher accuracy compared to LIME for all values of $\tau$. This suggests that the linear approximation models learned by LIME and R-LIME differ significantly, and R-LIME learns a high-precision linear approximation model adapted to the rectangular region. Additionally, as $\tau$ increases, the variability in the accuracy of LIME widens. This indicates that the linear models learned by LIME may not function effectively as approximation models depending on how the region is selected.
+R-LIME exhibits higher accuracy compared to LIME for all values of $\tau$. This suggests that the linear approximation models learned by LIME and R-LIME differ significantly, and R-LIME learns a high-accuracy linear approximation model adapted to the rectangular region. Additionally, as $\tau$ increases, the variability in the accuracy of LIME widens. This indicates that the linear models learned by LIME may not function effectively as approximation models depending on how the region is selected.
 
 \section{Challenges and Future Perspectives}
  
@@ -507,7 +584,7 @@ R-LIME exhibits higher accuracy compared to LIME for all values of $\tau$. This 
     \end{subfigure}
     \caption{%
       Behavior of R-LIME for balanced and imbalanced data.
-      In case of imbalanced label distribution, 
+      In case of imbalanced label distribution,
       the approximation region covers the entire input space and the
       linear approximation model always outputs the majority label.
     }
@@ -554,7 +631,7 @@ One potential method to quantitatively evaluate "interpretability" is through us
 We identified challenges in existing methods for local model-agnostic post-hoc
 explanations of black-box classifiers and proposed R-LIME to address them.
 We represented the rectangular region for local linear approximation as a
-conjunction of predicates of features and proposed an algorithm to
+conjunction of feature predicates and proposed an algorithm to
 maximize coverage under the constraint of minimum approximation accuracy.
 Comparing the outputs of LIME and R-LIME on real-world datasets,
 we demonstrated that explanations provided by R-LIME have clearer application
