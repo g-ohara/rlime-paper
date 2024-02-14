@@ -2,18 +2,16 @@
 
 import csv
 import multiprocessing
-import sys
 from functools import partial
 
 import numpy as np
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 
-sys.path.append("../NewLIME")
-# pylint: disable=import-error,wrong-import-position
-import newlime_base  # pyright: ignore[reportMissingImports] # noqa: E402
-import newlime_tabular  # pyright: ignore[reportMissingImports] # noqa: E402
-import newlime_utils  # pyright: ignore[reportMissingImports] # noqa: E402
+from NewLIME import mylime, newlime_base, newlime_tabular, newlime_utils
+from NewLIME.newlime_base import Arm
+from NewLIME.newlime_types import IntArray
+from NewLIME.sampler import Sampler
 
 
 def main() -> None:
@@ -21,7 +19,7 @@ def main() -> None:
 
     # Load the dataset.
     dataset = newlime_utils.load_dataset(
-        "recidivism", "../NewLIME/anchor-experiments/datasets/", balance=True
+        "recidivism", "NewLIME/datasets/", balance=True
     )
 
     # Learn the black box model.
@@ -30,39 +28,75 @@ def main() -> None:
 
     # Get the target instances.
     sample_num = 100
-    result_list = multiprocessing.Manager().list()
 
-    tau = 0.70
+    for tau in [0.80, 0.90]:
 
-    func = partial(
-        compare_lime_and_newlime,
-        dataset=dataset,
-        black_box=black_box,
-        tau=tau,
-        result_list=result_list,
-    )
+        print(f"tau = {tau:.2f}")
 
-    with multiprocessing.Pool() as pool:
-        pool.map(func, range(sample_num))
+        result_list = multiprocessing.Manager().list()
 
-    lime_acc, rlime_acc = zip(*result_list)
-    print("LIME")
-    print(f"  Mean: {np.mean(lime_acc):.4f}")
-    print(f"  Std : {np.std(lime_acc):.4f}")
-    print("R-LIME")
-    print(f"  Mean: {np.mean(rlime_acc):.4f}")
-    print(f"  Std : {np.std(rlime_acc):.4f}")
+        func = partial(
+            compare_lime_and_newlime,
+            dataset=dataset,
+            black_box=black_box,
+            tau=tau,
+            result_list=result_list,
+        )
 
-    # Save the results to a CSV file.
-    with open(f"{int(tau*100)}.csv", "w", encoding="utf-8") as f:
-        writer = csv.writer(f)
-        writer.writerow(lime_acc)
-        writer.writerow(rlime_acc)
+        with multiprocessing.Pool() as pool:
+            pool.map(func, range(sample_num))
+
+        lime_acc, rlime_acc = zip(*result_list)
+        print("LIME")
+        print(f"  Mean: {np.mean(lime_acc):.4f}")
+        print(f"  Std : {np.std(lime_acc):.4f}")
+        print("R-LIME")
+        print(f"  Mean: {np.mean(rlime_acc):.4f}")
+        print(f"  Std : {np.std(rlime_acc):.4f}")
+
+        # Save the results to a CSV file.
+        with open(f"{int(tau*100)}.csv", "w", encoding="utf-8") as f:
+            writer = csv.writer(f)
+            writer.writerow(lime_acc)
+            writer.writerow(rlime_acc)
+
+
+def calc_accuracy(
+    sample: IntArray, labels: IntArray, lime_weights: list[float], arm: Arm
+) -> tuple[float, float]:
+    """Calculate the precision of LIME and R-LIME.
+
+    Parameters
+    ----------
+    sample: newlime_utils.FloatArray
+        The samples.
+    labels: newlime_utils.IntArray
+        The labels of the samples.
+    lime_weights: newlime_utils.FloatArray
+        The weights of LIME.
+    surrogate_model: newlime_tabular.SurrogateModel
+        The surrogate model of R-LIME.
+
+    Returns
+    -------
+    tuple[float, float]
+        The precision of LIME and R-LIME.
+    """
+
+    # Get predictions of LIME and R-LIME.
+    lime_pred = np.dot(sample, lime_weights) > 0
+    rlime_pred = arm.surrogate_model.predict_many(pd.DataFrame(sample))
+
+    # Calculate the precision of LIME and R-LIME.
+    lime_acc = np.sum(lime_pred == labels) / len(labels)
+    rlime_acc = np.sum(rlime_pred == labels) / len(labels)
+
+    return lime_acc, rlime_acc
 
 
 def compare_lime_and_newlime(
     idx: int,
-    dataset: newlime_utils.Dataset,
+    dataset: newlime_tabular.Dataset,
     black_box: RandomForestClassifier,
     tau: float,
     result_list: list[tuple[float, float]],
@@ -86,11 +120,14 @@ def compare_lime_and_newlime(
     print(f"Process {idx:03d} Started.")
     trg, _, _ = newlime_utils.get_trg_sample(idx, dataset)
 
-    lime_weights = newlime_utils.lime_original(
-        trg, black_box.predict(trg.reshape(1, -1))[0], dataset, black_box
+    # Initialize sampler.
+    sampler = Sampler(
+        trg, dataset.train, black_box.predict, dataset.categorical_names
     )
 
-    hyper_param = newlime_tabular.HyperParam(
+    lime_weights = mylime.explain(trg, sampler, 5000)
+
+    hyper_param = newlime_base.HyperParam(
         tau=tau,
         delta=0.05,
         epsilon=0.1,
@@ -109,31 +146,11 @@ def compare_lime_and_newlime(
 
     _, arm = result
 
-    # Calculate the precision of LIME explanation under the rule generated
-    # by R-LIME. We have already had the weights of LIME. Therefore, we
-    # only need to calculate the precision. The precision is the ratio of
-    # the number of samples that are correctly classified by LIME to the
-    # number of samples.
-
-    # Initialize sampler.
-    sampler = newlime_base.Sampler(
-        trg,
-        dataset.train,
-        black_box.predict,
-        dataset.categorical_names,
-    )
-
     # Sample from the rule.
     sample, labels = sampler.sample(10000, arm.rule)
+    lime_acc, rlime_acc = calc_accuracy(sample, labels, lime_weights, arm)
 
-    # Get predictions of LIME and R-LIME.
-    lime_pred = np.dot(sample, lime_weights) > 0
-    rlime_pred = arm.surrogate_model.predict_many(pd.DataFrame(sample))
-
-    # Calculate the precision of LIME and R-LIME.
-    lime_acc = np.sum(lime_pred == labels) / len(labels)
-    rlime_acc = np.sum(rlime_pred == labels) / len(labels)
-
+    # Print and save the results.
     print(f"Process {idx:03d} Finished.")
     print(f"  LIME  : {lime_acc:.4f}")
     print(f"  R-LIME: {rlime_acc:.4f}")

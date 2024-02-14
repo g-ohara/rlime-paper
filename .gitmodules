@@ -4,3 +4,6 @@
 [submodule "python/NewLIME"]
 	path = python/NewLIME
 	url = git@github.com:G-Ohara/NewLIME.git
+[submodule "python/exp2/NewLIME"]
+	path = python/exp2/NewLIME
+	url = git@github.com:G-Ohara/NewLIME.git
