@@ -151,13 +151,16 @@ the scope of the explanation is limited to the vicinity of the focus point.
 This paper specifically focuses on \emph{local} \emph{model-agnostic} methods.
 For instance, LIME (Local Interpretable Model-agnostic Explanations)
 \cite{ribeiro2016why} approximates the complex model's decision boundary
-locally using a simpler model.
+locally using a simpler model around the given focal point.
 Although LIME enables users to interpret the local behavior of complex models,
-it does not optimize the approximation region \cite{radulovic2023bella} and
-the effective scope of the explanation is not explicitly presented
+it does not explicitly provide the effective scope of the explanation
 \cite{ribeiro2018anchors}.
+This limitation can lead users to overgeneralize the knowledge derived from the explanation.
+Without a clear indication of the scope of the explanation,
+users might mistakenly apply the derived knowledge to instances outside this scope,
+potentially leading to a misunderstanding of the black-box model's behavior.
 
-To address the limitations of LIME,
+To address this limitation of LIME,
 we propose a new method called R-LIME (Ruled LIME),
 which interprets complex classifiers in an interpretable region.
 R-LIME locally approximates a complex decision boundary linearly
@@ -180,7 +183,7 @@ expressed as a conjunction of feature predicates.
     \centering
     \includegraphics[width=\textwidth]{lime_vs_anchor_exp_b.png}
     \caption{%
-      Explanations by LIME.
+      Explanations by LIME\@.
       They provide contributions of each feature to the output,
       but do not explicitly indicate its scope.
     }\label{fig:lime_vs_anchor_exp_b}
@@ -251,7 +254,7 @@ contributing significantly to the output (\cref{fig:anchor}).
 
 For a discrete $m$-dimensional input space $\ispace$
 with a trained black-box classifier $f: \ispace \to \{0,1\}$,
-an instance $x \in \ispace$, 
+an instance $x \in \ispace$,
 and a distribution $\mathcal{D}$ over the input space,
 a rule $A(z) = a_{i_1}(z) \wedge a_{i_2}(z) \wedge \dots \wedge a_{i_t}(z)$ is defined.
 The predicates $a_i(z)$ evaluate to true ($=1$) when $z_i = x_i$ and false ($=0$) otherwise.
@@ -387,7 +390,7 @@ as long as the probability of the output of the black-box classifier $f$ matchin
 within $A$ exceeds a given threshold $\tau$.
 The proposed method, on the other hand, learns an linear classifier $g$
 within the rectangular region $A$ and maximizes the coverage of $A$
-under lower constraints on the accuracy of $g$. 
+under lower constraints on the accuracy of $g$.
 We modify the Anchor's definition of accuracy in \cref{eq:anchor_def_prec}
 as follows:
 \begin{equation}
@@ -475,9 +478,9 @@ For tolerance $\epsilon\in[0,1]$, the KL-LUCB algorithm guarantees below:
   P(\underset{A\in\cands}{\min}\Prec(A)\ge
   \underset{A'\in\mathcal{A}}{\min}\Prec(A')-\epsilon)\ge1-\delta.
 \end{equation}
-However, 
+However,
 the KL-LUCB algorithm assumes that the reward distribution for each arm
-remains unchanged, 
+remains unchanged,
 while our method updates the classifier $g_i$ with each sampling,
 which may not satisfy this assumption.
 This issue is discussed further in \cref{sec:reward}.
@@ -549,11 +552,11 @@ This dataset contains information on 9,549 prisoners released from
 North Carolina prisons between July 1, 1979, and June 30, 1980.
 The dataset includes 19 items such as race, gender,
 presence of alcohol dependence, number of prior offenses, and recidivism.
-For this experiment, 
+For this experiment,
 we treated the binary classification problem of predicting
-the presence or absence of recidivism (Recidivism) as the target label. 
+the presence or absence of recidivism (Recidivism) as the target label.
 We discretized continuous features and removed missing values,
-resulting in 15 features. 
+resulting in 15 features.
 This problem setting can be considered as a case
 where a machine learning model is introduced to decide parole for prisoners.
 Since such decisions can have a significant impact on a person's life,
@@ -564,7 +567,7 @@ was split into training data (7,639 instances) and test data (955 instances).
 A random forest model with 50 trees was trained using the training data.
 Subsequently, LIME and R-LIME explanations were generated
 for two instances extracted from the test data (\cref{fig:instance}).
-In R-LIME, logistic regression was used as the linear approximation model, 
+In R-LIME, logistic regression was used as the linear approximation model,
 and the distribution $\mathcal{D}$ was a multivariate normal distribution
 estimated from the training data.
 The beam width was set to $B=10$,
@@ -573,12 +576,12 @@ and the tolerance of the KL-LUCB algorithm to $\epsilon=0.05$.
 Accuracy thresholds $\tau$ were set to $\tau=0.70,0.80,0.90$.
 
   {%
-    
+
     \def\dir{python/exp1}
     \def\Asample{0012}
     \def\Bsample{0011}
     \def\index#1{\ifnum#1=0 \Asample \else \Bsample \fi}
-    
+
     {%
       \def\AB#1{\ifnum#1=0 A\else B\fi}
       \def\mylabel#1{\ifnum#1=0 \label{fig:A-instance}\else \label{fig:B-instance}\fi}
@@ -693,7 +696,7 @@ and being of white race (Race) contribute negatively to the prediction
 (predicting that the prisoner will not be re-arrested).
 While these LIME explanations provide valuable insights into the behavior of
 the black-box model,
-they do not explicitly indicate the application scope of the explanations, 
+they do not explicitly indicate the application scope of the explanations,
 leaving users unable to determine to which inmates the explanations are applicable.
 
 In contrast, R-LIME expresses the application scope of explanations
@@ -716,10 +719,10 @@ very narrow, limiting its utility.
 To demonstrate that R-LIME learns a highly accurate linear approximation model
 in the optimized approximation region,
 we conducted a comparison of the local accuracy of explanations
-between LIME and R-LIME.
+between LIME and R-LIME\@.
 Using the same settings as in \cref{sec:exp_setting},
 we randomly sampled 100 instances from the test data of the recidivism dataset
-and generated explanations (with $\tau=0.70,0.80,0.90$) using LIME and R-LIME.
+and generated explanations (with $\tau=0.70,0.80,0.90$) using LIME and R-LIME\@.
 We then sampled 10,000 instances within the rectangular region
 obtained by R-LIME and calculated the local accuracy of both methods.
 \subsubsection{Experimental Results}
@@ -727,14 +730,14 @@ obtained by R-LIME and calculated the local accuracy of both methods.
   \centering
   \includegraphics[width=0.55\textwidth]{python/exp2/box_plot}
   \caption[Comparison of Local Accuracy between R-LIME and LIME]{%
-    Comparison of local accuracy between LIME and R-LIME.
+    Comparison of local accuracy between LIME and R-LIME\@.
     R-LIME achieved higher and less variable accuracy compared to LIME
     for all values of $\tau$.
   }\label{fig:box_plot}
 \end{figure}
 The results are presented in \cref{fig:box_plot},
 showcasing the distribution of the accuracy of the linear approximation models
-learned by LIME and R-LIME.
+learned by LIME and R-LIME\@.
 R-LIME exhibits higher accuracy compared to LIME for all values of $\tau$.
 This suggests that the linear classifiers learned by LIME and R-LIME
 differ significantly,
@@ -769,6 +772,14 @@ effectively as approximation models depending on how the region is selected.
     \vspace{10pt}
   \end{figure}
  }
+
+
+\subsection{Computational Complexity}
+Most post-hoc explanation methods, including LIME, Anchor, BELLA and R-LIME,
+need to query the black-box model multiple times
+to get labels for perturbed samples, which can be computationally expensive.
+The number of queries required for LIME is $|\mathcal{Z}_p|$,
+where $|\mathcal{Z}_p|$ is the number of perturbed samples.
 
 \subsection{Behavior Regarding Imbalanced Label Distribution}
 R-LIME may generate less useful explanations
@@ -826,24 +837,24 @@ with a standard deviation of 0.017.
 While the deviation was relatively small considering confidence level $1-\delta=0.95$,
 we should modify the selection algorithm to consider the varying accuracy.
 
-\subsection{Evaluation through User Studies}
-Given the nature of the field of "interpretable machine learning,"
-where the goal is to "interpret" machine learning models,
-it is challenging to quantitatively compare various methods.
-While quantitative experiments were conducted in \cref{sec:exp2},
-they mainly demonstrated that the proposed method generates
-locally accurate explanations compared to LIME.
-The results do not directly prove the high interpretability of the proposed method.
-
-One potential method to quantitatively evaluate "interpretability" is
-through user studies.
-For example, \cite{ribeiro2018anchors} conducted user studies,
-assuming that if users could predict the output of a black-box model
-with high accuracy based on provided explanations,
-those explanations contained valuable information about the model's behavior.
-Similarly,
-conducting user studies in this research would be desirable
-to evaluate the interpretability of the proposed method.
+% \subsection{Evaluation through User Studies}
+% Given the nature of the field of "interpretable machine learning,"
+% where the goal is to "interpret" machine learning models,
+% it is challenging to quantitatively compare various methods.
+% While quantitative experiments were conducted in \cref{sec:exp2},
+% they mainly demonstrated that the proposed method generates
+% locally accurate explanations compared to LIME.
+% The results do not directly prove the high interpretability of the proposed method.
+% 
+% One potential method to quantitatively evaluate "interpretability" is
+% through user studies.
+% For example, \cite{ribeiro2018anchors} conducted user studies,
+% assuming that if users could predict the output of a black-box model
+% with high accuracy based on provided explanations,
+% those explanations contained valuable information about the model's behavior.
+% Similarly,
+% conducting user studies in this research would be desirable
+% to evaluate the interpretability of the proposed method.
 
 \section{Conclusion}
 We identified challenges in existing methods for local model-agnostic post-hoc
@@ -858,20 +869,10 @@ However, we discussed the instability of behavior concerning imbalanced label
 distributions and raised questions about the theoretical validity of using
 the KL-LUCB algorithm.
 
-\subsubsection{Acknowledgements}
+% \subsubsection{Acknowledgements}
 % Please place your acknowledgments at
 % the end of the paper, preceded by an unnumbered run-in heading (i.e.
 % 3rd-level heading).
-I would like to express my gratitude to Associate Professor Keigo Kimura
-from the Department of Mathematical Science,
-Division of Information Recognition,
-Graduate School of Information Science and Technology, Hokkaido University.
-He provided invaluable guidance,
-from setting the research theme to outlining the strategy and content of this study.
-Additionally,
-I appreciate the diverse insights shared by Professor Mineichi Kudo in the same laboratory.
-Finally, I am deeply thankful to all the members of the laboratory
-for their helpful advice and collaboration throughout the research process.
 
 %
 % ---- Bibliography ----
