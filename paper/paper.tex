@@ -69,9 +69,9 @@
 }
 
 % Author names and ORCID IDs
-\author{Genji Ohara\inst{1}\orcidID{0009-0000-5854-2820} \and
-	Keigo Kimura\inst{1}\orcidID{0000-0002-3614-6568} \and
-	Mineichi Kudo\inst{1}\orcidID{0000-0003-1013-3870}
+\author{Genji Ohara\orcidID{0009-0000-5854-2820} \and
+	Keigo Kimura\orcidID{0000-0002-3614-6568} \and
+	Mineichi Kudo\orcidID{0000-0003-1013-3870}
 }
 
 % Abbreviated author list for the running head (First names are abbreviated)
@@ -91,10 +91,13 @@
 % The abstract should briefly summarize the contents of the paper in
 % 150--250 words.
 \begin{abstract}
-	In recent years, complex machine learning models such as deep neural networks
+	In recent years,
+	complex machine learning models such as deep neural networks
 	have been used in various industrial fields due to their high accuracy.
-	However, its complexity has been a major obstacle to implementation
-	in decision-making situations where transparency of the decision process is required.
+	However,
+	its complexity has been a major obstacle to implementation
+	in decision-making situations where transparency of the decision process
+	is required.
 	In order to address this problem,
 	various post-hoc explanation methods have been proposed,
 	but they have not been able to achieve interpretability of
@@ -124,28 +127,36 @@ particularly in critical decision-making scenarios like healthcare and finance,
 where the opacity of decision rationale becomes a major obstacle to
 implementation.
 Consequently,
-there has been extensive research in the field of post hoc explanations
+there has been extensive research in the field of post-hoc explanations
 for machine learning models \cite{%
 	ribeiro2016why,ribeiro2018anchors,radulovic2023bella,guidotti2018local}.
 
-Existing methods on post hoc explanations categorize into
-\emph{model-dependent} and \emph{model-agnostic} methods,
+Existing post-hoc explanation methods are categorized
+into \emph{model-dependent} and \emph{model-agnostic} methods,
 based on their dependence on the model's structure.
 Model-dependent methods primarily focus on deep neural networks and
 explain the models' behavior using their parameters.
-While they allow a direct approach to the model,
-applying the same method to models with different structures is often challenging.
+While these methods can provide detailed explanations
+(e.g., layer-wise explanations for neural networks)
+using the models' internal parameters,
+it is often challenging
+to apply the same method to models with different structures.
 On the other hand,
-model-agnostic methods do not rely on the models' parameters and utilize only their output.
-Although they are applicable to any model, available information is limited.
-Model-agnostic methods further classify into
+model-agnostic methods
+do not rely on the models' parameters and utilize only their output.
+Although they are applicable to any model,
+they cannot explain reasoning process inside the model.
+Model-agnostic methods are classified into
 \emph{global} and \emph{local} methods based on their locality in input space.
-Global methods aim to explain the model's behavior across the entire input space,
+Global methods
+aim to explain the model's behavior across the entire input space,
 seeking explanations valid for any input.
-However, providing global explanations becomes challenging as the model's complexity increases.
-Local methods, in contrast, explain the model's output for a specific input
+However, providing global explanations becomes challenging
+as the model's complexity increases.
+Local methods, in contrast, explain output of the model for a specific input
 (focal point) in the vicinity of that input.
-While local methods offer more simple and accurate explanations than global methods,
+While local methods offer more simple and accurate explanations
+than global methods,
 the scope of the explanation is limited to the vicinity of the focus point.
 
 This paper specifically focuses on \emph{local} \emph{model-agnostic} methods.
@@ -155,56 +166,80 @@ locally using a simpler model around the given focal point.
 Although LIME enables users to interpret the local behavior of complex models,
 it does not explicitly provide the effective scope of the explanation
 \cite{ribeiro2018anchors}.
-This limitation can lead users to overgeneralize the knowledge derived from the explanation.
+This limitation can lead
+users to overgeneralize the knowledge derived from the explanation.
 Without a clear indication of the scope of the explanation,
-users might mistakenly apply the derived knowledge to instances outside this scope,
+users might mistakenly apply
+the derived knowledge to instances outside this scope,
 potentially leading to a misunderstanding of the black-box model's behavior.
 
 To address this limitation of LIME,
 we propose a new method called R-LIME (Ruled LIME),
 which interprets complex classifiers in an interpretable region.
 R-LIME locally approximates a complex decision boundary linearly
-in a rectangular region and maximizes the region as long as the accuracy of the linear
-classifier is higher than a specified threshold.
+in a rectangular region and maximizes the region
+as long as the accuracy of the linear classifier is
+higher than a specified threshold.
 The resulting rectangular region is interpretable for users because it is
-expressed as a conjunction of feature predicates.
+expressed as a conjunction of feature predicates (\cref{fig:example-rlime}).
 
 \section{Related Work}
+% I want to arrange figures in the following order:
+% (a) Instances around the focal point.
+% (b) Explanations by LIME.
+% (c) Explanations by Anchor.
+% (d) Explanations by R-LIME.
+% but I want to put both (b) and (c) vertically in left column
+% and (d) in right column.
+
 \begin{figure}[t]
 	\centering
 	\vspace{0.5cm}
 	\begin{subfigure}[t]{0.55\textwidth}
 		\centering
-		\includegraphics[width=\textwidth]{lime_vs_anchor_exp_a.png}
-		\caption{Instances around the focal point.}\label{fig:lime_vs_anchor_exp_a}
-		\vspace{0.5cm}
+		\includegraphics[scale=0.35]{example-instance}
+		\caption{Focal point.}\label{fig:example-instance}
 	\end{subfigure}
+	\hfill
+	\begin{subfigure}[t]{0.45\textwidth}
+		\begin{subfigure}[t]{\textwidth}
+			\centering
+			\includegraphics[scale=0.35]{example-lime}
+			\caption{%
+				Explanation by LIME\@.
+				It provides contributions of each feature to the output,
+				but does not explicitly indicate its scope.
+			}\label{fig:example-lime}
+			\vspace{0.4cm}
+		\end{subfigure}
+		\begin{subfigure}[t]{\textwidth}
+			\centering
+			\includegraphics[scale=0.35]{example-anchor}
+			\caption{%
+				Explanation by Anchor.
+				It provides the effective scope of the explanation,
+				but does not show the influence of each feature.
+			}\label{fig:example-anchor}
+		\end{subfigure}
+	\end{subfigure}
+	\hspace{0.3cm}
 	\begin{subfigure}[t]{0.45\textwidth}
 		\centering
-		\includegraphics[width=\textwidth]{lime_vs_anchor_exp_b.png}
+		\vspace{-2.05cm}
+		\includegraphics[scale=0.35]{example-rlime}
 		\caption{%
-			Explanations by LIME\@.
-			They provide contributions of each feature to the output,
-			but do not explicitly indicate its scope.
-		}\label{fig:lime_vs_anchor_exp_b}
-		\vspace{0.5cm}
-	\end{subfigure}
-	\begin{subfigure}[t]{0.55\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{lime_vs_anchor_exp_c.png}
-		\caption{%
-			Explanations by Anchor.
-			They provide the effective scope of the explanation,
-			but do not provide details about the influence of each feature.
-		}\label{fig:lime_vs_anchor_exp_c}
+			Explanation by R-LIME\@.
+			It provides both contributions of each feature and
+			its effective scope.
+		}\label{fig:example-rlime}
 	\end{subfigure}
 	\caption{%
-		Explanations by LIME and Anchor
-		for an LSTM sentiment prediction model \cite{ribeiro2018anchors}.
-	}\label{fig:lime_vs_anchor_exp}
+		Example of explanations by LIME, Anchor and R-LIME
+		for a sentiment prediction model.
+	}\label{fig:example}
 \end{figure}
 In this chapter,
-we provide an overview of existing research on local model-agnostic explanations,
+we briefly review existing research on local model-agnostic explanations,
 particularly focusing on studies closely related to our proposed method.
 
 \subsection{LIME (Local Interpretable Model-agnostic Explanations) \cite{ribeiro2016why}}
@@ -234,14 +269,15 @@ by showing the contribution of each feature to the output $f(x)$.
 However, due to not explicitly indicating the perturbation region,
 users cannot assess the effective scope of the explanation
 \cite{ribeiro2018anchors}.
-An example of explanation by LIME for an LSTM sentiment prediction model
-is illustrated in \cref{fig:lime_vs_anchor_exp_b}.
-The left explanation suggests that
-the word "not" contributes to the model's positive prediction,
-which does not apply to the instance on the right.
-However, without the explicit perturbation region,
-users might mistakenly apply the left explanation to the right instance,
-potentially leading to a misunderstanding of the black-box model's behavior
+An example of explanation by LIME for a sentiment prediction model
+is illustrated in \cref{fig:example-lime}.
+The explanation provides valuable insights that
+the word "not" mainly contributes to the model's positive prediction,
+but does not explicitly indicate the effective scope of that insight.
+Without the effective scope,
+users might mistakenly apply the explanation to other instances
+(e.g., ``This book is not good''),
+potentially leading to misunderstanding of the black-box model's behavior
 \cite{ribeiro2018anchors}.
 
 \subsection{Anchor \cite{ribeiro2018anchors}}\label{sec:anchor}
@@ -290,14 +326,15 @@ Thus, the following optimization problem is solved:
 While Anchor provides an effective scope of the explanation,
 the information it includes is less than LIME,
 limiting its utility \cite{ribeiro2018anchors}.
-An example of Anchor explanation for an LSTM sentiment prediction model
-is depicted in \cref{fig:lime_vs_anchor_exp_c}.
-The left explanation suggests that changing words other than "not" and "bad"
+An example of Anchor explanation for a sentiment prediction model
+is illustrated in \cref{fig:example-anchor}.
+The explanation suggests that changing words other than ``not'' and ``bad''
 has little impact on the classifier's output.
-While it clearly does not apply to the right instance,
+While it clearly does not apply to the sentence ``This book is not good''
+because of not including the word ``bad'',
 the explanation does not provide details about the influence of each word,
 resulting in less user insight into the model's behavior compared to LIME
-(\cref{fig:lime_vs_anchor_exp_b}).
+(\cref{fig:example-lime}).
 
 \subsection{%
 	BELLA (Black box model Explanations by Local Linear Approximations)
@@ -381,6 +418,7 @@ Anchor \cite{ribeiro2018anchors} and BELLA \cite{radulovic2023bella}.
 Our method locally approximates the given black-box classifier $f$
 around the focal point $x$ by a linear classifier $g$ similar to LIME and BELLA,
 but samples parturbation from a rectangular region similar to Anchor
+so that the generality of approximation is explicitly provided
 (\cref{fig:rlime}).
 The accuracy of $g$ is defined as the "accuracy" of the rule,
 and the generality of explanations is defined as the "coverage" of the rule.
@@ -443,20 +481,21 @@ The characteristics of R-LIME are listed below:
 	\end{algorithm}
 }
 
-Our method's algorithm is mainly based on that used in Anchor.
+The algorithm of our method
+is mainly based on that used in Anchor\cite{ribeiro2018anchors}.
 For non-convex optimization problems like \cref{eq:main_problem},
 greedy search are often used.
 However,
 greedy methods tend to converge to local optima, and to address this,
 R-LIME utilizes beam search,
 which selects multiple candidates at each iteration.
-The pseudocode is shown in \cref{alg:greedy_search}.
+The pseudo code is shown in \cref{alg:greedy_search}.
 
 \subsubsection{Generation of New Candidate Rules}
 To generate new candidate rules,
 one additional predicate is added to each of the $B$ candidate rules
 selected in the previous iteration.
-The pseudocode is shown in \cref{alg:generate_cands}.
+The pseudo code is shown in \cref{alg:generate_cands}.
 $T(x)$ is the set of attribute-value pairs (predicates) that are true for $x$,
 and $T(x)\setminus A$ is the set of predicates in $T(x)$ not included in rule $A$.
 
@@ -472,7 +511,7 @@ the algorithm updates $g_i$ using the sampled perturbation vector $z$
 and the pseudo-label $f(z)$ after each trial.
 To efficiently select the rule (arm) with the highest accuracy,
 we employ the KL-LUCB algorithm \cite{kaufmann2013information}.
-The pseudocode is shown in \cref{alg:best_cands}.
+The pseudo code is shown in \cref{alg:best_cands}.
 For tolerance $\epsilon\in[0,1]$, the KL-LUCB algorithm guarantees below:
 \begin{equation}
 	P(\underset{A\in\cands}{\min}\Prec(A)\ge
@@ -500,7 +539,7 @@ and the iteration is terminated.
 If $\mathcal{A}$ does not contain any rule satisfying \cref{eq:stop_condition},
 it returns \textbf{null},
 and proceeds to the next iteration.
-The pseudocode is presented in \cref{alg:largest_valid_cand}.
+The pseudo code is presented in \cref{alg:largest_valid_cand}.
 
 % The algorithmic procedure outlined above approximates
 % the solution to the optimization problem in \cref{eq:main_problem}
@@ -577,7 +616,7 @@ Accuracy thresholds $\tau$ were set to $\tau=0.70,0.80,0.90$.
 
 	{%
 
-		\def\dir{python/exp1}
+		\def\dir{experiments/exp1}
 		\def\Asample{0012}
 		\def\Bsample{0011}
 		\def\index#1{\ifnum#1=0 \Asample \else \Bsample \fi}
@@ -728,7 +767,7 @@ obtained by R-LIME and calculated the local accuracy of both methods.
 \subsubsection{Experimental Results}
 \begin{figure}[tbp]
 	\centering
-	\includegraphics[width=0.55\textwidth]{python/exp2/box_plot}
+	\includegraphics[width=0.55\textwidth]{experiments/exp2/box_plot}
 	\caption[Comparison of Local Accuracy between R-LIME and LIME]{%
 		Comparison of local accuracy between LIME and R-LIME\@.
 		R-LIME achieved higher and less variable accuracy compared to LIME
