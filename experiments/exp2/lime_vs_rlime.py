@@ -110,7 +110,7 @@ def original_lime(
         discretize_continuous=False,
     )
     lime_exp = lime_explainer.explain_instance(
-        trg, model.predict_proba, num_features=5, top_labels=1
+        trg, model.predict_proba, num_features=15, top_labels=1
     )
     weights = [0.0] * len(dataset.feature_names)
     for t in lime_exp.local_exp[pred_label]:
