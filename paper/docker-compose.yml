@@ -1,12 +1,13 @@
 services:
   latex:
     image: genjiohara/latex
-    container_name: ICPR2024
+    container_name: ICPR2024-paper
     build:
       context: .
       dockerfile: Dockerfile
     volumes:
       - ./:/root/workspace
+      - ../experiments:/root/workspace/experiments
       - /tmp/.X11-unix:/tmp/.X11-unix
     environment:
       - DISPLAY=$DISPLAY

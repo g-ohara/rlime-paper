@@ -44,7 +44,7 @@
 
 
 % set the path for figures
-\graphicspath{{./data/}{./python/data/}}
+\graphicspath{{./data/}{../python/data/}}
 
 % set the label format for subcaption
 \renewcommand\thesubfigure{(\alph{subfigure})}
@@ -60,18 +60,18 @@
 
 % Authentic title
 \title{%
-  R-LIME: Rectangular Constraints and Optimization for Local Interpretable
-  Model-agnostic Explanation Methods}
+	R-LIME: Rectangular Constraints and Optimization for Local Interpretable
+	Model-agnostic Explanation Methods}
 
 % Abbreviated title for the running head
 \titlerunning{%
-  R-LIME: Rectangular Constraints and Optimization for LIME Methods
+	R-LIME: Rectangular Constraints and Optimization for LIME Methods
 }
 
 % Author names and ORCID IDs
 \author{Genji Ohara\inst{1}\orcidID{0009-0000-5854-2820} \and
-  Keigo Kimura\inst{1}\orcidID{0000-0002-3614-6568} \and
-  Mineichi Kudo\inst{1}\orcidID{0000-0003-1013-3870}
+	Keigo Kimura\inst{1}\orcidID{0000-0002-3614-6568} \and
+	Mineichi Kudo\inst{1}\orcidID{0000-0003-1013-3870}
 }
 
 % Abbreviated author list for the running head (First names are abbreviated)
@@ -80,10 +80,10 @@
 
 % The authors' affiliations
 \institute{Division of Computer Science and Information Technology\\
-  Graduate School of Information Sci.\ and Tech.,
-  Hokkaido University\\
-  Sapporo 060-0814, JAPAN,\\
-  \email{\{genji-ohara, kimura5, mine\}@ist.hokudai.ac.jp}}
+	Graduate School of Information Sci.\ and Tech.,
+	Hokkaido University\\
+	Sapporo 060-0814, JAPAN,\\
+	\email{\{genji-ohara, kimura5, mine\}@ist.hokudai.ac.jp}}
 
 % typeset the header of the contribution
 \maketitle              %
@@ -91,27 +91,27 @@
 % The abstract should briefly summarize the contents of the paper in
 % 150--250 words.
 \begin{abstract}
-  In recent years, complex machine learning models such as deep neural networks
-  have been used in various industrial fields due to their high accuracy.
-  However, its complexity has been a major obstacle to implementation
-  in decision-making situations where transparency of the decision process is required.
-  In order to address this problem,
-  various post-hoc explanation methods have been proposed,
-  but they have not been able to achieve interpretability of
-  both the explanation and its scope.
-  We propose a new method, R-LIME,
-  which interprets complex classifiers in an interpretable scope.
-  R-LIME locally approximizes a complex decision boundary linearly
-  in a rectangular region
-  and maximizes the region as long as the accuracy of the linear
-  classifier is higher than a specified threshold.
-  The resulting rectangular region is interpretable for users because it is
-  expressed as a conjunction of feature predicates.
-  We demonstrate the effectiveness of the proposed method through qualitative
-  and quantitative experiments using a real-world dataset.
-  Finally, we discuss limitations and future work of the proposed method.
-  % 148 words
-  \keywords{Interpretable machine learning \and Local surrogate model}
+	In recent years, complex machine learning models such as deep neural networks
+	have been used in various industrial fields due to their high accuracy.
+	However, its complexity has been a major obstacle to implementation
+	in decision-making situations where transparency of the decision process is required.
+	In order to address this problem,
+	various post-hoc explanation methods have been proposed,
+	but they have not been able to achieve interpretability of
+	both the explanation and its scope.
+	We propose a new method, R-LIME,
+	which interprets complex classifiers in an interpretable scope.
+	R-LIME locally approximizes a complex decision boundary linearly
+	in a rectangular region
+	and maximizes the region as long as the accuracy of the linear
+	classifier is higher than a specified threshold.
+	The resulting rectangular region is interpretable for users because it is
+	expressed as a conjunction of feature predicates.
+	We demonstrate the effectiveness of the proposed method through qualitative
+	and quantitative experiments using a real-world dataset.
+	Finally, we discuss limitations and future work of the proposed method.
+	% 148 words
+	\keywords{Interpretable machine learning \and Local surrogate model}
 \end{abstract}
 
 \section{Introduction}
@@ -126,7 +126,7 @@ implementation.
 Consequently,
 there has been extensive research in the field of post hoc explanations
 for machine learning models \cite{%
-  ribeiro2016why,ribeiro2018anchors,radulovic2023bella,guidotti2018local}.
+	ribeiro2016why,ribeiro2018anchors,radulovic2023bella,guidotti2018local}.
 
 Existing methods on post hoc explanations categorize into
 \emph{model-dependent} and \emph{model-agnostic} methods,
@@ -171,37 +171,37 @@ expressed as a conjunction of feature predicates.
 
 \section{Related Work}
 \begin{figure}[t]
-  \centering
-  \vspace{0.5cm}
-  \begin{subfigure}[t]{0.55\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{lime_vs_anchor_exp_a.png}
-    \caption{Instances around the focal point.}\label{fig:lime_vs_anchor_exp_a}
-    \vspace{0.5cm}
-  \end{subfigure}
-  \begin{subfigure}[t]{0.45\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{lime_vs_anchor_exp_b.png}
-    \caption{%
-      Explanations by LIME\@.
-      They provide contributions of each feature to the output,
-      but do not explicitly indicate its scope.
-    }\label{fig:lime_vs_anchor_exp_b}
-    \vspace{0.5cm}
-  \end{subfigure}
-  \begin{subfigure}[t]{0.55\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{lime_vs_anchor_exp_c.png}
-    \caption{%
-      Explanations by Anchor.
-      They provide the effective scope of the explanation,
-      but do not provide details about the influence of each feature.
-    }\label{fig:lime_vs_anchor_exp_c}
-  \end{subfigure}
-  \caption{%
-    Explanations by LIME and Anchor
-    for an LSTM sentiment prediction model \cite{ribeiro2018anchors}.
-  }\label{fig:lime_vs_anchor_exp}
+	\centering
+	\vspace{0.5cm}
+	\begin{subfigure}[t]{0.55\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{lime_vs_anchor_exp_a.png}
+		\caption{Instances around the focal point.}\label{fig:lime_vs_anchor_exp_a}
+		\vspace{0.5cm}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.45\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{lime_vs_anchor_exp_b.png}
+		\caption{%
+			Explanations by LIME\@.
+			They provide contributions of each feature to the output,
+			but do not explicitly indicate its scope.
+		}\label{fig:lime_vs_anchor_exp_b}
+		\vspace{0.5cm}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.55\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{lime_vs_anchor_exp_c.png}
+		\caption{%
+			Explanations by Anchor.
+			They provide the effective scope of the explanation,
+			but do not provide details about the influence of each feature.
+		}\label{fig:lime_vs_anchor_exp_c}
+	\end{subfigure}
+	\caption{%
+		Explanations by LIME and Anchor
+		for an LSTM sentiment prediction model \cite{ribeiro2018anchors}.
+	}\label{fig:lime_vs_anchor_exp}
 \end{figure}
 In this chapter,
 we provide an overview of existing research on local model-agnostic explanations,
@@ -215,18 +215,18 @@ by a linear classifier $g: \mathbb{R}^d \to \{0,1\}$
 (\cref{fig:lime}).
 The process involves:
 \begin{enumerate}
-  \item Obtaining a set of perturbed samples $\mathcal{Z}_p$ around $x$
-        and the set of pseudo-labels $f(\mathcal{Z}_p) = \{f(z) \mid z \in \mathcal{Z}_p\}$.
-  \item Learning a linear classifier $g$
-        using $\mathcal{Z}_p$ and $f(\mathcal{Z}_p)$
-        by minimizing the following loss function:
-        \begin{equation}
-          \label{eq:lime_loss}
-          \mathcal{L}(f,g,\pi_x)=\sum_{z\in\mathcal{Z}_p}
-          \pi_x(z){\left(f(z)-g(z)\right)}^2,
-        \end{equation}
-        where $\pi_x(z)$ is a weight function designed to be larger for samples
-        closer to $x$, typically implemented using an exponential kernel.
+	\item Obtaining a set of perturbed samples $\mathcal{Z}_p$ around $x$
+	      and the set of pseudo-labels $f(\mathcal{Z}_p) = \{f(z) \mid z \in \mathcal{Z}_p\}$.
+	\item Learning a linear classifier $g$
+	      using $\mathcal{Z}_p$ and $f(\mathcal{Z}_p)$
+	      by minimizing the following loss function:
+	      \begin{equation}
+		      \label{eq:lime_loss}
+		      \mathcal{L}(f,g,\pi_x)=\sum_{z\in\mathcal{Z}_p}
+		      \pi_x(z){\left(f(z)-g(z)\right)}^2,
+	      \end{equation}
+	      where $\pi_x(z)$ is a weight function designed to be larger for samples
+	      closer to $x$, typically implemented using an exponential kernel.
 \end{enumerate}
 
 LIME provides valuable insights into the local behavior of the model
@@ -260,9 +260,9 @@ a rule $A(z) = a_{i_1}(z) \wedge a_{i_2}(z) \wedge \dots \wedge a_{i_t}(z)$ is d
 The predicates $a_i(z)$ evaluate to true ($=1$) when $z_i = x_i$ and false ($=0$) otherwise.
 The accuracy $\Prec(A)$ and coverage $\Cov(A)$ of the rule $A$ are defined as follows:
 \begin{align}
-  \Prec(A) & =\mathbb{E}_{z\sim\mathcal{D}(z|A)}
-  [\mathbbm{1}_{f(z)=f(x)}], \label{eq:anchor_def_prec} \\
-  \Cov(A)  & =\mathbb{E}_{z\sim\mathcal{D}(z)}[A(z)].
+	\Prec(A) & =\mathbb{E}_{z\sim\mathcal{D}(z|A)}
+	[\mathbbm{1}_{f(z)=f(x)}], \label{eq:anchor_def_prec} \\
+	\Cov(A)  & =\mathbb{E}_{z\sim\mathcal{D}(z)}[A(z)].
 \end{align}
 
 where $\mathcal{D}(z|A)$ is the conditional distribution in the region
@@ -277,14 +277,14 @@ However, \cref{eq:anchor_def_prec} is not directly computable.
 Introducing a confidence level $1-\delta$ $(0\le\delta\le1)$,
 the accuracy constraint is relaxed as follows:
 \begin{equation}
-  \label{eq:const_prec}
-  P(\Prec(A)\ge\tau)\ge1-\delta.
+	\label{eq:const_prec}
+	P(\Prec(A)\ge\tau)\ge1-\delta.
 \end{equation}
 Thus, the following optimization problem is solved:
 \begin{equation}
-  \label{eq:main_problem}
-  A^*=\underset{A \text{~s.t. } P(\Prec(A)\ge\tau)\ge1-\delta\wedge A(x)=1}
-  {\arg\max}\Cov(A).
+	\label{eq:main_problem}
+	A^*=\underset{A \text{~s.t. } P(\Prec(A)\ge\tau)\ge1-\delta\wedge A(x)=1}
+	{\arg\max}\Cov(A).
 \end{equation}
 
 While Anchor provides an effective scope of the explanation,
@@ -300,8 +300,8 @@ resulting in less user insight into the model's behavior compared to LIME
 (\cref{fig:lime_vs_anchor_exp_b}).
 
 \subsection{%
-  BELLA (Black box model Explanations by Local Linear Approximations)
-  \cite{radulovic2023bella}
+	BELLA (Black box model Explanations by Local Linear Approximations)
+	\cite{radulovic2023bella}
 }
 BELLA addresses the non-optimization of the approximation region,
 a drawback of LIME,
@@ -310,14 +310,14 @@ using a subset $Z'$ of the dataset $Z$
 instead of perturbed samples (\cref{fig:bella}).
 The process involves:
 \begin{enumerate}
-  \item Computing the distance $d_x(z)$ for all instances $z$ in $Z$
-        with respect to the focal point $x$.
-  \item Selecting the $k$ instances with the smallest $d_x(z)$,
-        forming a subset $Z_s(k) \subseteq Z$.
-  \item Learning the local linear classifier $g$ using $Z_s(k)$
-        and calculating the similarity measure $\mathcal{R}(k)$ between $f$ and $g$
-        over $k=1,2,\dots,|Z|$.
-  \item Obtaining the optimal $k^*$ by maximizing $\mathcal{R}(k)$.
+	\item Computing the distance $d_x(z)$ for all instances $z$ in $Z$
+	      with respect to the focal point $x$.
+	\item Selecting the $k$ instances with the smallest $d_x(z)$,
+	      forming a subset $Z_s(k) \subseteq Z$.
+	\item Learning the local linear classifier $g$ using $Z_s(k)$
+	      and calculating the similarity measure $\mathcal{R}(k)$ between $f$ and $g$
+	      over $k=1,2,\dots,|Z|$.
+	\item Obtaining the optimal $k^*$ by maximizing $\mathcal{R}(k)$.
 \end{enumerate}
 
 BELLA aims to enhance the reliability of explanations
@@ -330,48 +330,48 @@ its interpretability is lower compared to Anchor.
 
 \section{Proposed Method}
 \begin{figure}[tb]
-  \centering
-  \begin{subfigure}[t]{0.45\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{lime}
-    \caption{%
-      LIME: Locally approximates the decision boundary around the focal point.
-    }\label{fig:lime}
-  \end{subfigure}%
-  \hfill
-  \begin{subfigure}[t]{0.45\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{anchor}
-    \caption{%
-      Anchor: Maximizes coverage of a rectangular region
-      containing the focal point under accuracy constraints.
-    }\label{fig:anchor}
-  \end{subfigure}
-  \hfill
-  \begin{subfigure}[t]{0.45\textwidth}
-    \centering
-    \includegraphics[width=0.85\textwidth]{bella}
-    \caption{%
-      BELLA: Explores a subset of the dataset,
-      maximizing similarity between the local linear classifier
-      and the black-box classifier.
-    }\label{fig:bella}
-  \end{subfigure}
-  \hfill
-  \begin{subfigure}[t]{0.45\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{rlime3}
-    \caption{%
-      R-LIME:
-      Maximizes coverage of a rectangular region containing the focal point
-      under lower constraints on the accuracy of the linear classifier.
-    }\label{fig:rlime}
-  \end{subfigure}
-  \caption{%
-    Visual comparison of LIME, Anchor, BELLA and R-LIME (our proposed method).
-    The solid line represents the rectangular region containing the focal
-    point, and the dashed line represents the learned approximation model.
-  }
+	\centering
+	\begin{subfigure}[t]{0.45\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{lime}
+		\caption{%
+			LIME: Locally approximates the decision boundary around the focal point.
+		}\label{fig:lime}
+	\end{subfigure}%
+	\hfill
+	\begin{subfigure}[t]{0.45\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{anchor}
+		\caption{%
+			Anchor: Maximizes coverage of a rectangular region
+			containing the focal point under accuracy constraints.
+		}\label{fig:anchor}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[t]{0.45\textwidth}
+		\centering
+		\includegraphics[width=0.85\textwidth]{bella}
+		\caption{%
+			BELLA: Explores a subset of the dataset,
+			maximizing similarity between the local linear classifier
+			and the black-box classifier.
+		}\label{fig:bella}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[t]{0.45\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{rlime3}
+		\caption{%
+			R-LIME:
+			Maximizes coverage of a rectangular region containing the focal point
+			under lower constraints on the accuracy of the linear classifier.
+		}\label{fig:rlime}
+	\end{subfigure}
+	\caption{%
+		Visual comparison of LIME, Anchor, BELLA and R-LIME (our proposed method).
+		The solid line represents the rectangular region containing the focal
+		point, and the dashed line represents the learned approximation model.
+	}
 \end{figure}
 
 \subsection{Overview}
@@ -394,8 +394,8 @@ under lower constraints on the accuracy of $g$.
 We modify the Anchor's definition of accuracy in \cref{eq:anchor_def_prec}
 as follows:
 \begin{equation}
-  \Prec(A)=\underset{g\in G}{\max}\ \mathbb{E}_{z\sim\mathcal{D}(z|A)}
-  [\mathbbm{1}_{f(z)=g(z)}]. \label{eq:def_prec}
+	\Prec(A)=\underset{g\in G}{\max}\ \mathbb{E}_{z\sim\mathcal{D}(z|A)}
+	[\mathbbm{1}_{f(z)=g(z)}]. \label{eq:def_prec}
 \end{equation}
 where $G$ is the set of possible linear classifiers.
 By solving the optimization problem in \cref{eq:main_problem}
@@ -403,44 +403,44 @@ under the modified accuracy definition in \cref{eq:def_prec},
 we can select the rule that enables explanation with high accuracy and generality.
 The characteristics of R-LIME are listed below:
 \begin{itemize}
-  \item The approximation region is optimal and interpretable.
-  \item The dataset is not directly accessed, and only the distribution is utilized.
-  \item The number of samples is dynamically determined
-        based on the estimated accuracy without the need for predefining it.
+	\item The approximation region is optimal and interpretable.
+	\item The dataset is not directly accessed, and only the distribution is utilized.
+	\item The number of samples is dynamically determined
+	      based on the estimated accuracy without the need for predefining it.
 \end{itemize}
 
 \subsection{Algorithm}\label{sec:alg}
 {%
-  \begin{figure}[t]
-    \centering
-    \includegraphics[width=0.32\textwidth]{rlime1}
-    \includegraphics[width=0.32\textwidth]{rlime2}
-    \includegraphics[width=0.32\textwidth]{rlime3}
-    \caption{%
-      Overview of the R-LIME algorithm.
-      The progression of the algorithm is illustrated from left to right.
-      The solid line represents the rectangular region $A$,
-      and the dashed line represents the linear approximation model $g$
-      learned within $A$.
-      The initial value of $A$ is an empty rule (entire input space),
-      and predicates are added to $A$, reducing coverage.
-      The process continues until $\Prec(A)\ge\tau$,
-      at which point the rule with the maximum coverage is output.
-    }
-  \end{figure}
-  \begin{algorithm}[p]
-    \input{alg1}
-  \end{algorithm}
-  \begin{algorithm}[p]
-    \input{alg2}
-  \end{algorithm}
-  \def\myidt{\hspace{\algorithmicindent}}
-  \begin{algorithm}[p]
-    \input{alg3}
-  \end{algorithm}
-  \begin{algorithm}[p]
-    \input{alg4}
-  \end{algorithm}
+	\begin{figure}[t]
+		\centering
+		\includegraphics[width=0.32\textwidth]{rlime1}
+		\includegraphics[width=0.32\textwidth]{rlime2}
+		\includegraphics[width=0.32\textwidth]{rlime3}
+		\caption{%
+			Overview of the R-LIME algorithm.
+			The progression of the algorithm is illustrated from left to right.
+			The solid line represents the rectangular region $A$,
+			and the dashed line represents the linear approximation model $g$
+			learned within $A$.
+			The initial value of $A$ is an empty rule (entire input space),
+			and predicates are added to $A$, reducing coverage.
+			The process continues until $\Prec(A)\ge\tau$,
+			at which point the rule with the maximum coverage is output.
+		}
+	\end{figure}
+	\begin{algorithm}[p]
+		\input{alg1}
+	\end{algorithm}
+	\begin{algorithm}[p]
+		\input{alg2}
+	\end{algorithm}
+	\def\myidt{\hspace{\algorithmicindent}}
+	\begin{algorithm}[p]
+		\input{alg3}
+	\end{algorithm}
+	\begin{algorithm}[p]
+		\input{alg4}
+	\end{algorithm}
 }
 
 Our method's algorithm is mainly based on that used in Anchor.
@@ -475,8 +475,8 @@ we employ the KL-LUCB algorithm \cite{kaufmann2013information}.
 The pseudocode is shown in \cref{alg:best_cands}.
 For tolerance $\epsilon\in[0,1]$, the KL-LUCB algorithm guarantees below:
 \begin{equation}
-  P(\underset{A\in\cands}{\min}\Prec(A)\ge
-  \underset{A'\in\mathcal{A}}{\min}\Prec(A')-\epsilon)\ge1-\delta.
+	P(\underset{A\in\cands}{\min}\Prec(A)\ge
+	\underset{A'\in\mathcal{A}}{\min}\Prec(A')-\epsilon)\ge1-\delta.
 \end{equation}
 However,
 the KL-LUCB algorithm assumes that the reward distribution for each arm
@@ -488,8 +488,8 @@ This issue is discussed further in \cref{sec:reward}.
 \subsubsection{Selection of the Rule with Maximum Coverage Meeting the Constraint}
 To satisfy the constraint imposed by \cref{eq:const_prec}, rule $A$ needs to fulfill the lower bound constraint:
 \begin{equation}
-  \Prec_{l}(A,\delta)>\tau
-  \label{eq:stop_condition}
+	\Prec_{l}(A,\delta)>\tau
+	\label{eq:stop_condition}
 \end{equation}
 where $\Prec_{l}(A,\delta)$ is the lower limit of
 the $100(1-\delta)$\% confidence interval for $\Prec(A)$.
@@ -513,38 +513,38 @@ We compare LIME and R-LIME using a real-world dataset.
 \subsection{Qualitative Evaluation}
 \subsubsection{Experimental Setup}\label{sec:exp_setting}
 {%
-  \renewcommand{\arraystretch}{1.05}
-  \begin{table}[tbp]
-    \centering
-    \caption{%
-      Attributes of the recidivism dataset used in the experiments.
-      Continuous features are all discretized
-      and only binary and ordinal features are considered.
-    }\label{tab:rcdv}
-    \begin{tabular}{llc}
-      \toprule
-      Attribute              & Overview                              & \# of Possible Values \\
-      \midrule
-      Race                   & Race (Black or White)                 & 2                     \\
-      Alcohol                & Presence of serious alcohol issues    & 2                     \\
-      Junky                  & Drug usage                            & 2                     \\
-      Supervised Release     & Supervised release                    & 2                     \\
-      Married                & Marital status                        & 2                     \\
-      Felony                 & Felony or not                         & 2                     \\
-      WorkRelease            & Participation in work release program & 2                     \\
-      Crime against Property & Crime against property or not         & 2                     \\
-      Crime against Person   & Crime against a person or not         & 2                     \\
-      Gender                 & Gender (Female or Male)               & 2                     \\
-      Priors                 & Number of prior offenses              & 4                     \\
-      YearsSchool            & Years of formal education completed   & 4                     \\
-      PrisonViolations       & Number of prison rule violations      & 3                     \\
-      Age                    & Age                                   & 4                     \\
-      MonthsServed           & Months served in prison               & 4                     \\
-      \midrule
-      Recidivism             & Recidivism or not                     & 2                     \\
-      \bottomrule
-    \end{tabular}
-  \end{table}
+	\renewcommand{\arraystretch}{1.05}
+	\begin{table}[tbp]
+		\centering
+		\caption{%
+			Attributes of the recidivism dataset used in the experiments.
+			Continuous features are all discretized
+			and only binary and ordinal features are considered.
+		}\label{tab:rcdv}
+		\begin{tabular}{llc}
+			\toprule
+			Attribute              & Overview                              & \# of Possible Values \\
+			\midrule
+			Race                   & Race (Black or White)                 & 2                     \\
+			Alcohol                & Presence of serious alcohol issues    & 2                     \\
+			Junky                  & Drug usage                            & 2                     \\
+			Supervised Release     & Supervised release                    & 2                     \\
+			Married                & Marital status                        & 2                     \\
+			Felony                 & Felony or not                         & 2                     \\
+			WorkRelease            & Participation in work release program & 2                     \\
+			Crime against Property & Crime against property or not         & 2                     \\
+			Crime against Person   & Crime against a person or not         & 2                     \\
+			Gender                 & Gender (Female or Male)               & 2                     \\
+			Priors                 & Number of prior offenses              & 4                     \\
+			YearsSchool            & Years of formal education completed   & 4                     \\
+			PrisonViolations       & Number of prison rule violations      & 3                     \\
+			Age                    & Age                                   & 4                     \\
+			MonthsServed           & Months served in prison               & 4                     \\
+			\midrule
+			Recidivism             & Recidivism or not                     & 2                     \\
+			\bottomrule
+		\end{tabular}
+	\end{table}
 }
 
 The experiments utilized the recidivism dataset \cite{schmidt1988predicting}.
@@ -575,109 +575,109 @@ the confidence coefficient to $1-\delta=0.95$,
 and the tolerance of the KL-LUCB algorithm to $\epsilon=0.05$.
 Accuracy thresholds $\tau$ were set to $\tau=0.70,0.80,0.90$.
 
-  {%
+	{%
 
-    \def\dir{python/exp1}
-    \def\Asample{0012}
-    \def\Bsample{0011}
-    \def\index#1{\ifnum#1=0 \Asample \else \Bsample \fi}
+		\def\dir{python/exp1}
+		\def\Asample{0012}
+		\def\Bsample{0011}
+		\def\index#1{\ifnum#1=0 \Asample \else \Bsample \fi}
 
-    {%
-      \def\AB#1{\ifnum#1=0 A\else B\fi}
-      \def\mylabel#1{\ifnum#1=0 \label{fig:A-instance}\else \label{fig:B-instance}\fi}
-      \renewcommand{\arraystretch}{1.02}
-      \begin{figure}[tbp]
-        \foreach\a in {0,1}{%
-            \centering
-            \begin{subfigure}{\textwidth}
-              \centering
-              \begin{tabular}{p{14em}m{16em}}
-                \toprule
-                \csvreader[no head, late after line= \\]{%
-                  \dir/\index{\a}.csv
-                }{}{%
-                \ifnum\thecsvrow=16 \midrule\fi\csvcoli & \csvcolii
-                }
-                \bottomrule
-              \end{tabular}
-              \caption{Instance~\AB{\a}}\mylabel{\a}
-              \vspace{15pt}
-            \end{subfigure}
-          }
-        \vspace{-15pt}
-        \caption{Two instances sampled from recidivism dataset.}\label{fig:instance}
-      \end{figure}
-    }
-    {%
-      \def\scale{0.315}
-      \def\imgwidth{0.495\textwidth}
-      \def\hspacebase{\hspace{-1.5em}}
-      \def\vspacebase{\vspace{0.5em}}
-      \def\vspacebeforecaption{\vspace{-0.4em}}
-      \begin{figure}[p]
-        \centering
-        \begin{subfigure}[t]{\imgwidth}
-          \hspacebase
-          \includegraphics[scale=\scale]{\dir/lime-\Asample}
-          \vspacebeforecaption
-          \caption{LIME}\label{fig:A-lime}
-          \vspacebase
-        \end{subfigure}
-        \begin{subfigure}[t]{\imgwidth}
-          \hspacebase
-          \hspace{1.0em}
-          \includegraphics[scale=\scale]{\dir/newlime-\Asample-70}
-          \vspacebeforecaption
-          \caption{R-LIME ($\tau=0.70$)}\label{fig:A-rlime-70}
-          \vspacebase
-        \end{subfigure}
-        \begin{subfigure}[t]{\imgwidth}
-          \hspacebase
-          \includegraphics[scale=\scale]{\dir/newlime-\Asample-80}
-          \vspacebeforecaption
-          \caption{R-LIME ($\tau=0.80$)}\label{fig:A-rlime-80}
-        \end{subfigure}
-        \begin{subfigure}[t]{\imgwidth}
-          \hspacebase
-          \includegraphics[scale=\scale]{\dir/newlime-\Asample-90}
-          \vspacebeforecaption
-          \caption{R-LIME ($\tau=0.90$)}\label{fig:A-rlime-90}
-        \end{subfigure}
-        \caption{Explanation for Instance A by LIME and R-LIME.}\label{fig:A}
-      \end{figure}
-      \begin{figure}[p]
-        \centering
-        \begin{subfigure}[t]{\imgwidth}
-          \hspacebase
-          \includegraphics[scale=\scale]{\dir/lime-\Bsample}
-          \vspacebeforecaption
-          \caption{LIME}\label{fig:B-lime}
-          \vspacebase
-        \end{subfigure}
-        \begin{subfigure}[t]{\imgwidth}
-          \hspacebase
-          \includegraphics[scale=\scale]{\dir/newlime-\Bsample-70}
-          \vspacebeforecaption
-          \caption{R-LIME ($\tau=0.70$)}\label{fig:B-rlime-70}
-          \vspacebase
-        \end{subfigure}
-        \begin{subfigure}[t]{\imgwidth}
-          \hspacebase
-          \includegraphics[scale=\scale]{\dir/newlime-\Bsample-80}
-          \vspacebeforecaption
-          \caption{R-LIME ($\tau=0.80$)}\label{fig:B-rlime-80}
-        \end{subfigure}
-        \begin{subfigure}[t]{\imgwidth}
-          \hspacebase
-          \hspace{0em}
-          \includegraphics[scale=\scale]{\dir/newlime-\Bsample-90}
-          \vspacebeforecaption
-          \caption{R-LIME ($\tau=0.90$)}\label{fig:B-rlime-90}
-        \end{subfigure}
-        \caption{Explanation for Instance B by LIME and R-LIME}\label{fig:B}
-      \end{figure}
-    }
-  }
+		{%
+			\def\AB#1{\ifnum#1=0 A\else B\fi}
+			\def\mylabel#1{\ifnum#1=0 \label{fig:A-instance}\else \label{fig:B-instance}\fi}
+			\renewcommand{\arraystretch}{1.02}
+			\begin{figure}[tbp]
+				\foreach\a in {0,1}{%
+						\centering
+						\begin{subfigure}{\textwidth}
+							\centering
+							\begin{tabular}{p{14em}m{16em}}
+								\toprule
+								\csvreader[no head, late after line= \\]{%
+									\dir/\index{\a}.csv
+								}{}{%
+								\ifnum\thecsvrow=16 \midrule\fi\csvcoli & \csvcolii
+								}
+								\bottomrule
+							\end{tabular}
+							\caption{Instance~\AB{\a}}\mylabel{\a}
+							\vspace{15pt}
+						\end{subfigure}
+					}
+				\vspace{-15pt}
+				\caption{Two instances sampled from recidivism dataset.}\label{fig:instance}
+			\end{figure}
+		}
+		{%
+			\def\scale{0.315}
+			\def\imgwidth{0.495\textwidth}
+			\def\hspacebase{\hspace{-1.5em}}
+			\def\vspacebase{\vspace{0.5em}}
+			\def\vspacebeforecaption{\vspace{-0.4em}}
+			\begin{figure}[p]
+				\centering
+				\begin{subfigure}[t]{\imgwidth}
+					\hspacebase
+					\includegraphics[scale=\scale]{\dir/lime-\Asample}
+					\vspacebeforecaption
+					\caption{LIME}\label{fig:A-lime}
+					\vspacebase
+				\end{subfigure}
+				\begin{subfigure}[t]{\imgwidth}
+					\hspacebase
+					\hspace{1.0em}
+					\includegraphics[scale=\scale]{\dir/newlime-\Asample-70}
+					\vspacebeforecaption
+					\caption{R-LIME ($\tau=0.70$)}\label{fig:A-rlime-70}
+					\vspacebase
+				\end{subfigure}
+				\begin{subfigure}[t]{\imgwidth}
+					\hspacebase
+					\includegraphics[scale=\scale]{\dir/newlime-\Asample-80}
+					\vspacebeforecaption
+					\caption{R-LIME ($\tau=0.80$)}\label{fig:A-rlime-80}
+				\end{subfigure}
+				\begin{subfigure}[t]{\imgwidth}
+					\hspacebase
+					\includegraphics[scale=\scale]{\dir/newlime-\Asample-90}
+					\vspacebeforecaption
+					\caption{R-LIME ($\tau=0.90$)}\label{fig:A-rlime-90}
+				\end{subfigure}
+				\caption{Explanation for Instance A by LIME and R-LIME.}\label{fig:A}
+			\end{figure}
+			\begin{figure}[p]
+				\centering
+				\begin{subfigure}[t]{\imgwidth}
+					\hspacebase
+					\includegraphics[scale=\scale]{\dir/lime-\Bsample}
+					\vspacebeforecaption
+					\caption{LIME}\label{fig:B-lime}
+					\vspacebase
+				\end{subfigure}
+				\begin{subfigure}[t]{\imgwidth}
+					\hspacebase
+					\includegraphics[scale=\scale]{\dir/newlime-\Bsample-70}
+					\vspacebeforecaption
+					\caption{R-LIME ($\tau=0.70$)}\label{fig:B-rlime-70}
+					\vspacebase
+				\end{subfigure}
+				\begin{subfigure}[t]{\imgwidth}
+					\hspacebase
+					\includegraphics[scale=\scale]{\dir/newlime-\Bsample-80}
+					\vspacebeforecaption
+					\caption{R-LIME ($\tau=0.80$)}\label{fig:B-rlime-80}
+				\end{subfigure}
+				\begin{subfigure}[t]{\imgwidth}
+					\hspacebase
+					\hspace{0em}
+					\includegraphics[scale=\scale]{\dir/newlime-\Bsample-90}
+					\vspacebeforecaption
+					\caption{R-LIME ($\tau=0.90$)}\label{fig:B-rlime-90}
+				\end{subfigure}
+				\caption{Explanation for Instance B by LIME and R-LIME}\label{fig:B}
+			\end{figure}
+		}
+	}
 \subsubsection{Experimental Results}
 The results of the experiment are shown in \cref{fig:A,fig:B}.
 The values assigned to each attribute name represent the contribution
@@ -727,13 +727,13 @@ We then sampled 10,000 instances within the rectangular region
 obtained by R-LIME and calculated the local accuracy of both methods.
 \subsubsection{Experimental Results}
 \begin{figure}[tbp]
-  \centering
-  \includegraphics[width=0.55\textwidth]{python/exp2/box_plot}
-  \caption[Comparison of Local Accuracy between R-LIME and LIME]{%
-    Comparison of local accuracy between LIME and R-LIME\@.
-    R-LIME achieved higher and less variable accuracy compared to LIME
-    for all values of $\tau$.
-  }\label{fig:box_plot}
+	\centering
+	\includegraphics[width=0.55\textwidth]{python/exp2/box_plot}
+	\caption[Comparison of Local Accuracy between R-LIME and LIME]{%
+		Comparison of local accuracy between LIME and R-LIME\@.
+		R-LIME achieved higher and less variable accuracy compared to LIME
+		for all values of $\tau$.
+	}\label{fig:box_plot}
 \end{figure}
 The results are presented in \cref{fig:box_plot},
 showcasing the distribution of the accuracy of the linear approximation models
@@ -751,25 +751,25 @@ effectively as approximation models depending on how the region is selected.
  {%
   \def\imgwidth{0.49\textwidth}
   \begin{figure}[t]
-    \centering
-    \begin{subfigure}[t]{\imgwidth}
-      \centering
-      \includegraphics[width=0.78\textwidth]{newlime}
-      \caption{R-LIME for balanced data.}\label{fig:balanced}
-    \end{subfigure}
-    \begin{subfigure}[t]{\imgwidth}
-      \centering
-      \includegraphics[width=0.8\textwidth]{newlime_for_imbalanced_data}
-      \caption{R-LIME for imbalanced data.
-      }\label{fig:imbalanced}
-    \end{subfigure}
-    \caption{%
-      Behavior of R-LIME for balanced and imbalanced data.
-      In case of imbalanced label distribution,
-      the approximation region covers the entire input space and the
-      linear approximation model always outputs the majority label.
-    }
-    \vspace{10pt}
+	  \centering
+	  \begin{subfigure}[t]{\imgwidth}
+		  \centering
+		  \includegraphics[width=0.78\textwidth]{newlime}
+		  \caption{R-LIME for balanced data.}\label{fig:balanced}
+	  \end{subfigure}
+	  \begin{subfigure}[t]{\imgwidth}
+		  \centering
+		  \includegraphics[width=0.8\textwidth]{newlime_for_imbalanced_data}
+		  \caption{R-LIME for imbalanced data.
+		  }\label{fig:imbalanced}
+	  \end{subfigure}
+	  \caption{%
+		  Behavior of R-LIME for balanced and imbalanced data.
+		  In case of imbalanced label distribution,
+		  the approximation region covers the entire input space and the
+		  linear approximation model always outputs the majority label.
+	  }
+	  \vspace{10pt}
   \end{figure}
  }
 
@@ -799,21 +799,21 @@ Another solution involves adding constraints
 to limit the label distribution bias within the approximation region.
 In addition to \cref{eq:const_prec}, adding a constraint like
 \begin{equation}
-  {\left(\mathbb{E}_{z\sim\mathcal{D}(z\mid A)}[\mathbbm{1}_{f(z)=1}]-\frac{1}{2}\right)}^2<\mu
+	{\left(\mathbb{E}_{z\sim\mathcal{D}(z\mid A)}[\mathbbm{1}_{f(z)=1}]-\frac{1}{2}\right)}^2<\mu
 \end{equation}
 could suppress the excessive expansion of the approximation region.
 
 \subsection{Changes in Reward Distribution in Optimal Arm Identification}\label{sec:reward}
 {%
-  \renewcommand{\arraystretch}{1.1}
-  \begin{table}[tbp]
-    \centering
-    \caption{%
-      Deviation between the estimated accuracy and the true accuracy.
-      Deviation was relatively small considering confidence level $1-\delta=0.95$.
-    }\label{tab:reward}
-    \input{tab_exp_adv}
-  \end{table}
+	\renewcommand{\arraystretch}{1.1}
+	\begin{table}[tbp]
+		\centering
+		\caption{%
+			Deviation between the estimated accuracy and the true accuracy.
+			Deviation was relatively small considering confidence level $1-\delta=0.95$.
+		}\label{tab:reward}
+		\input{tab_exp_adv}
+	\end{table}
 }
 In R-LIME,
 the problem of selecting the rule with the highest accuracy is formulated
