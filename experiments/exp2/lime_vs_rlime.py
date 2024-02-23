@@ -5,13 +5,14 @@ import multiprocessing
 from functools import partial
 
 import numpy as np
-import pandas as pd
-from sklearn.ensemble import RandomForestClassifier
+import pandas as pd  # type: ignore
+from lime import lime_tabular  # type: ignore
+from sklearn.ensemble import RandomForestClassifier  # type: ignore
 
-from NewLIME import mylime, newlime_base, newlime_tabular, newlime_utils
-from NewLIME.newlime_base import Arm
-from NewLIME.newlime_types import IntArray
-from NewLIME.sampler import Sampler
+from RLIME import mylime, newlime_base, newlime_tabular, newlime_utils
+from RLIME.newlime_base import Arm
+from RLIME.newlime_types import IntArray
+from RLIME.sampler import Sampler
 
 
 def main() -> None:
@@ -19,7 +20,7 @@ def main() -> None:
 
     # Load the dataset.
     dataset = newlime_utils.load_dataset(
-        "recidivism", "NewLIME/datasets/", balance=True
+        "recidivism", "RLIME/datasets/", balance=True
     )
 
     # Learn the black box model.
@@ -29,7 +30,7 @@ def main() -> None:
     # Get the target instances.
     sample_num = 100
 
-    for tau in [0.80, 0.90]:
+    for tau in [0.70, 0.80, 0.90]:
 
         print(f"tau = {tau:.2f}")
 
@@ -94,6 +95,29 @@ def calc_accuracy(
     return lime_acc, rlime_acc
 
 
+def original_lime(
+    dataset: newlime_tabular.Dataset,
+    trg: IntArray,
+    model: RandomForestClassifier,
+    pred_label: int,
+) -> list[float]:
+    """Calculate the weights of LIME."""
+
+    lime_explainer = lime_tabular.LimeTabularExplainer(
+        dataset.train,
+        feature_names=dataset.feature_names,
+        class_names=dataset.class_names,
+        discretize_continuous=False,
+    )
+    lime_exp = lime_explainer.explain_instance(
+        trg, model.predict_proba, num_features=5, top_labels=1
+    )
+    weights = [0.0] * len(dataset.feature_names)
+    for t in lime_exp.local_exp[pred_label]:
+        weights[t[0]] = t[1] * (pred_label * 2 - 1)
+    return weights
+
+
 def compare_lime_and_newlime(
     idx: int,
     dataset: newlime_tabular.Dataset,
@@ -125,7 +149,10 @@ def compare_lime_and_newlime(
         trg, dataset.train, black_box.predict, dataset.categorical_names
     )
 
-    lime_weights = mylime.explain(trg, sampler, 5000)
+    # lime_weights = mylime.explain(trg, sampler, 5000)
+    lime_weights = original_lime(
+        dataset, trg, black_box, black_box.predict(trg.reshape(1, -1))[0]
+    )
 
     hyper_param = newlime_base.HyperParam(
         tau=tau,

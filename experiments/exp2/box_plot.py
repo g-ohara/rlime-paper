@@ -42,7 +42,7 @@ def main() -> None:
     )
     # plt.title("Accuracy of LIME and R-LIME")
     plt.ylabel("Accuracy")
-    plt.savefig("box_plot.png")
+    plt.savefig("box_plot.eps")
 
 
 def read_data(filename: str) -> tuple[list[float], list[float]]:
