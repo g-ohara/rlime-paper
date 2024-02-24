@@ -2,6 +2,7 @@
 
 import csv
 import multiprocessing
+import sys
 from functools import partial
 
 import numpy as np
@@ -9,10 +10,14 @@ import pandas as pd  # type: ignore
 from lime import lime_tabular  # type: ignore
 from sklearn.ensemble import RandomForestClassifier  # type: ignore
 
-from RLIME import mylime, newlime_base, newlime_tabular, newlime_utils
-from RLIME.newlime_base import Arm
-from RLIME.newlime_types import IntArray
-from RLIME.sampler import Sampler
+sys.path.append("RLIME")
+import mylime  # type: ignore
+import newlime_base  # type: ignore
+import newlime_tabular
+import newlime_utils
+from newlime_base import Arm
+from newlime_types import IntArray
+from sampler import Sampler
 
 
 def main() -> None:
@@ -63,7 +68,11 @@ def main() -> None:
 
 
 def calc_accuracy(
-    sample: IntArray, labels: IntArray, lime_weights: list[float], arm: Arm
+    sample: IntArray,
+    labels: IntArray,
+    lime_weights: list[float],
+    lime_scaler,
+    arm: Arm,
 ) -> tuple[float, float]:
     """Calculate the precision of LIME and R-LIME.
 
@@ -85,7 +94,7 @@ def calc_accuracy(
     """
 
     # Get predictions of LIME and R-LIME.
-    lime_pred = np.dot(sample, lime_weights) > 0
+    lime_pred = np.dot(lime_scaler.transform(sample), lime_weights) > 0
     rlime_pred = arm.surrogate_model.predict_many(pd.DataFrame(sample))
 
     # Calculate the precision of LIME and R-LIME.
@@ -149,10 +158,10 @@ def compare_lime_and_newlime(
         trg, dataset.train, black_box.predict, dataset.categorical_names
     )
 
-    # lime_weights = mylime.explain(trg, sampler, 5000)
-    lime_weights = original_lime(
-        dataset, trg, black_box, black_box.predict(trg.reshape(1, -1))[0]
-    )
+    lime_weights, scaler = mylime.explain(trg, sampler, 5000)
+    # lime_weights = original_lime(
+    #     dataset, trg, black_box, black_box.predict(trg.reshape(1, -1))[0]
+    # )
 
     hyper_param = newlime_base.HyperParam(
         tau=tau,
@@ -175,7 +184,9 @@ def compare_lime_and_newlime(
 
     # Sample from the rule.
     sample, labels = sampler.sample(10000, arm.rule)
-    lime_acc, rlime_acc = calc_accuracy(sample, labels, lime_weights, arm)
+    lime_acc, rlime_acc = calc_accuracy(
+        sample, labels, lime_weights, scaler, arm
+    )
 
     # Print and save the results.
     print(f"Process {idx:03d} Finished.")

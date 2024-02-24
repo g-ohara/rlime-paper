@@ -124,42 +124,27 @@ due to their significant improvement in accuracy in recent years.
 However,
 the increasing complexity and black-box nature of these models pose challenges,
 particularly in critical decision-making scenarios like healthcare and finance,
-where the opacity of decision rationale becomes a major obstacle to
+where the opacity of decision process becomes a major obstacle to
 implementation.
 Consequently,
 there has been extensive research in the field of post-hoc explanations
-for machine learning models \cite{%
-	ribeiro2016why,ribeiro2018anchors,radulovic2023bella,guidotti2018local}.
+for machine learning models~\cite{%
+	guidotti2018local,radulovic2023bella,ribeiro2016why,ribeiro2018anchors}.
 
 Existing post-hoc explanation methods are categorized
 into \emph{model-dependent} and \emph{model-agnostic} methods,
 based on their dependence on the model's structure.
-Model-dependent methods primarily focus on deep neural networks and
-explain the models' behavior using their parameters.
-While these methods can provide detailed explanations
-(e.g., layer-wise explanations for neural networks)
-using the models' internal parameters,
-it is often challenging
-to apply the same method to models with different structures.
-On the other hand,
-model-agnostic methods
-do not rely on the models' parameters and utilize only their output.
-Although they are applicable to any model,
-they cannot explain reasoning process inside the model.
-Model-agnostic methods are classified into
+Furthermore, model-agnostic methods are classified into
 \emph{global} and \emph{local} methods based on their locality in input space.
-Global methods
-aim to explain the model's behavior across the entire input space,
-seeking explanations valid for any input.
-However, providing global explanations becomes challenging
-as the model's complexity increases.
 Local methods, in contrast, explain output of the model for a specific input
 (focal point) in the vicinity of that input.
 While local methods offer more simple and accurate explanations
 than global methods,
 the scope of the explanation is limited to the vicinity of the focus point.
 
-This paper specifically focuses on \emph{local} \emph{model-agnostic} methods.
+This paper specifically focuses on \emph{local} \emph{model-agnostic} methods,
+which do not rely on the models' structure
+and explain the models' behavior in the vicinity of a specific input.
 For instance, LIME (Local Interpretable Model-agnostic Explanations)
 \cite{ribeiro2016why} approximates the complex model's decision boundary
 locally using a simpler model around the given focal point.
@@ -171,7 +156,7 @@ users to overgeneralize the knowledge derived from the explanation.
 Without a clear indication of the scope of the explanation,
 users might mistakenly apply
 the derived knowledge to instances outside this scope,
-potentially leading to a misunderstanding of the black-box model's behavior.
+potentially leading to misunderstanding of the black-box model's behavior.
 
 To address this limitation of LIME,
 we propose a new method called R-LIME (Ruled LIME),
@@ -184,14 +169,6 @@ The resulting rectangular region is interpretable for users because it is
 expressed as a conjunction of feature predicates (\cref{fig:example-rlime}).
 
 \section{Related Work}
-% I want to arrange figures in the following order:
-% (a) Instances around the focal point.
-% (b) Explanations by LIME.
-% (c) Explanations by Anchor.
-% (d) Explanations by R-LIME.
-% but I want to put both (b) and (c) vertically in left column
-% and (d) in right column.
-
 \begin{figure}[t]
 	\centering
 	\vspace{0.5cm}
@@ -225,7 +202,7 @@ expressed as a conjunction of feature predicates (\cref{fig:example-rlime}).
 	\hspace{0.3cm}
 	\begin{subfigure}[t]{0.45\textwidth}
 		\centering
-		\vspace{-2.05cm}
+		\vspace{-1.96cm}
 		\includegraphics[scale=0.35]{example-rlime}
 		\caption{%
 			Explanation by R-LIME\@.
@@ -239,10 +216,116 @@ expressed as a conjunction of feature predicates (\cref{fig:example-rlime}).
 	}\label{fig:example}
 \end{figure}
 In this chapter,
+we overview existing research on post-hoc explanations,
+which explain the behavior of complex models already trained.
+They are categorized
+into \emph{model-dependent} and \emph{model-agnostic} methods
+based on their dependence on the model's structure.
+
+Model-dependent methods primarily focus on deep neural networks and
+explain the models' behavior using their parameters~\cite{samek2021explaining}.
+Layer-wise relevance propagation (LRP)~\cite{bach2015pixel} and
+deep Taylor decomposition (DTD)~\cite{montavon2017explaining}
+are representative model-dependent methods.
+While these methods can provide detailed explanations
+(e.g., layer-wise explanations for neural networks)
+using the models' internal parameters,
+it is often challenging
+to apply the same method to models with different structures.
+
+On the other hand,
+model-agnostic methods
+do not rely on the models' parameters and utilize only their output.
+Although these methods are applicable to any model,
+they cannot explain the reasoning process inside the model.
+Furthermore, model-agnostic methods are classified into
+\emph{global} and \emph{local} methods based on their locality in input space.
+Global methods
+aim to explain the model's behavior across the entire input space,
+seeking explanations valid for any input.
+Partial dependence plots (PDP)~\cite{friedman2001greedy} and
+accumulated local effects (ALE)~\cite{apley2020visualizing}
+are representative global methods.
+However, providing global explanations becomes challenging
+as the model's complexity increases.
+Local methods, in contrast, explain output of the model for a specific input
+(focal point) in the vicinity of that input.
+While local methods offer more simple and accurate explanations
+than global methods,
+the scope of the explanation is limited to the vicinity of the focus point.
+
+Model-dependent methods aim to explain the behavior of complex models
+using their internal parameters.
+
+% BELLA\cite{radulovic2023bella} addresses the non-optimization of the approximation region,
+% a drawback of LIME,
+% by learning a local linear classifier $g$
+% using a subset $Z'$ of the dataset $Z$
+% instead of perturbed samples.
+% The process involves:
+% \begin{enumerate}
+% 	\item Computing the distance $d_x(z)$ for all instances $z$ in $Z$
+% 	      with respect to the focal point $x$.
+% 	\item Selecting the $k$ instances with the smallest $d_x(z)$,
+% 	      forming a subset $Z_s(k) \subseteq Z$.
+% 	\item Learning the local linear classifier $g$ using $Z_s(k)$
+% 	      and calculating the similarity measure $\mathcal{R}(k)$ between $f$ and $g$
+% 	      over $k=1,2,\dots,|Z|$.
+% 	\item Obtaining the optimal $k^*$ by maximizing $\mathcal{R}(k)$.
+% \end{enumerate}
+% 
+% BELLA aims to enhance the reliability of explanations
+% by optimizing the approximation region for high-accuracy linear approximations.
+% However, it assumes direct access to the dataset $Z$ used for training the classifier,
+% making it inapplicable in scenarios where direct access to the dataset is restricted.
+% Additionally,
+% as BELLA presents the approximation region as a subset of the dataset,
+% its interpretability is lower compared to Anchor.
+
+\section{Proposed Method}
+\begin{figure}[tbp]
+	\centering
+	\begin{subfigure}[t]{0.3\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{visual-lime}
+		\caption{%
+			LIME: Locally approximates the decision boundary around the focal point.
+		}\label{fig:lime}
+	\end{subfigure}%
+	\hspace{0.03\textwidth}
+	\begin{subfigure}[t]{0.3\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{visual-anchor}
+		\caption{%
+			Anchor: Maximizes coverage of a rectangular region
+			containing the focal point under accuracy constraints.
+		}\label{fig:anchor}
+	\end{subfigure}
+	\hspace{0.03\textwidth}
+	\begin{subfigure}[t]{0.3\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{visual-rlime}
+		\caption{%
+			R-LIME:
+			Maximizes coverage of a rectangular region containing the focal point
+			under lower constraints on the accuracy of the linear classifier.
+		}\label{fig:rlime}
+	\end{subfigure}
+	\caption{%
+		Visual comparison of LIME, Anchor and R-LIME (our proposed method).
+		The solid line represents the rectangular region containing the focal
+		point, and the dashed line represents the learned approximation model.
+	}
+\end{figure}
+\subsection{Previous Work}
+We specifically focuses on \emph{local} and \emph{model-agnostic} methods.
+In this section,
 we briefly review existing research on local model-agnostic explanations,
 particularly focusing on studies closely related to our proposed method.
-
-\subsection{LIME (Local Interpretable Model-agnostic Explanations) \cite{ribeiro2016why}}
+\subsubsection{%
+	LIME (Local Interpretable Model-agnostic Explanations)
+	\cite{ribeiro2016why}
+}
 LIME locally
 approximates a trained black-box classifier $f: \mathbb{R}^d \to \{0,1\}$
 around a focal point $x \in \mathbb{R}^d$
@@ -271,16 +354,23 @@ users cannot assess the effective scope of the explanation
 \cite{ribeiro2018anchors}.
 An example of explanation by LIME for a sentiment prediction model
 is illustrated in \cref{fig:example-lime}.
-The explanation provides valuable insights that
-the word "not" mainly contributes to the model's positive prediction,
-but does not explicitly indicate the effective scope of that insight.
-Without the effective scope,
-users might mistakenly apply the explanation to other instances
-(e.g., ``This book is not good''),
+The explanation provides suggests that
+the word ``not'' mainly contributes to the positive prediction,
+but does not explicitly indicate the effective scope.
+Without the scope,
+users might mistakenly apply the knowledge derived from the explanation
+to other instances far from the focal point,
 potentially leading to misunderstanding of the black-box model's behavior
 \cite{ribeiro2018anchors}.
+For example,
+user may apply the insights derived from the explanation
+(\cref{fig:example-lime})
+to the sentence ``This book is not good.''
+and mistakenly conclude that the word ``not''
+mainly contributes to the positive prediction for this sentence as well,
+which is incorrect obviously.
 
-\subsection{Anchor \cite{ribeiro2018anchors}}\label{sec:anchor}
+\subsubsection{Anchor~\cite{ribeiro2018anchors}}\label{sec:anchor}
 Anchor represents a rectangular region containing the focal point $x$,
 expressed as a conjunction of feature predicates (a rule),
 that maximizes the probability of the black-box classifier $f$
@@ -325,96 +415,21 @@ Thus, the following optimization problem is solved:
 
 While Anchor provides an effective scope of the explanation,
 the information it includes is less than LIME,
-limiting its utility \cite{ribeiro2018anchors}.
+limiting its utility~\cite{ribeiro2018anchors}.
 An example of Anchor explanation for a sentiment prediction model
 is illustrated in \cref{fig:example-anchor}.
 The explanation suggests that changing words other than ``not'' and ``bad''
 has little impact on the classifier's output.
-While it clearly does not apply to the sentence ``This book is not good''
+While it clearly cannot be applied to the sentence ``This book is not good''
 because of not including the word ``bad'',
 the explanation does not provide details about the influence of each word,
 resulting in less user insight into the model's behavior compared to LIME
 (\cref{fig:example-lime}).
 
-\subsection{%
-	BELLA (Black box model Explanations by Local Linear Approximations)
-	\cite{radulovic2023bella}
-}
-BELLA addresses the non-optimization of the approximation region,
-a drawback of LIME,
-by learning a local linear classifier $g$
-using a subset $Z'$ of the dataset $Z$
-instead of perturbed samples (\cref{fig:bella}).
-The process involves:
-\begin{enumerate}
-	\item Computing the distance $d_x(z)$ for all instances $z$ in $Z$
-	      with respect to the focal point $x$.
-	\item Selecting the $k$ instances with the smallest $d_x(z)$,
-	      forming a subset $Z_s(k) \subseteq Z$.
-	\item Learning the local linear classifier $g$ using $Z_s(k)$
-	      and calculating the similarity measure $\mathcal{R}(k)$ between $f$ and $g$
-	      over $k=1,2,\dots,|Z|$.
-	\item Obtaining the optimal $k^*$ by maximizing $\mathcal{R}(k)$.
-\end{enumerate}
-
-BELLA aims to enhance the reliability of explanations
-by optimizing the approximation region for high-accuracy linear approximations.
-However, it assumes direct access to the dataset $Z$ used for training the classifier,
-making it inapplicable in scenarios where direct access to the dataset is restricted.
-Additionally,
-as BELLA presents the approximation region as a subset of the dataset,
-its interpretability is lower compared to Anchor.
-
-\section{Proposed Method}
-\begin{figure}[tb]
-	\centering
-	\begin{subfigure}[t]{0.45\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{lime}
-		\caption{%
-			LIME: Locally approximates the decision boundary around the focal point.
-		}\label{fig:lime}
-	\end{subfigure}%
-	\hfill
-	\begin{subfigure}[t]{0.45\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{anchor}
-		\caption{%
-			Anchor: Maximizes coverage of a rectangular region
-			containing the focal point under accuracy constraints.
-		}\label{fig:anchor}
-	\end{subfigure}
-	\hfill
-	\begin{subfigure}[t]{0.45\textwidth}
-		\centering
-		\includegraphics[width=0.85\textwidth]{bella}
-		\caption{%
-			BELLA: Explores a subset of the dataset,
-			maximizing similarity between the local linear classifier
-			and the black-box classifier.
-		}\label{fig:bella}
-	\end{subfigure}
-	\hfill
-	\begin{subfigure}[t]{0.45\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{rlime3}
-		\caption{%
-			R-LIME:
-			Maximizes coverage of a rectangular region containing the focal point
-			under lower constraints on the accuracy of the linear classifier.
-		}\label{fig:rlime}
-	\end{subfigure}
-	\caption{%
-		Visual comparison of LIME, Anchor, BELLA and R-LIME (our proposed method).
-		The solid line represents the rectangular region containing the focal
-		point, and the dashed line represents the learned approximation model.
-	}
-\end{figure}
-
 \subsection{Overview}
 We propose R-LIME,
-a method that aims to address the limitations of LIME \cite{ribeiro2016why},
-Anchor \cite{ribeiro2018anchors} and BELLA \cite{radulovic2023bella}.
+a method that aims to address the limitations of LIME~\cite{ribeiro2016why},
+Anchor~\cite{ribeiro2018anchors} and BELLA \cite{radulovic2023bella}.
 Our method locally approximates the given black-box classifier $f$
 around the focal point $x$ by a linear classifier $g$ similar to LIME and BELLA,
 but samples parturbation from a rectangular region similar to Anchor
@@ -919,6 +934,7 @@ the KL-LUCB algorithm.
 % BibTeX users should specify bibliography style 'splncs04'.
 % References will then be sorted and formatted in the correct style.
 %
+\newpage
 \bibliographystyle{splncs04}
 \bibliography{MyRef/ref}
 %
