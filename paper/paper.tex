@@ -51,7 +51,8 @@
 
 % settings for cleveref
 \crefname{figure}{Fig.}{Figs.}
-\crefname{table}{Table.}{Tables.}
+\crefname{table}{Table}{Tables}
+\crefname{algorithm}{Algorithm}{Algorithms}
 
 % import the TeX file containing macro definitions
 \input{macro}
@@ -130,22 +131,18 @@ Consequently,
 there has been extensive research in the field of post-hoc explanations
 for machine learning models~\cite{%
 	guidotti2018local,radulovic2023bella,ribeiro2016why,ribeiro2018anchors}.
-
 Existing post-hoc explanation methods are categorized
-into \emph{model-dependent} and \emph{model-agnostic} methods,
+into \emph{model-dependent} and \emph{model-agnostic} methods
 based on their dependence on the model's structure.
 Furthermore, model-agnostic methods are classified into
 \emph{global} and \emph{local} methods based on their locality in input space.
-Local methods, in contrast, explain output of the model for a specific input
-(focal point) in the vicinity of that input.
-While local methods offer more simple and accurate explanations
-than global methods,
-the scope of the explanation is limited to the vicinity of the focus point.
 
-This paper specifically focuses on \emph{local} \emph{model-agnostic} methods,
+This paper specifically focuses
+on \emph{model-agnostic} and \emph{local} methods,
 which do not rely on the models' structure
-and explain the models' behavior in the vicinity of a specific input.
-For instance, LIME (Local Interpretable Model-agnostic Explanations)
+and explain the models' behavior
+in the vicinity of a given input (focal point).
+For example, LIME (Local Interpretable Model-agnostic Explanations)
 \cite{ribeiro2016why} approximates the complex model's decision boundary
 locally using a simpler model around the given focal point.
 Although LIME enables users to interpret the local behavior of complex models,
@@ -164,57 +161,11 @@ which interprets complex classifiers in an interpretable region.
 R-LIME locally approximates a complex decision boundary linearly
 in a rectangular region and maximizes the region
 as long as the accuracy of the linear classifier is
-higher than a specified threshold.
+higher than a given threshold.
 The resulting rectangular region is interpretable for users because it is
 expressed as a conjunction of feature predicates (\cref{fig:example-rlime}).
 
 \section{Related Work}
-\begin{figure}[t]
-	\centering
-	\vspace{0.5cm}
-	\begin{subfigure}[t]{0.55\textwidth}
-		\centering
-		\includegraphics[scale=0.35]{example-instance}
-		\caption{Focal point.}\label{fig:example-instance}
-	\end{subfigure}
-	\hfill
-	\begin{subfigure}[t]{0.45\textwidth}
-		\begin{subfigure}[t]{\textwidth}
-			\centering
-			\includegraphics[scale=0.35]{example-lime}
-			\caption{%
-				Explanation by LIME\@.
-				It provides contributions of each feature to the output,
-				but does not explicitly indicate its scope.
-			}\label{fig:example-lime}
-			\vspace{0.4cm}
-		\end{subfigure}
-		\begin{subfigure}[t]{\textwidth}
-			\centering
-			\includegraphics[scale=0.35]{example-anchor}
-			\caption{%
-				Explanation by Anchor.
-				It provides the effective scope of the explanation,
-				but does not show the influence of each feature.
-			}\label{fig:example-anchor}
-		\end{subfigure}
-	\end{subfigure}
-	\hspace{0.3cm}
-	\begin{subfigure}[t]{0.45\textwidth}
-		\centering
-		\vspace{-1.96cm}
-		\includegraphics[scale=0.35]{example-rlime}
-		\caption{%
-			Explanation by R-LIME\@.
-			It provides both contributions of each feature and
-			its effective scope.
-		}\label{fig:example-rlime}
-	\end{subfigure}
-	\caption{%
-		Example of explanations by LIME, Anchor and R-LIME
-		for a sentiment prediction model.
-	}\label{fig:example}
-\end{figure}
 In this chapter,
 we overview existing research on post-hoc explanations,
 which explain the behavior of complex models already trained.
@@ -222,11 +173,11 @@ They are categorized
 into \emph{model-dependent} and \emph{model-agnostic} methods
 based on their dependence on the model's structure.
 
-Model-dependent methods primarily focus on deep neural networks and
+Model-dependent methods,
+such as DTD (Deep Taylor Decomposition)~\cite{montavon2017explaining}
+and LRP (Layer-wise Relevance Propagation)~\cite{bach2015pixel},
+primarily focus on deep neural networks and
 explain the models' behavior using their parameters~\cite{samek2021explaining}.
-Layer-wise relevance propagation (LRP)~\cite{bach2015pixel} and
-deep Taylor decomposition (DTD)~\cite{montavon2017explaining}
-are representative model-dependent methods.
 While these methods can provide detailed explanations
 (e.g., layer-wise explanations for neural networks)
 using the models' internal parameters,
@@ -240,22 +191,111 @@ Although these methods are applicable to any model,
 they cannot explain the reasoning process inside the model.
 Furthermore, model-agnostic methods are classified into
 \emph{global} and \emph{local} methods based on their locality in input space.
-Global methods
+Global methods,
+such as PDP (Partial Dependence Plots)~\cite{friedman2001greedy}
+and ALE (Accumulated Local Effects)~\cite{apley2020visualizing},
 aim to explain the model's behavior across the entire input space,
 seeking explanations valid for any input.
-Partial dependence plots (PDP)~\cite{friedman2001greedy} and
-accumulated local effects (ALE)~\cite{apley2020visualizing}
-are representative global methods.
 However, providing global explanations becomes challenging
 as the model's complexity increases.
-Local methods, in contrast, explain output of the model for a specific input
+In contrast, local methods,
+such as LIME (Local Interpretable Model-agnostic Explanations)~\cite{ribeiro2016why}
+and Anchor~\cite{ribeiro2018anchors},
+% SHAP~\cite{lundberg2017unified},
+% EXPLAN~\cite{rasouli2020explan},
+% LORE (Local Rule-based Explanations)~\cite{guidotti2018local}
+% and BELLA (Black box model Explanations by Local Linear Approximations)
+% \cite{radulovic2023bella},
+explain output of the model for a specific input
 (focal point) in the vicinity of that input.
 While local methods offer more simple and accurate explanations
 than global methods,
-the scope of the explanation is limited to the vicinity of the focus point.
+the scope of the explanation is limited to the vicinity of the focal point.
 
-Model-dependent methods aim to explain the behavior of complex models
-using their internal parameters.
+\begin{figure}[tbp]
+	\def\scale{0.38}
+	\centering
+	\vspace{0.5cm}
+	\begin{subfigure}[t]{0.55\textwidth}
+		\centering
+		\includegraphics[scale=\scale]{example-instance}
+		\caption{Focal point.}\label{fig:example-instance}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[t]{0.45\textwidth}
+		\begin{subfigure}[t]{\textwidth}
+			\centering
+			\includegraphics[scale=\scale]{example-lime}
+			\caption{%
+				Explanation by LIME\@.
+				It provides contributions of each feature to the output,
+				but does not explicitly indicate its scope.
+			}\label{fig:example-lime}
+			\vspace{0.4cm}
+		\end{subfigure}
+		\begin{subfigure}[t]{\textwidth}
+			\centering
+			\includegraphics[scale=\scale]{example-anchor}
+			\caption{%
+				Explanation by Anchor.
+				It provides the effective scope of the explanation,
+				but does not show the influence of each feature.
+			}\label{fig:example-anchor}
+		\end{subfigure}
+	\end{subfigure}
+	\hspace{0.3cm}
+	\begin{subfigure}[t]{0.45\textwidth}
+		\centering
+		\vspace{-2.24cm}
+		\includegraphics[scale=\scale]{example-rlime}
+		\caption{%
+			Explanation by R-LIME\@.
+			It provides both contributions of each feature and
+			its effective scope.
+		}\label{fig:example-rlime}
+	\end{subfigure}
+	\caption{%
+		Example of explanations by LIME~\cite{ribeiro2016why},
+		Anchor~\cite{ribeiro2018anchors} and R-LIME (our proposed method).
+		for a sentiment prediction model.
+	}\label{fig:example}
+\end{figure}
+In this paper,
+we focus on local model-agnostic methods.
+An example of explanations by LIME and Anchor
+for a sentiment prediction model is illustrated in \cref{fig:example}.
+LIME~\cite{ribeiro2016why} approximates the complex decision boundary
+locally using a linear model around the given focal point,
+then provides the weights of the linear model as the contribution of each feature
+to the output.
+The explanation by LIME (\cref{fig:example-lime}) provides suggests that
+the word ``not'' mainly contributes to the positive prediction,
+but does not explicitly indicate the effective scope.
+Without the scope,
+users might mistakenly apply the knowledge derived from the explanation
+to other instances far from the focal point,
+potentially leading to misunderstanding of the black-box model's behavior
+\cite{ribeiro2018anchors}.
+For example,
+user may apply the insights derived from the explanation
+to the sentence ``This book is not good.''
+and mistakenly conclude that the word ``not''
+mainly contributes to the positive prediction for this sentence as well,
+which is incorrect obviously.
+Anchor~\cite{ribeiro2018anchors} represents a rectangular region
+containing the focal point,
+that maximizes the probability of the black-box classifier outputting
+the same label as the focal point.
+While Anchor provides an effective scope of the explanation,
+the information it includes is less than LIME,
+limiting its utility~\cite{ribeiro2018anchors}.
+The explanation by Anchor (\cref{fig:example-anchor})
+suggests that changing words other than ``not'' and ``bad''
+has little impact on the classifier's output.
+While it clearly cannot be applied to the sentence ``This book is not good''
+because of not including the word ``bad'',
+the explanation does not provide details about the influence of each word,
+resulting in less user insight into the model's behavior compared to LIME.
 
 % BELLA\cite{radulovic2023bella} addresses the non-optimization of the approximation region,
 % a drawback of LIME,
@@ -352,23 +392,6 @@ by showing the contribution of each feature to the output $f(x)$.
 However, due to not explicitly indicating the perturbation region,
 users cannot assess the effective scope of the explanation
 \cite{ribeiro2018anchors}.
-An example of explanation by LIME for a sentiment prediction model
-is illustrated in \cref{fig:example-lime}.
-The explanation provides suggests that
-the word ``not'' mainly contributes to the positive prediction,
-but does not explicitly indicate the effective scope.
-Without the scope,
-users might mistakenly apply the knowledge derived from the explanation
-to other instances far from the focal point,
-potentially leading to misunderstanding of the black-box model's behavior
-\cite{ribeiro2018anchors}.
-For example,
-user may apply the insights derived from the explanation
-(\cref{fig:example-lime})
-to the sentence ``This book is not good.''
-and mistakenly conclude that the word ``not''
-mainly contributes to the positive prediction for this sentence as well,
-which is incorrect obviously.
 
 \subsubsection{Anchor~\cite{ribeiro2018anchors}}\label{sec:anchor}
 Anchor represents a rectangular region containing the focal point $x$,
@@ -413,26 +436,13 @@ Thus, the following optimization problem is solved:
 	{\arg\max}\Cov(A).
 \end{equation}
 
-While Anchor provides an effective scope of the explanation,
-the information it includes is less than LIME,
-limiting its utility~\cite{ribeiro2018anchors}.
-An example of Anchor explanation for a sentiment prediction model
-is illustrated in \cref{fig:example-anchor}.
-The explanation suggests that changing words other than ``not'' and ``bad''
-has little impact on the classifier's output.
-While it clearly cannot be applied to the sentence ``This book is not good''
-because of not including the word ``bad'',
-the explanation does not provide details about the influence of each word,
-resulting in less user insight into the model's behavior compared to LIME
-(\cref{fig:example-lime}).
-
 \subsection{Overview}
 We propose R-LIME,
 a method that aims to address the limitations of LIME~\cite{ribeiro2016why},
-Anchor~\cite{ribeiro2018anchors} and BELLA \cite{radulovic2023bella}.
+and Anchor~\cite{ribeiro2018anchors}.
 Our method locally approximates the given black-box classifier $f$
 around the focal point $x$ by a linear classifier $g$ similar to LIME and BELLA,
-but samples parturbation from a rectangular region similar to Anchor
+but samples perturbation from a rectangular region similar to Anchor
 so that the generality of approximation is explicitly provided
 (\cref{fig:rlime}).
 The accuracy of $g$ is defined as the "accuracy" of the rule,
@@ -454,13 +464,13 @@ where $G$ is the set of possible linear classifiers.
 By solving the optimization problem in \cref{eq:main_problem}
 under the modified accuracy definition in \cref{eq:def_prec},
 we can select the rule that enables explanation with high accuracy and generality.
-The characteristics of R-LIME are listed below:
-\begin{itemize}
-	\item The approximation region is optimal and interpretable.
-	\item The dataset is not directly accessed, and only the distribution is utilized.
-	\item The number of samples is dynamically determined
-	      based on the estimated accuracy without the need for predefining it.
-\end{itemize}
+% The characteristics of R-LIME are listed below:
+% \begin{itemize}
+% 	\item The approximation region is optimal and interpretable.
+% 	\item The dataset is not directly accessed, and only the distribution is utilized.
+% 	\item The number of samples is dynamically determined
+% 	      based on the estimated accuracy without the need for predefining it.
+% \end{itemize}
 
 \subsection{Algorithm}\label{sec:alg}
 {%
@@ -560,6 +570,15 @@ The pseudo code is presented in \cref{alg:largest_valid_cand}.
 % the solution to the optimization problem in \cref{eq:main_problem}
 % under the definition of accuracy in \cref{eq:def_prec}. 
 
+\subsection{Computational Complexity}
+Post-hoc explanation methods including LIME, Anchor, and R-LIME
+need to query the black-box model multiple times
+to get labels for perturbed samples, which is computationally expensive.
+The number of queries required for LIME is $|\mathcal{Z}_p|$,
+where $|\mathcal{Z}_p|$ is the number of perturbed samples.
+On the other hand, the number of queries required for Anchor and R-LIME
+is $|\mathcal{D}|$,
+
 \section{Experiments}
 To verify the effectiveness of the proposed method,
 We compare LIME and R-LIME using a real-world dataset.
@@ -572,7 +591,7 @@ We compare LIME and R-LIME using a real-world dataset.
 		\centering
 		\caption{%
 			Attributes of the recidivism dataset used in the experiments.
-			Continuous features are all discretized
+			Continuous features are all discretized,
 			and only binary and ordinal features are considered.
 		}\label{tab:rcdv}
 		\begin{tabular}{llc}
@@ -605,7 +624,7 @@ The experiments utilized the recidivism dataset \cite{schmidt1988predicting}.
 This dataset contains information on 9,549 prisoners released from
 North Carolina prisons between July 1, 1979, and June 30, 1980.
 The dataset includes 19 items such as race, gender,
-presence of alcohol dependence, number of prior offenses, and recidivism.
+presence of alcohol dependence, number of prior offenses and recidivism.
 For this experiment,
 we treated the binary classification problem of predicting
 the presence or absence of recidivism (Recidivism) as the target label.
@@ -804,36 +823,29 @@ effectively as approximation models depending on how the region is selected.
 \section{Challenges and Future Perspectives}
  {%
   \def\imgwidth{0.49\textwidth}
+  \def\scale{0.08}
   \begin{figure}[t]
 	  \centering
 	  \begin{subfigure}[t]{\imgwidth}
 		  \centering
-		  \includegraphics[width=0.78\textwidth]{newlime}
-		  \caption{R-LIME for balanced data.}\label{fig:balanced}
+		  \includegraphics[scale=\scale]{newlime}
+		  \caption{R-LIME for balanced label distribution.}\label{fig:balanced}
 	  \end{subfigure}
 	  \begin{subfigure}[t]{\imgwidth}
 		  \centering
-		  \includegraphics[width=0.8\textwidth]{newlime_for_imbalanced_data}
-		  \caption{R-LIME for imbalanced data.
+		  \includegraphics[scale=\scale]{newlime_for_imbalanced_data}
+		  \caption{R-LIME for imbalanced label distribution.
 		  }\label{fig:imbalanced}
 	  \end{subfigure}
 	  \caption{%
-		  Behavior of R-LIME for balanced and imbalanced data.
+		  Behavior of R-LIME for balanced and imbalanced label distribution.
 		  In case of imbalanced label distribution,
 		  the approximation region covers the entire input space and the
 		  linear approximation model always outputs the majority label.
 	  }
-	  \vspace{10pt}
   \end{figure}
  }
 
-
-\subsection{Computational Complexity}
-Most post-hoc explanation methods, including LIME, Anchor, BELLA and R-LIME,
-need to query the black-box model multiple times
-to get labels for perturbed samples, which can be computationally expensive.
-The number of queries required for LIME is $|\mathcal{Z}_p|$,
-where $|\mathcal{Z}_p|$ is the number of perturbed samples.
 
 \subsection{Behavior Regarding Imbalanced Label Distribution}
 R-LIME may generate less useful explanations
@@ -934,7 +946,6 @@ the KL-LUCB algorithm.
 % BibTeX users should specify bibliography style 'splncs04'.
 % References will then be sorted and formatted in the correct style.
 %
-\newpage
 \bibliographystyle{splncs04}
 \bibliography{MyRef/ref}
 %
