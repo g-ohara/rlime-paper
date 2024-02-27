@@ -3,7 +3,14 @@
 % Package amsmath Warning: Unable to redefine math accent \vec.
 \RequirePackage{amsmath} % for environments such as align
 
-\documentclass[runningheads]{llncs}
+\def\mode{0} % 0: Graduation thesis, 1: ICPR paper
+
+\ifnum\mode=0
+	\documentclass{article}
+	\usepackage{prmlthesis}
+\else
+	\documentclass[runningheads]{llncs}
+\fi
 
 % If possible, figure files should be included in EPS format.
 
@@ -42,7 +49,6 @@
 % cf. https://tex.stackexchange.com/questions/10924/underfull-hbox-in-bibliography
 \apptocmd{\sloppy}{\hbadness 10000\relax}{}{}
 
-
 % set the path for figures
 \graphicspath{{./data/}{../python/data/}}
 
@@ -59,64 +65,84 @@
 
 \begin{document}
 
-% Authentic title
-\title{%
-	R-LIME: Rectangular Constraints and Optimization for Local Interpretable
-	Model-agnostic Explanation Methods}
+\ifnum\mode=0
+	\title{%
+		R-LIME: Rectangular Constraints and Optimization for Local Interpretable
+		Model-agnostic Explanation Methods
+	}
+	\etitle{}
+	\author{Genji Ohara}
+	\institute{hogehoge}
+\else
+	\title{%
+		R-LIME: Rectangular Constraints and Optimization for Local Interpretable
+		Model-agnostic Explanation Methods}
+	% Abbreviated title for the running head
+	\titlerunning{%
+		R-LIME: Rectangular Constraints and Optimization for LIME Methods
+	}
 
-% Abbreviated title for the running head
-\titlerunning{%
-	R-LIME: Rectangular Constraints and Optimization for LIME Methods
-}
+	% Author names and ORCID IDs
+	\author{Genji Ohara\orcidID{0009-0000-5854-2820} \and
+		Keigo Kimura\orcidID{0000-0002-3614-6568} \and
+		Mineichi Kudo\orcidID{0000-0003-1013-3870}
+	}
 
-% Author names and ORCID IDs
-\author{Genji Ohara\orcidID{0009-0000-5854-2820} \and
-	Keigo Kimura\orcidID{0000-0002-3614-6568} \and
-	Mineichi Kudo\orcidID{0000-0003-1013-3870}
-}
+	% Abbreviated author list for the running head (First names are abbreviated)
+	% If there are more than two authors, 'et al.' is used.
+	\authorrunning{G. Ohara et al.}
 
-% Abbreviated author list for the running head (First names are abbreviated)
-% If there are more than two authors, 'et al.' is used.
-\authorrunning{G. Ohara et al.}
-
-% The authors' affiliations
-\institute{Division of Computer Science and Information Technology\\
-	Graduate School of Information Sci.\ and Tech.,
-	Hokkaido University\\
-	Sapporo 060-0814, JAPAN,\\
-	\email{\{genji-ohara, kimura5, mine\}@ist.hokudai.ac.jp}}
+	% The authors' affiliations
+	\institute{Division of Computer Science and Information Technology\\
+		Graduate School of Information Sci.\ and Tech.,
+		Hokkaido University\\
+		Sapporo 060-0814, JAPAN,\\
+		\email{\{genji-ohara, kimura5, mine\}@ist.hokudai.ac.jp}}
+\fi
 
 % typeset the header of the contribution
 \maketitle              %
 
-% The abstract should briefly summarize the contents of the paper in
-% 150--250 words.
-\begin{abstract}
-	In recent years,
-	complex machine learning models such as deep neural networks
-	have been used in various industrial fields due to their high accuracy.
-	However,
-	its complexity has been a major obstacle to implementation
-	in decision-making situations where transparency of the decision process
-	is required.
-	In order to address this problem,
-	various post-hoc explanation methods have been proposed,
-	but they have not been able to achieve interpretability of
-	both the explanation and its scope.
-	We propose a new method, R-LIME,
-	which interprets complex classifiers in an interpretable scope.
-	R-LIME locally approximizes a complex decision boundary linearly
-	in a rectangular region
-	and maximizes the region as long as the accuracy of the linear
-	classifier is higher than a specified threshold.
-	The resulting rectangular region is interpretable for users because it is
-	expressed as a conjunction of feature predicates.
-	We demonstrate the effectiveness of the proposed method through qualitative
-	and quantitative experiments using a real-world dataset.
-	Finally, we discuss limitations and future work of the proposed method.
-	% 148 words
-	\keywords{Interpretable machine learning \and Local surrogate model}
-\end{abstract}
+\ifnum\mode=0
+	\pagestyle{plain}
+	\pagenumbering{roman}
+	\tableofcontents
+	\newpage
+	\listoffigures\listoftables\clearpage
+	\AddToHook{cmd/section/before}{\clearpage}
+	\pagestyle{plain}
+	\pagenumbering{arabic}
+\else
+
+	% The abstract should briefly summarize the contents of the paper in
+	% 150--250 words.
+	\begin{abstract}
+		In recent years,
+		complex machine learning models such as deep neural networks
+		have been used in various industrial fields due to their high accuracy.
+		However,
+		its complexity has been a major obstacle to implementation
+		in decision-making situations where transparency of the decision process
+		is required.
+		In order to address this problem,
+		various post-hoc explanation methods have been proposed,
+		but they have not been able to achieve interpretability of
+		both the explanation and its scope.
+		We propose a new method, R-LIME,
+		which interprets complex classifiers in an interpretable scope.
+		R-LIME locally approximizes a complex decision boundary linearly
+		in a rectangular region
+		and maximizes the region as long as the accuracy of the linear
+		classifier is higher than a specified threshold.
+		The resulting rectangular region is interpretable for users because it is
+		expressed as a conjunction of feature predicates.
+		We demonstrate the effectiveness of the proposed method through qualitative
+		and quantitative experiments using a real-world dataset.
+		Finally, we discuss limitations and future work of the proposed method.
+		% 148 words
+		\keywords{Interpretable machine learning \and Local surrogate model}
+	\end{abstract}
+\fi
 
 \section{Introduction}
 Machine learning models, such as deep learning and random forests,
@@ -254,7 +280,7 @@ the scope of the explanation is limited to the vicinity of the focal point.
 			its effective scope.
 		}\label{fig:example-rlime}
 	\end{subfigure}
-	\caption{%
+	\caption[Example of explanations by LIME, Anchor and R-LIME]{%
 		Example of explanations by LIME~\cite{ribeiro2016why},
 		Anchor~\cite{ribeiro2018anchors} and R-LIME (our proposed method).
 		for a sentiment prediction model.
@@ -351,7 +377,7 @@ resulting in less user insight into the model's behavior compared to LIME.
 			under lower constraints on the accuracy of the linear classifier.
 		}\label{fig:rlime}
 	\end{subfigure}
-	\caption{%
+	\caption[Visual comparison of LIME, Anchor and R-LIME]{%
 		Visual comparison of LIME, Anchor and R-LIME (our proposed method).
 		The solid line represents the rectangular region containing the focal
 		point, and the dashed line represents the learned approximation model.
@@ -362,7 +388,7 @@ We specifically focuses on \emph{local} and \emph{model-agnostic} methods.
 In this section,
 we briefly review existing research on local model-agnostic explanations,
 particularly focusing on studies closely related to our proposed method.
-\subsubsection{%
+\subsubsection[LIME]{%
 	LIME (Local Interpretable Model-agnostic Explanations)
 	\cite{ribeiro2016why}
 }
@@ -393,7 +419,9 @@ However, due to not explicitly indicating the perturbation region,
 users cannot assess the effective scope of the explanation
 \cite{ribeiro2018anchors}.
 
-\subsubsection{Anchor~\cite{ribeiro2018anchors}}\label{sec:anchor}
+\subsubsection[Anchor]{%
+	Anchor~\cite{ribeiro2018anchors}
+}\label{sec:anchor}
 Anchor represents a rectangular region containing the focal point $x$,
 expressed as a conjunction of feature predicates (a rule),
 that maximizes the probability of the black-box classifier $f$
@@ -445,8 +473,8 @@ around the focal point $x$ by a linear classifier $g$ similar to LIME and BELLA,
 but samples perturbation from a rectangular region similar to Anchor
 so that the generality of approximation is explicitly provided
 (\cref{fig:rlime}).
-The accuracy of $g$ is defined as the "accuracy" of the rule,
-and the generality of explanations is defined as the "coverage" of the rule.
+The accuracy of $g$ is defined as the ``accuracy'' of the rule,
+and the generality of explanations is defined as the ``coverage'' of the rule.
 
 Anchor maximizes the coverage of region $A$
 as long as the probability of the output of the black-box classifier $f$ matching $f(x)$
@@ -479,7 +507,7 @@ we can select the rule that enables explanation with high accuracy and generalit
 		\includegraphics[width=0.32\textwidth]{rlime1}
 		\includegraphics[width=0.32\textwidth]{rlime2}
 		\includegraphics[width=0.32\textwidth]{rlime3}
-		\caption{%
+		\caption[Overview of the R-LIME algorithm]{%
 			Overview of the R-LIME algorithm.
 			The progression of the algorithm is illustrated from left to right.
 			The solid line represents the rectangular region $A$,
@@ -491,19 +519,25 @@ we can select the rule that enables explanation with high accuracy and generalit
 			at which point the rule with the maximum coverage is output.
 		}
 	\end{figure}
-	\begin{algorithm}[p]
-		\input{alg1}
-	\end{algorithm}
-	\begin{algorithm}[p]
-		\input{alg2}
-	\end{algorithm}
 	\def\myidt{\hspace{\algorithmicindent}}
-	\begin{algorithm}[p]
-		\input{alg3}
-	\end{algorithm}
-	\begin{algorithm}[p]
-		\input{alg4}
-	\end{algorithm}
+	\ifnum\mode=0
+		\begin{algorithm}[t]
+			\small
+			\input{alg1}
+		\end{algorithm}
+	\else
+		\begin{algorithm}[p]
+			\small
+			\input{alg1}
+		\end{algorithm}
+	\fi
+
+	\foreach \alg in {2,3,4}{%
+			\begin{algorithm}[p]
+				\small
+				\input{alg\alg}
+			\end{algorithm}
+		}
 }
 
 The algorithm of our method
@@ -570,14 +604,16 @@ The pseudo code is presented in \cref{alg:largest_valid_cand}.
 % the solution to the optimization problem in \cref{eq:main_problem}
 % under the definition of accuracy in \cref{eq:def_prec}. 
 
-\subsection{Computational Complexity}
-Post-hoc explanation methods including LIME, Anchor, and R-LIME
-need to query the black-box model multiple times
-to get labels for perturbed samples, which is computationally expensive.
-The number of queries required for LIME is $|\mathcal{Z}_p|$,
-where $|\mathcal{Z}_p|$ is the number of perturbed samples.
-On the other hand, the number of queries required for Anchor and R-LIME
-is $|\mathcal{D}|$,
+\ifnum\mode=1
+	\subsection{Computational Complexity}
+	Post-hoc explanation methods including LIME, Anchor, and R-LIME
+	need to query the black-box model multiple times
+	to get labels for perturbed samples, which is computationally expensive.
+	The number of queries required for LIME is $|\mathcal{Z}_p|$,
+	where $|\mathcal{Z}_p|$ is the number of perturbed samples.
+	On the other hand, the number of queries required for Anchor and R-LIME
+	is $|\mathcal{D}|$,
+\fi
 
 \section{Experiments}
 To verify the effectiveness of the proposed method,
@@ -589,32 +625,35 @@ We compare LIME and R-LIME using a real-world dataset.
 	\renewcommand{\arraystretch}{1.05}
 	\begin{table}[tbp]
 		\centering
-		\caption{%
+		\caption[Attributes of the recidivism dataset used in the experiments]{%
 			Attributes of the recidivism dataset used in the experiments.
 			Continuous features are all discretized,
 			and only binary and ordinal features are considered.
 		}\label{tab:rcdv}
+		\ifnum\mode=0
+			\small
+		\fi
 		\begin{tabular}{llc}
 			\toprule
-			Attribute              & Overview                              & \# of Possible Values \\
+			Attribute              & Overview                              & \# of \ifnum\mode=1 Possible \fi Values \\
 			\midrule
-			Race                   & Race (Black or White)                 & 2                     \\
-			Alcohol                & Presence of serious alcohol issues    & 2                     \\
-			Junky                  & Drug usage                            & 2                     \\
-			Supervised Release     & Supervised release                    & 2                     \\
-			Married                & Marital status                        & 2                     \\
-			Felony                 & Felony or not                         & 2                     \\
-			WorkRelease            & Participation in work release program & 2                     \\
-			Crime against Property & Crime against property or not         & 2                     \\
-			Crime against Person   & Crime against a person or not         & 2                     \\
-			Gender                 & Gender (Female or Male)               & 2                     \\
-			Priors                 & Number of prior offenses              & 4                     \\
-			YearsSchool            & Years of formal education completed   & 4                     \\
-			PrisonViolations       & Number of prison rule violations      & 3                     \\
-			Age                    & Age                                   & 4                     \\
-			MonthsServed           & Months served in prison               & 4                     \\
+			Race                   & Race (Black or White)                 & 2                                       \\
+			Alcohol                & Presence of serious alcohol issues    & 2                                       \\
+			Junky                  & Drug usage                            & 2                                       \\
+			Supervised Release     & Supervised release                    & 2                                       \\
+			Married                & Marital status                        & 2                                       \\
+			Felony                 & Felony or not                         & 2                                       \\
+			WorkRelease            & Participation in work release program & 2                                       \\
+			Crime against Property & Crime against property or not         & 2                                       \\
+			Crime against Person   & Crime against a person or not         & 2                                       \\
+			Gender                 & Gender (Female or Male)               & 2                                       \\
+			Priors                 & Number of prior offenses              & 4                                       \\
+			YearsSchool            & Years of formal education completed   & 4                                       \\
+			PrisonViolations       & Number of prison rule violations      & 3                                       \\
+			Age                    & Age                                   & 4                                       \\
+			MonthsServed           & Months served in prison               & 4                                       \\
 			\midrule
-			Recidivism             & Recidivism or not                     & 2                     \\
+			Recidivism             & Recidivism or not                     & 2                                       \\
 			\bottomrule
 		\end{tabular}
 	\end{table}
@@ -658,11 +697,18 @@ Accuracy thresholds $\tau$ were set to $\tau=0.70,0.80,0.90$.
 		{%
 			\def\AB#1{\ifnum#1=0 A\else B\fi}
 			\def\mylabel#1{\ifnum#1=0 \label{fig:A-instance}\else \label{fig:B-instance}\fi}
-			\renewcommand{\arraystretch}{1.02}
+			\ifnum\mode=0
+				\renewcommand{\arraystretch}{0.99}
+			\else
+				\renewcommand{\arraystretch}{1.02}
+			\fi
 			\begin{figure}[tbp]
 				\foreach\a in {0,1}{%
 						\centering
 						\begin{subfigure}{\textwidth}
+							\ifnum\mode=0
+								\small
+							\fi
 							\centering
 							\begin{tabular}{p{14em}m{16em}}
 								\toprule
@@ -678,12 +724,19 @@ Accuracy thresholds $\tau$ were set to $\tau=0.70,0.80,0.90$.
 						\end{subfigure}
 					}
 				\vspace{-15pt}
-				\caption{Two instances sampled from recidivism dataset.}\label{fig:instance}
+				\caption[Two instances sampled from recidivism dataset]{%
+					Two instances sampled from recidivism dataset.
+				}\label{fig:instance}
 			\end{figure}
 		}
 		{%
-			\def\scale{0.315}
-			\def\imgwidth{0.495\textwidth}
+			\ifnum\mode=0
+				\def\scale{0.3}
+				\def\imgwidth{0.45\textwidth}
+			\else
+				\def\scale{0.315}
+				\def\imgwidth{0.495\textwidth}
+			\fi
 			\def\hspacebase{\hspace{-1.5em}}
 			\def\vspacebase{\vspace{0.5em}}
 			\def\vspacebeforecaption{\vspace{-0.4em}}
@@ -716,7 +769,9 @@ Accuracy thresholds $\tau$ were set to $\tau=0.70,0.80,0.90$.
 					\vspacebeforecaption
 					\caption{R-LIME ($\tau=0.90$)}\label{fig:A-rlime-90}
 				\end{subfigure}
-				\caption{Explanation for Instance A by LIME and R-LIME.}\label{fig:A}
+				\caption[Explanation for Instance A by LIME and R-LIME]{%
+					Explanation for Instance A by LIME and R-LIME.
+				}\label{fig:A}
 			\end{figure}
 			\begin{figure}[p]
 				\centering
@@ -747,7 +802,9 @@ Accuracy thresholds $\tau$ were set to $\tau=0.70,0.80,0.90$.
 					\vspacebeforecaption
 					\caption{R-LIME ($\tau=0.90$)}\label{fig:B-rlime-90}
 				\end{subfigure}
-				\caption{Explanation for Instance B by LIME and R-LIME}\label{fig:B}
+				\caption[Explanation for Instance B by LIME and R-LIME]{%
+					Explanation for Instance B by LIME and R-LIME.
+				}\label{fig:B}
 			\end{figure}
 		}
 	}
@@ -837,7 +894,7 @@ effectively as approximation models depending on how the region is selected.
 		  \caption{R-LIME for imbalanced label distribution.
 		  }\label{fig:imbalanced}
 	  \end{subfigure}
-	  \caption{%
+	  \caption[Behavior of R-LIME for balanced and imbalanced label distribution]{%
 		  Behavior of R-LIME for balanced and imbalanced label distribution.
 		  In case of imbalanced label distribution,
 		  the approximation region covers the entire input space and the
@@ -869,12 +926,12 @@ In addition to \cref{eq:const_prec}, adding a constraint like
 \end{equation}
 could suppress the excessive expansion of the approximation region.
 
-\subsection{Changes in Reward Distribution in Optimal Arm Identification}\label{sec:reward}
+\subsection{Changes in Reward Distribution in Best Arm Identification}\label{sec:reward}
 {%
 	\renewcommand{\arraystretch}{1.1}
 	\begin{table}[tbp]
 		\centering
-		\caption{%
+		\caption[Deviation between the estimated accuracy and the true accuracy]{%
 			Deviation between the estimated accuracy and the true accuracy.
 			Deviation was relatively small considering confidence level $1-\delta=0.95$.
 		}\label{tab:reward}
@@ -903,25 +960,6 @@ with a standard deviation of 0.017.
 While the deviation was relatively small considering confidence level $1-\delta=0.95$,
 we should modify the selection algorithm to consider the varying accuracy.
 
-% \subsection{Evaluation through User Studies}
-% Given the nature of the field of "interpretable machine learning,"
-% where the goal is to "interpret" machine learning models,
-% it is challenging to quantitatively compare various methods.
-% While quantitative experiments were conducted in \cref{sec:exp2},
-% they mainly demonstrated that the proposed method generates
-% locally accurate explanations compared to LIME.
-% The results do not directly prove the high interpretability of the proposed method.
-% 
-% One potential method to quantitatively evaluate "interpretability" is
-% through user studies.
-% For example, \cite{ribeiro2018anchors} conducted user studies,
-% assuming that if users could predict the output of a black-box model
-% with high accuracy based on provided explanations,
-% those explanations contained valuable information about the model's behavior.
-% Similarly,
-% conducting user studies in this research would be desirable
-% to evaluate the interpretability of the proposed method.
-
 \section{Conclusion}
 We identified challenges in existing methods for local model-agnostic post-hoc
 explanations of black-box classifiers and proposed R-LIME to address them.
@@ -935,6 +973,20 @@ However, we discussed the instability of behavior concerning imbalanced label
 distributions and raised questions about the theoretical validity of using
 the KL-LUCB algorithm.
 
+\ifnum\mode=0
+	\acknowledge
+	I would like to express my gratitude to Associate Professor Keigo Kimura
+	from the Department of Mathematical Science,
+	Division of Information Recognition,
+	Graduate School of Information Science and Technology, Hokkaido University.
+	He provided invaluable guidance,
+	from setting the research theme to outlining the strategy and content of this study.
+	Additionally,
+	I appreciate the diverse insights shared by Professor Mineichi Kudo in the same laboratory.
+	Finally, I am deeply thankful to all the members of the laboratory
+	for their helpful advice and collaboration throughout the research process.
+\fi
+
 % \subsubsection{Acknowledgements}
 % Please place your acknowledgments at
 % the end of the paper, preceded by an unnumbered run-in heading (i.e.
@@ -946,7 +998,11 @@ the KL-LUCB algorithm.
 % BibTeX users should specify bibliography style 'splncs04'.
 % References will then be sorted and formatted in the correct style.
 %
-\bibliographystyle{splncs04}
+\ifnum\mode=0
+	\bibliographystyle{prml}
+\else
+	\bibliographystyle{splncs04}
+\fi
 \bibliography{MyRef/ref}
 %
 \end{document}

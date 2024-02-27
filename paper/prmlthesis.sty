@@ -1,0 +1,32 @@
+\usepackage{pifont}
+\def\etitle#1{\gdef\@etitle{#1}}
+\def\institute#1{\gdef\@institute{#1}}
+\let\@thebib=\bibliography
+\renewcommand{\floatpagefraction}{0.7}
+\renewcommand{\baselinestretch}{1.3}
+\renewcommand{\arraystretch}{0.8}
+% \renewcommand{\refname}{文献}
+\renewcommand{\refname}{References}
+% \renewcommand{\bibliography}{\newpage \small \addcontentsline{toc}{section}{\numberline{}文献} \@thebib}
+\renewcommand{\bibliography}{\newpage \small \addcontentsline{toc}{section}{\numberline{}References} \@thebib}
+% \newcommand{\acknowledge}{\newpage \section*{謝辞} \addcontentsline{toc}{section}{\numberline{}謝辞}}
+\newcommand{\acknowledge}{\newpage \section*{Acknowledgements} \addcontentsline{toc}{section}{\numberline{}Acknowledgements}}
+\renewcommand{\maketitle}{\begin{titlepage}
+		\setcounter{page}{0}
+		\centering \LARGE
+		\vspace*{2.0cm}
+		\@title \\
+		\@etitle
+		\vfill
+		\@institute
+		\vspace{2ex} \\
+		\@author
+		\vspace{2ex} \\
+		\@date
+		\vspace*{2.0cm}
+	\end{titlepage}}
+% \AtBeginDocument{\maketitle
+% \pagestyle{empty}
+% \tableofcontents \newpage
+% \listoffigures \listoftables \clearpage
+% \pagestyle{plain}}

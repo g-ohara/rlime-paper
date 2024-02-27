@@ -7,3 +7,6 @@
 [submodule "experiments/exp2/R-LIME"]
 	path = experiments/exp2/RLIME
 	url = git@github.com:G-Ohara/R-LIME.git
+[submodule "experiments/exp_adv/RLIME"]
+	path = experiments/exp_adv/RLIME
+	url = git@github.com:G-Ohara/R-LIME.git
