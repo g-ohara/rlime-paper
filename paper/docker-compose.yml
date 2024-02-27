@@ -1,7 +1,7 @@
 services:
   latex:
     image: genjiohara/latex
-    container_name: ICPR2024-paper
+    container_name: RLIME_paper-paper
     build:
       context: .
       dockerfile: Dockerfile

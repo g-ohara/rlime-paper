@@ -6,8 +6,9 @@
 \def\mode{0} % 0: Graduation thesis, 1: ICPR paper
 
 \ifnum\mode=0
-	\documentclass{article}
+	\documentclass[11pt]{article}
 	\usepackage{prmlthesis}
+	\usepackage[a4paper]{geometry}
 \else
 	\documentclass[runningheads]{llncs}
 \fi
@@ -698,7 +699,7 @@ Accuracy thresholds $\tau$ were set to $\tau=0.70,0.80,0.90$.
 			\def\AB#1{\ifnum#1=0 A\else B\fi}
 			\def\mylabel#1{\ifnum#1=0 \label{fig:A-instance}\else \label{fig:B-instance}\fi}
 			\ifnum\mode=0
-				\renewcommand{\arraystretch}{0.99}
+				\renewcommand{\arraystretch}{0.97}
 			\else
 				\renewcommand{\arraystretch}{1.02}
 			\fi
@@ -733,11 +734,12 @@ Accuracy thresholds $\tau$ were set to $\tau=0.70,0.80,0.90$.
 			\ifnum\mode=0
 				\def\scale{0.3}
 				\def\imgwidth{0.45\textwidth}
+				\def\hspacebase{\hspace{-0.5em}}
 			\else
 				\def\scale{0.315}
 				\def\imgwidth{0.495\textwidth}
+				\def\hspacebase{\hspace{-1.5em}}
 			\fi
-			\def\hspacebase{\hspace{-1.5em}}
 			\def\vspacebase{\vspace{0.5em}}
 			\def\vspacebeforecaption{\vspace{-0.4em}}
 			\begin{figure}[p]
@@ -879,18 +881,17 @@ effectively as approximation models depending on how the region is selected.
 
 \section{Challenges and Future Perspectives}
  {%
-  \def\imgwidth{0.49\textwidth}
-  \def\scale{0.08}
+  \def\imgwidth{0.45\textwidth}
   \begin{figure}[t]
 	  \centering
 	  \begin{subfigure}[t]{\imgwidth}
 		  \centering
-		  \includegraphics[scale=\scale]{newlime}
+		  \includegraphics[width=0.7\textwidth]{newlime}
 		  \caption{R-LIME for balanced label distribution.}\label{fig:balanced}
 	  \end{subfigure}
 	  \begin{subfigure}[t]{\imgwidth}
 		  \centering
-		  \includegraphics[scale=\scale]{newlime_for_imbalanced_data}
+		  \includegraphics[width=0.7\textwidth]{newlime_for_imbalanced_data}
 		  \caption{R-LIME for imbalanced label distribution.
 		  }\label{fig:imbalanced}
 	  \end{subfigure}
@@ -975,16 +976,17 @@ the KL-LUCB algorithm.
 
 \ifnum\mode=0
 	\acknowledge
-	I would like to express my gratitude to Associate Professor Keigo Kimura
-	from the Department of Mathematical Science,
-	Division of Information Recognition,
-	Graduate School of Information Science and Technology, Hokkaido University.
-	He provided invaluable guidance,
-	from setting the research theme to outlining the strategy and content of this study.
-	Additionally,
-	I appreciate the diverse insights shared by Professor Mineichi Kudo in the same laboratory.
-	Finally, I am deeply thankful to all the members of the laboratory
-	for their helpful advice and collaboration throughout the research process.
+	I would like to thank Associate Professor Keigo Kimura
+	of the Laboratory for Pattern Recognition and Machine Learning,
+	Division of Computer Science and Information Technology,
+	Graduate School of Information Sci.\ and Tech., Hokkaido University.
+	He provided valuable guidance
+	from setting the research theme to outlining the research method.
+	Furthermore,
+	I appreciate the various insights shared by Professor Mineichi Kudo
+	in the same laboratory.
+	Finally, I am deeply thankful to all the members of our laboratory
+	for their helpful advice and cooperation throughout the research process.
 \fi
 
 % \subsubsection{Acknowledgements}
