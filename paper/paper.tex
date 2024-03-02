@@ -7,6 +7,7 @@
 
 \ifnum\mode=0
 	\documentclass[11pt]{article}
+	\usepackage{luatexja}
 	\usepackage{prmlthesis}
 	\usepackage[a4paper]{geometry}
 \else
@@ -68,12 +69,26 @@
 
 \ifnum\mode=0
 	\title{%
+		R-LIME: LIME法における矩形制約と最適化
+	}
+	\etitle{%
 		R-LIME: Rectangular Constraints and Optimization for Local Interpretable
 		Model-agnostic Explanation Methods
 	}
-	\etitle{}
-	\author{Genji Ohara}
-	\institute{hogehoge}
+	\author{大原 玄嗣 (Genji Ohara)}
+	\institute{%
+		北海道大学 工学部 \\
+		情報エレクトロニクス学科 \\
+		情報理工学コース \\
+		情報認識学研究室
+	}
+	\date{2024年3月}
+	% \institute{%
+	% 	Laboratory for Pattern Recognition and Machine Learning,\\
+	% 	Division of Computer Science and Information Technology,\\
+	% 	Department of Electronics and Information Engineering,\\
+	% 	School of Engineering, Hokkaido University
+	% }
 \else
 	\title{%
 		R-LIME: Rectangular Constraints and Optimization for Local Interpretable
@@ -201,8 +216,8 @@ into \emph{model-dependent} and \emph{model-agnostic} methods
 based on their dependence on the model's structure.
 
 Model-dependent methods,
-such as DTD (Deep Taylor Decomposition)~\cite{montavon2017explaining}
-and LRP (Layer-wise Relevance Propagation)~\cite{bach2015pixel},
+such as Deep Taylor Decomposition (DTD)~\cite{montavon2017explaining}
+and Layer-wise Relevance Propagation (LRP)~\cite{bach2015pixel},
 primarily focus on deep neural networks and
 explain the models' behavior using their parameters~\cite{samek2021explaining}.
 While these methods can provide detailed explanations
@@ -219,8 +234,8 @@ they cannot explain the reasoning process inside the model.
 Furthermore, model-agnostic methods are classified into
 \emph{global} and \emph{local} methods based on their locality in input space.
 Global methods,
-such as PDP (Partial Dependence Plots)~\cite{friedman2001greedy}
-and ALE (Accumulated Local Effects)~\cite{apley2020visualizing},
+such as Partial Dependence Plots (PDP)~\cite{friedman2001greedy}
+and Accumulated Local Effects (ALE)~\cite{apley2020visualizing},
 aim to explain the model's behavior across the entire input space,
 seeking explanations valid for any input.
 However, providing global explanations becomes challenging
@@ -273,7 +288,11 @@ the scope of the explanation is limited to the vicinity of the focal point.
 	\hspace{0.3cm}
 	\begin{subfigure}[t]{0.45\textwidth}
 		\centering
-		\vspace{-2.24cm}
+		\ifnum\mode=0
+			\vspace{-1.79cm}
+		\else
+			\vspace{-2.24cm}
+		\fi
 		\includegraphics[scale=\scale]{example-rlime}
 		\caption{%
 			Explanation by R-LIME\@.
@@ -977,9 +996,9 @@ explanations of black-box classifiers and proposed R-LIME to address them.
 We represented the rectangular region for local linear approximation as a
 conjunction of feature predicates and proposed an algorithm to
 maximize coverage under the constraint of minimum approximation accuracy.
-Comparing the outputs of LIME and R-LIME on real-world datasets,
-we demonstrated that explanations provided by R-LIME have clearer application
-scopes and can be evaluated by users for reliability and generality.
+Comparing the outputs of LIME and R-LIME on the real-world dataset,
+we demonstrated that R-LIME provides a clear application scope of the
+explanation and can be evaluated by users for its reliability and generality.
 However, we discussed the instability of behavior concerning imbalanced label
 distributions and raised questions about the theoretical validity of using
 the KL-LUCB algorithm.
