@@ -25,14 +25,14 @@
      inkscape:document-units="mm"
      showgrid="false"
      inkscape:zoom="1.3932941"
-     inkscape:cx="395.46569"
-     inkscape:cy="486.97545"
+     inkscape:cx="395.46568"
+     inkscape:cy="486.97543"
      inkscape:window-width="1850"
      inkscape:window-height="1016"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer3"
+     inkscape:current-layer="layer2"
      inkscape:snap-others="true"
      inkscape:snap-midpoints="false" />
   <defs
@@ -244,7 +244,7 @@
        style="font-size:12.4323px;white-space:pre;shape-inside:url(#rect100231-7);display:inline;fill:#000000;fill-opacity:1"><tspan
          x="296.15625"
          y="225.83952"
-         id="tspan20067">not</tspan></text>
+         id="tspan2279">not</tspan></text>
     <rect
        style="display:inline;fill:#cb0b41;fill-opacity:1;stroke-width:0.201946"
        id="rect92755-2-3"
@@ -259,7 +259,7 @@
        style="font-size:12.4323px;white-space:pre;shape-inside:url(#rect100231-20-5);display:inline;fill:#000000;fill-opacity:1"><tspan
          x="296.15625"
          y="225.83952"
-         id="tspan20069">bad</tspan></text>
+         id="tspan2281">bad</tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.49582501,0,0,0.52560563,7.2882137,24.212639)"
@@ -267,7 +267,7 @@
        style="font-size:12.3969px;white-space:pre;shape-inside:url(#rect100231-5-92);display:inline;fill:#000000;fill-opacity:1"><tspan
          x="296.15625"
          y="225.80819"
-         id="tspan20071">interesting</tspan></text>
+         id="tspan2283">interesting</tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.49582501,0,0,0.52560563,-13.648164,40.85478)"
@@ -275,7 +275,7 @@
        style="font-size:12.3969px;white-space:pre;shape-inside:url(#rect100231-5-9-2);display:inline;fill:#000000;fill-opacity:1"><tspan
          x="296.15625"
          y="225.80819"
-         id="tspan20073">funny</tspan></text>
+         id="tspan2285">funny</tspan></text>
     <rect
        style="display:inline;fill:#000000;fill-opacity:1;stroke-width:0.207333"
        id="use107707-7"
@@ -291,7 +291,7 @@
        style="font-size:12.4323px;white-space:pre;shape-inside:url(#rect100231-20-5-6-7-0);display:inline;fill:#000000;fill-opacity:1"><tspan
          x="296.15625"
          y="225.83952"
-         id="tspan20075">{&quot;bad&quot;} 
+         id="tspan2287">{&quot;bad&quot;} 
 </tspan></text>
     <g
        id="g1131">
@@ -311,46 +311,46 @@
     <text
        xml:space="preserve"
        style="font-size:4.23333px;display:inline;fill:#000000;fill-opacity:1;stroke-width:0.2;stroke-linecap:round"
-       x="139.57291"
+       x="127.93139"
        y="166.23129"
        id="text2188-5-5-2-6"><tspan
          sodipodi:role="line"
          id="tspan2186-3-6-9-0"
          style="font-size:4.23333px;fill:#000000;fill-opacity:1;stroke-width:0.2"
-         x="139.57291"
+         x="127.93139"
          y="166.23129">0.14</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:4.23333px;display:inline;fill:#000000;fill-opacity:1;stroke-width:0.2;stroke-linecap:round"
-       x="165.86429"
+       x="176.44748"
        y="149.40802"
        id="text2188-5-5-9"><tspan
          sodipodi:role="line"
          id="tspan2186-3-6-3"
          style="font-size:4.23333px;fill:#000000;fill-opacity:1;stroke-width:0.2"
-         x="165.86429"
+         x="176.44748"
          y="149.40802">0.21</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:4.23333px;display:inline;fill:#000000;fill-opacity:1;stroke-width:0.2;stroke-linecap:round"
-       x="125.45351"
+       x="113.28267"
        y="133.16954"
        id="text2188-5-7"><tspan
          sodipodi:role="line"
          id="tspan2186-3-0"
          style="font-size:4.23333px;fill:#000000;fill-opacity:1;stroke-width:0.2"
-         x="125.45351"
+         x="113.28267"
          y="133.16954">0.28</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:4.23333px;display:inline;fill:#000000;fill-opacity:1;stroke-width:0.2;stroke-linecap:round"
-       x="183.59552"
+       x="195.23703"
        y="116.05917"
        id="text2188-1"><tspan
          sodipodi:role="line"
          id="tspan2186-2"
          style="font-size:4.23333px;fill:#000000;fill-opacity:1;stroke-width:0.2"
-         x="183.59552"
+         x="195.23703"
          y="116.05917">0.37</tspan></text>
   </g>
   <g
@@ -365,7 +365,7 @@
        style="font-size:12.4323px;white-space:pre;shape-inside:url(#rect100231-20-5-6-7);display:inline;fill:#000000;fill-opacity:1"><tspan
          x="296.15625"
          y="225.83952"
-         id="tspan20077">{&quot;not&quot;, &quot;bad&quot;} 
+         id="tspan2289">{&quot;not&quot;, &quot;bad&quot;} 
 </tspan></text>
     <rect
        style="fill:#00b400;fill-opacity:0.419608;fill-rule:nonzero;stroke:url(#radialGradient383642);stroke-width:0.232014;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none"
@@ -381,7 +381,7 @@
        style="font-size:12.4323px;white-space:pre;shape-inside:url(#rect100231-20-5-6-7-9);display:inline;fill:#000000;fill-opacity:1"><tspan
          x="296.15625"
          y="225.83952"
-         id="tspan20079">Positive 
+         id="tspan2291">Positive 
 </tspan></text>
     <g
        id="g1131-3"
@@ -434,7 +434,7 @@
        style="font-size:12.4323px;white-space:pre;shape-inside:url(#rect100231-7-2);display:inline;fill:#000000;fill-opacity:1"><tspan
          x="296.15625"
          y="225.83952"
-         id="tspan20081">not</tspan></text>
+         id="tspan2293">not</tspan></text>
     <rect
        style="display:inline;fill:#cb0b41;fill-opacity:1;stroke-width:0.224575"
        id="rect92755-2-3-8"
@@ -449,7 +449,7 @@
        style="font-size:12.4323px;white-space:pre;shape-inside:url(#rect100231-20-5-6);display:inline;fill:#000000;fill-opacity:1"><tspan
          x="296.15625"
          y="225.83952"
-         id="tspan20083">bad</tspan></text>
+         id="tspan2295">bad</tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.49582501,0,0,0.52560563,-85.341388,-11.077243)"
@@ -457,7 +457,7 @@
        style="font-size:12.3969px;white-space:pre;shape-inside:url(#rect100231-5-92-6);display:inline;fill:#000000;fill-opacity:1"><tspan
          x="296.15625"
          y="225.80819"
-         id="tspan20085">interesting</tspan></text>
+         id="tspan2297">interesting</tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.49582501,0,0,0.52560563,-85.111091,5.5649001)"
@@ -465,7 +465,7 @@
        style="font-size:12.3969px;white-space:pre;shape-inside:url(#rect100231-5-9-2-4);display:inline;fill:#000000;fill-opacity:1"><tspan
          x="296.15625"
          y="225.80819"
-         id="tspan20087">funny</tspan></text>
+         id="tspan2299">funny</tspan></text>
     <rect
        style="display:inline;fill:#000000;fill-opacity:1;stroke-width:0.207333"
        id="use107707-7-2"
@@ -477,46 +477,46 @@
     <text
        xml:space="preserve"
        style="font-size:4.23333px;fill:#000000;fill-opacity:1;stroke-width:0.2;stroke-linecap:round"
-       x="91.661789"
+       x="102.24514"
        y="80.961693"
        id="text2188"><tspan
          sodipodi:role="line"
          id="tspan2186"
          style="font-size:4.23333px;fill:#000000;fill-opacity:1;stroke-width:0.2"
-         x="91.661789"
+         x="102.24514"
          y="80.961693">0.38</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:4.23333px;display:inline;fill:#000000;fill-opacity:1;stroke-width:0.2;stroke-linecap:round"
-       x="26.010662"
+       x="13.839821"
        y="97.753845"
        id="text2188-5"><tspan
          sodipodi:role="line"
          id="tspan2186-3"
          style="font-size:4.23333px;fill:#000000;fill-opacity:1;stroke-width:0.2"
-         x="26.010662"
+         x="13.839821"
          y="97.753845">0.32</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:4.23333px;display:inline;fill:#000000;fill-opacity:1;stroke-width:0.2;stroke-linecap:round"
-       x="70.7556"
+       x="81.338943"
        y="114.31055"
        id="text2188-5-5"><tspan
          sodipodi:role="line"
          id="tspan2186-3-6"
          style="font-size:4.23333px;fill:#000000;fill-opacity:1;stroke-width:0.2"
-         x="70.7556"
+         x="81.338943"
          y="114.31055">0.19</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:4.23333px;display:inline;fill:#000000;fill-opacity:1;stroke-width:0.2;stroke-linecap:round"
-       x="63.513969"
+       x="74.097313"
        y="130.60466"
        id="text2188-5-5-2"><tspan
          sodipodi:role="line"
          id="tspan2186-3-6-9"
          style="font-size:4.23333px;fill:#000000;fill-opacity:1;stroke-width:0.2"
-         x="63.513969"
+         x="74.097313"
          y="130.60466">0.11</tspan></text>
   </g>
   <g
@@ -538,10 +538,10 @@
        style="font-size:12.4323px;white-space:pre;shape-inside:url(#rect100231-20-5-6-7-1);display:inline;fill:#000000;fill-opacity:1"><tspan
          x="296.15625"
          y="225.83952"
-         id="tspan20089">This book is not bad. 
+         id="tspan2301">This book is not bad. 
 </tspan><tspan
          x="296.15625"
          y="241.37989"
-         id="tspan20091">It is funny and interesting.</tspan></text>
+         id="tspan2303">It is funny and interesting.</tspan></text>
   </g>
 </svg>

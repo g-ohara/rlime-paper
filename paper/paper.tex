@@ -394,9 +394,9 @@ particularly focusing on studies closely related to our proposed method.
 	\cite{ribeiro2016why}
 }
 LIME locally
-approximates a trained black-box classifier $f: \mathbb{R}^d \to \{0,1\}$
-around a focal point $x \in \mathbb{R}^d$
-by a linear classifier $g: \mathbb{R}^d \to \{0,1\}$
+approximates a trained black-box classifier $f: \mathbb{R}^m \to \{0,1\}$
+around a focal point $x \in \mathbb{R}^m$
+by a linear classifier $g: \mathbb{R}^m \to \{0,1\}$
 (\cref{fig:lime}).
 The process involves:
 \begin{enumerate}
@@ -605,16 +605,21 @@ The pseudo code is presented in \cref{alg:largest_valid_cand}.
 % the solution to the optimization problem in \cref{eq:main_problem}
 % under the definition of accuracy in \cref{eq:def_prec}. 
 
-\ifnum\mode=1
-	\subsection{Computational Complexity}
-	Post-hoc explanation methods including LIME, Anchor, and R-LIME
-	need to query the black-box model multiple times
-	to get labels for perturbed samples, which is computationally expensive.
-	The number of queries required for LIME is $|\mathcal{Z}_p|$,
-	where $|\mathcal{Z}_p|$ is the number of perturbed samples.
-	On the other hand, the number of queries required for Anchor and R-LIME
-	is $|\mathcal{D}|$,
-\fi
+\subsection{Computational Complexity}
+Post-hoc explanation methods including LIME, Anchor, and R-LIME
+need to query the black-box model multiple times
+to get labels for perturbed samples, which is computationally expensive.
+The number of queries required for LIME is $|\mathcal{Z}_p|$,
+where $|\mathcal{Z}_p|$ is the number of perturbed samples.
+On the other hand,
+the number of queries required for Anchor and R-LIME is
+$\mathcal{O}(B\cdot m^2+m^2\cdot\mathcal{O}_{\mathrm{MAB}[B\cdot m,B]})$,
+where $B$ is the beam width, $m$ is the number of features, and
+$\mathcal{O}_{\mathrm{MAB}[B\cdot m,B]}$ is the computational complexity of
+pure exploration
+of the multi-armed bandit algorithm with $B\cdot m$ arms and beam width $B$.
+$\mathcal{O}_{\mathrm{MAB}[B\cdot m,B]}$ depends on hyperparameters
+such as threshold $\tau$, confidence level $1-\delta$ and tolerance $\epsilon$.
 
 \section{Experiments}
 To verify the effectiveness of the proposed method,
@@ -732,7 +737,7 @@ Accuracy thresholds $\tau$ were set to $\tau=0.70,0.80,0.90$.
 		}
 		{%
 			\ifnum\mode=0
-				\def\scale{0.3}
+				\def\scale{0.32}
 				\def\imgwidth{0.45\textwidth}
 				\def\hspacebase{\hspace{-0.5em}}
 			\else
@@ -746,6 +751,7 @@ Accuracy thresholds $\tau$ were set to $\tau=0.70,0.80,0.90$.
 				\centering
 				\begin{subfigure}[t]{\imgwidth}
 					\hspacebase
+					\hspace{1.0em}
 					\includegraphics[scale=\scale]{\dir/lime-\Asample}
 					\vspacebeforecaption
 					\caption{LIME}\label{fig:A-lime}
@@ -753,7 +759,7 @@ Accuracy thresholds $\tau$ were set to $\tau=0.70,0.80,0.90$.
 				\end{subfigure}
 				\begin{subfigure}[t]{\imgwidth}
 					\hspacebase
-					\hspace{1.0em}
+					\hspace{0.5em}
 					\includegraphics[scale=\scale]{\dir/newlime-\Asample-70}
 					\vspacebeforecaption
 					\caption{R-LIME ($\tau=0.70$)}\label{fig:A-rlime-70}
@@ -767,6 +773,7 @@ Accuracy thresholds $\tau$ were set to $\tau=0.70,0.80,0.90$.
 				\end{subfigure}
 				\begin{subfigure}[t]{\imgwidth}
 					\hspacebase
+					\hspace{-0.5em}
 					\includegraphics[scale=\scale]{\dir/newlime-\Asample-90}
 					\vspacebeforecaption
 					\caption{R-LIME ($\tau=0.90$)}\label{fig:A-rlime-90}
@@ -779,6 +786,7 @@ Accuracy thresholds $\tau$ were set to $\tau=0.70,0.80,0.90$.
 				\centering
 				\begin{subfigure}[t]{\imgwidth}
 					\hspacebase
+					\hspace{-0.7em}
 					\includegraphics[scale=\scale]{\dir/lime-\Bsample}
 					\vspacebeforecaption
 					\caption{LIME}\label{fig:B-lime}
@@ -786,6 +794,7 @@ Accuracy thresholds $\tau$ were set to $\tau=0.70,0.80,0.90$.
 				\end{subfigure}
 				\begin{subfigure}[t]{\imgwidth}
 					\hspacebase
+					\hspace{0.5em}
 					\includegraphics[scale=\scale]{\dir/newlime-\Bsample-70}
 					\vspacebeforecaption
 					\caption{R-LIME ($\tau=0.70$)}\label{fig:B-rlime-70}
@@ -793,13 +802,14 @@ Accuracy thresholds $\tau$ were set to $\tau=0.70,0.80,0.90$.
 				\end{subfigure}
 				\begin{subfigure}[t]{\imgwidth}
 					\hspacebase
+					\hspace{-0.8em}
 					\includegraphics[scale=\scale]{\dir/newlime-\Bsample-80}
 					\vspacebeforecaption
 					\caption{R-LIME ($\tau=0.80$)}\label{fig:B-rlime-80}
 				\end{subfigure}
 				\begin{subfigure}[t]{\imgwidth}
 					\hspacebase
-					\hspace{0em}
+					\hspace{-0.8em}
 					\includegraphics[scale=\scale]{\dir/newlime-\Bsample-90}
 					\vspacebeforecaption
 					\caption{R-LIME ($\tau=0.90$)}\label{fig:B-rlime-90}
