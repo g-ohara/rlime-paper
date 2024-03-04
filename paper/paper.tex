@@ -432,7 +432,6 @@ The process involves:
 	      where $\pi_x(z)$ is a weight function designed to be larger for samples
 	      closer to $x$, typically implemented using an exponential kernel.
 \end{enumerate}
-
 LIME provides valuable insights into the local behavior of the model
 by showing the contribution of each feature to the output $f(x)$.
 However, due to not explicitly indicating the perturbation region,
@@ -448,7 +447,6 @@ that maximizes the probability of the black-box classifier $f$
 outputting $f(x)$ within the region.
 It aims to highlight important features
 contributing significantly to the output (\cref{fig:anchor}).
-
 For a discrete $m$-dimensional input space $\ispace$
 with a trained black-box classifier $f: \ispace \to \{0,1\}$,
 an instance $x \in \ispace$,
@@ -461,13 +459,11 @@ The accuracy $\Prec(A)$ and coverage $\Cov(A)$ of the rule $A$ are defined as fo
 	[\mathbbm{1}_{f(z)=f(x)}], \label{eq:anchor_def_prec} \\
 	\Cov(A)  & =\mathbb{E}_{z\sim\mathcal{D}(z)}[A(z)].
 \end{align}
-
 where $\mathcal{D}(z|A)$ is the conditional distribution in the region
 where the rule $A$ returns true.
 $\Prec(A)$ represents the probability that the output of $f$ matches
 between the perturbation $z\sim\mathcal{D}(z|A)$ and the focal point $x$,
 and $\Cov(A)$ expresses the probability that the perturbation $z$ fits into $A$.
-
 Anchor maximizes coverage under the constraint that
 the accuracy of the rule $A$ exceeds a given threshold $\tau$.
 However, \cref{eq:anchor_def_prec} is not directly computable.
@@ -636,8 +632,7 @@ The pseudo code is presented in \cref{alg:largest_valid_cand}.
 	$\mathcal{O}(B\cdot m^2+m^2\cdot\mathcal{O}_{\mathrm{MAB}[B\cdot m,B]})$,
 	where $B$ is the beam width, $m$ is the number of features, and
 	$\mathcal{O}_{\mathrm{MAB}[B\cdot m,B]}$ is the computational complexity of
-	pure exploration
-	of the multi-armed bandit algorithm with $B\cdot m$ arms and beam width $B$.
+	pure exploration problem of finding the $B$ best arms among $B\cdot m$ arms.
 	$\mathcal{O}_{\mathrm{MAB}[B\cdot m,B]}$ depends on hyperparameters
 	such as threshold $\tau$, confidence level $1-\delta$ and tolerance $\epsilon$.
 \fi
@@ -869,9 +864,8 @@ as a conjunction of predicates.
 For example, the explanation for instance A
 under $\tau=0.70$ (\cref{fig:A-rlime-70}) indicates that it is applicable
 only to married prisoner (Married$=$Yes).
-Furthermore, the generated explanations include the accuracy and coverage of
-the approximation region, allowing users to evaluate how reliable the
-explanations are.
+Furthermore, the explanations include the accuracy and coverage,
+allowing users to evaluate its reliability.
 For example, the coverage of the explanation for instance B under $\tau=0.90$
 (\cref{fig:B-rlime-90}) is 0.01\%,
 indicating that the decision boundaries around instance B are complex,
@@ -893,7 +887,7 @@ obtained by R-LIME and calculated the local accuracy of both methods.
 \subsubsection{Experimental Results}
 \begin{figure}[tbp]
 	\centering
-	\includegraphics[width=0.55\textwidth]{experiments/exp2/box_plot}
+	\includegraphics[width=0.53\textwidth]{experiments/exp2/box_plot}
 	\caption[Comparison of Local Accuracy between R-LIME and LIME]{%
 		Comparison of local accuracy between LIME and R-LIME\@.
 		R-LIME achieved higher and less variable accuracy compared to LIME
@@ -901,9 +895,9 @@ obtained by R-LIME and calculated the local accuracy of both methods.
 	}\label{fig:box_plot}
 \end{figure}
 The results are presented in \cref{fig:box_plot},
-showcasing the distribution of the accuracy of the linear approximation models
+showing the distribution of the accuracy of the linear approximation models
 learned by LIME and R-LIME\@.
-R-LIME exhibits higher accuracy compared to LIME for all values of $\tau$.
+R-LIME achieved higher accuracy compared to LIME for all values of $\tau$.
 This suggests that the linear classifiers learned by LIME and R-LIME
 differ significantly,
 and R-LIME learns a high-accuracy linear classifier adapted to the rectangular region.
@@ -914,17 +908,17 @@ effectively as approximation models depending on how the region is selected.
 
 \section{Challenges and Future Perspectives}
  {%
-  \def\imgwidth{0.45\textwidth}
+  \def\imgwidth{0.47\textwidth}
   \begin{figure}[t]
 	  \centering
 	  \begin{subfigure}[t]{\imgwidth}
 		  \centering
-		  \includegraphics[width=0.8\textwidth]{visual-rlime3}
+		  \includegraphics[width=0.75\textwidth]{visual-rlime3}
 		  \caption{R-LIME for balanced label distribution.}\label{fig:balanced}
 	  \end{subfigure}
 	  \begin{subfigure}[t]{\imgwidth}
 		  \centering
-		  \includegraphics[width=0.8\textwidth]{visual-rlime-imbalanced}
+		  \includegraphics[width=0.75\textwidth]{visual-rlime-imbalanced}
 		  \caption{R-LIME for imbalanced label distribution.
 		  }\label{fig:imbalanced}
 	  \end{subfigure}

@@ -3,7 +3,6 @@
 ## Contents
 This repository contains items below:
 - README.md (This file)
-- slide.pdf
 - paper/
   - paper.pdf
   - paper.tex (TeX file for entire paper)
