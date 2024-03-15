@@ -58,9 +58,13 @@
 \renewcommand\thesubfigure{(\alph{subfigure})}
 
 % settings for cleveref
-\crefname{figure}{Figure}{Figures}
 \crefname{table}{Table}{Tables}
 \crefname{algorithm}{Algorithm}{Algorithms}
+\ifnum\mode=0
+  \crefname{figure}{Figure}{Figures}
+\else
+  \crefname{figure}{Fig.}{Figs.}
+\fi
 
 % import the TeX file containing macro definitions
 \input{tex/macro}
@@ -129,7 +133,6 @@
   \pagestyle{plain}
   \pagenumbering{arabic}
 \else
-
   % The abstract should briefly summarize the contents of the paper in
   % 150--250 words.
   \begin{abstract}
@@ -178,82 +181,23 @@ into \emph{model-dependent} and \emph{model-agnostic} methods
 based on their dependence on the model's structure.
 Furthermore, model-agnostic methods are classified into
 \emph{global} and \emph{local} methods based on their locality in input space.
-
-This paper specifically focuses
-on \emph{model-agnostic} and \emph{local} methods,
-which do not rely on the models' structure
-and explain the models' behavior
-in the vicinity of a given input (focal point).
-For example, LIME (Local Interpretable Model-agnostic Explanations)
-\cite{ribeiro2016why} approximates the complex model's decision boundary
-locally using a simpler model around the given focal point.
-Although LIME enables users to interpret the local behavior of complex models,
-it does not explicitly provide the effective scope of the explanation
-\cite{ribeiro2018anchors}.
-This limitation can lead
-users to overgeneralize the knowledge derived from the explanation.
-Without a clear indication of the scope of the explanation,
-users might mistakenly apply
-the derived knowledge to instances outside this scope,
-potentially leading to misunderstanding of the black-box model's behavior.
-
-To address this limitation of LIME,
-we propose a new method called R-LIME (Ruled LIME),
-which interprets complex classifiers in an interpretable region.
-R-LIME locally approximates a complex decision boundary linearly
-in a rectangular region and maximizes the region
-as long as the accuracy of the linear classifier is
-higher than a given threshold.
-The resulting rectangular region is interpretable for users because it is
-expressed as a conjunction of feature predicates (\cref{fig:example-rlime}).
-
-\section{Related Work}
-In this chapter,
-we overview existing research on post-hoc explanations,
-which explain the behavior of complex models already trained.
-They are categorized
-into \emph{model-dependent} and \emph{model-agnostic} methods
-based on their dependence on the model's structure.
-
-Model-dependent methods,
-such as Deep Taylor Decomposition (DTD)~\cite{montavon2017explaining}
-and Layer-wise Relevance Propagation (LRP)~\cite{bach2015pixel},
-primarily focus on deep neural networks and
-explain the models' behavior using their parameters~\cite{samek2021explaining}.
-While these methods can provide detailed explanations
-(e.g., layer-wise explanations for neural networks)
-using the models' internal parameters,
-it is often challenging
-to apply the same method to models with different structures.
-
-On the other hand,
-model-agnostic methods
-do not rely on the models' parameters and utilize only their output.
-Although these methods are applicable to any model,
-they cannot explain the reasoning process inside the model.
-Furthermore, model-agnostic methods are classified into
-\emph{global} and \emph{local} methods based on their locality in input space.
-Global methods,
-such as Partial Dependence Plots (PDP)~\cite{friedman2001greedy}
-and Accumulated Local Effects (ALE)~\cite{apley2020visualizing},
-aim to explain the model's behavior across the entire input space,
-seeking explanations valid for any input.
-However, providing global explanations becomes challenging
-as the model's complexity increases.
-In contrast, local methods,
-such as LIME (Local Interpretable Model-agnostic Explanations)~\cite{ribeiro2016why}
-and Anchor~\cite{ribeiro2018anchors},
-% SHAP~\cite{lundberg2017unified},
-% EXPLAN~\cite{rasouli2020explan},
-% LORE (Local Rule-based Explanations)~\cite{guidotti2018local}
-% and BELLA (Black box model Explanations by Local Linear Approximations)
-% \cite{radulovic2023bella},
-explain output of the model for a specific input
-(focal point) in the vicinity of that input.
-While local methods offer more simple and accurate explanations
-than global methods,
-the scope of the explanation is limited to the vicinity of the focal point.
-
+% This paper specifically focuses
+% on \emph{model-agnostic} and \emph{local} methods,
+% which do not rely on the models' structure
+% and explain the models' behavior
+% in the vicinity of a given input (focal point).
+% For example, LIME (Local Interpretable Model-agnostic Explanations)
+% \cite{ribeiro2016why} approximates the complex model's decision boundary
+% locally using a simpler model around the given focal point.
+% Although LIME enables users to interpret the local behavior of complex models,
+% it does not explicitly provide the effective scope of the explanation
+% \cite{ribeiro2018anchors}.
+% This limitation can lead
+% users to overgeneralize the knowledge derived from the explanation.
+% Without a clear indication of the scope of the explanation,
+% users might mistakenly apply
+% the derived knowledge to instances outside this scope,
+% potentially leading to misunderstanding of the black-box model's behavior.
 \begin{figure}[tbp]
   \def\scale{0.38}
   \centering
@@ -342,30 +286,62 @@ because of not including the word ``bad'',
 the explanation does not provide details about the influence of each word,
 resulting in less user insight into the model's behavior compared to LIME.
 
-% BELLA\cite{radulovic2023bella} addresses the non-optimization of the approximation region,
-% a drawback of LIME,
-% by learning a local linear classifier $g$
-% using a subset $Z'$ of the dataset $Z$
-% instead of perturbed samples.
-% The process involves:
-% \begin{enumerate}
-% 	\item Computing the distance $d_x(z)$ for all instances $z$ in $Z$
-% 	      with respect to the focal point $x$.
-% 	\item Selecting the $k$ instances with the smallest $d_x(z)$,
-% 	      forming a subset $Z_s(k) \subseteq Z$.
-% 	\item Learning the local linear classifier $g$ using $Z_s(k)$
-% 	      and calculating the similarity measure $\mathcal{R}(k)$ between $f$ and $g$
-% 	      over $k=1,2,\dots,|Z|$.
-% 	\item Obtaining the optimal $k^*$ by maximizing $\mathcal{R}(k)$.
-% \end{enumerate}
-% 
-% BELLA aims to enhance the reliability of explanations
-% by optimizing the approximation region for high-accuracy linear approximations.
-% However, it assumes direct access to the dataset $Z$ used for training the classifier,
-% making it inapplicable in scenarios where direct access to the dataset is restricted.
-% Additionally,
-% as BELLA presents the approximation region as a subset of the dataset,
-% its interpretability is lower compared to Anchor.
+To address this limitation of LIME,
+we propose a new method called R-LIME (Ruled LIME),
+which interprets complex classifiers in an interpretable region.
+R-LIME locally approximates a complex decision boundary linearly
+in a rectangular region and maximizes the region
+as long as the accuracy of the linear classifier is
+higher than a given threshold.
+The resulting rectangular region is interpretable for users because it is
+expressed as a conjunction of feature predicates (\cref{fig:example-rlime}).
+
+\section{Related Work}
+In this chapter,
+we overview existing research on post-hoc explanations,
+which explain the behavior of complex models already trained.
+They are categorized
+into \emph{model-dependent} and \emph{model-agnostic} methods
+based on their dependence on the model's structure.
+
+Model-dependent methods,
+such as Deep Taylor Decomposition (DTD)~\cite{montavon2017explaining}
+and Layer-wise Relevance Propagation (LRP)~\cite{bach2015pixel},
+primarily focus on deep neural networks and
+explain the models' behavior using their parameters~\cite{samek2021explaining}.
+While these methods can provide detailed explanations
+(e.g., layer-wise explanations for neural networks)
+using the models' internal parameters,
+it is often challenging
+to apply the same method to models with different structures.
+
+On the other hand,
+model-agnostic methods
+do not rely on the models' parameters and utilize only their output.
+Although these methods are applicable to any model,
+they cannot explain the reasoning process inside the model.
+Furthermore, model-agnostic methods are classified into
+\emph{global} and \emph{local} methods based on their locality in input space.
+Global methods,
+such as Partial Dependence Plots (PDP)~\cite{friedman2001greedy}
+and Accumulated Local Effects (ALE)~\cite{apley2020visualizing},
+aim to explain the model's behavior across the entire input space,
+seeking explanations valid for any input.
+However, providing global explanations becomes challenging
+as the model's complexity increases.
+In contrast, local methods,
+such as LIME (Local Interpretable Model-agnostic Explanations)~\cite{ribeiro2016why}
+and Anchor~\cite{ribeiro2018anchors},
+% SHAP~\cite{lundberg2017unified},
+% EXPLAN~\cite{rasouli2020explan},
+% LORE (Local Rule-based Explanations)~\cite{guidotti2018local}
+% and BELLA (Black box model Explanations by Local Linear Approximations)
+% \cite{radulovic2023bella},
+explain output of the model for a specific input
+(focal point) in the vicinity of that input.
+While local methods offer more simple and accurate explanations
+than global methods,
+the scope of the explanation is limited to the vicinity of the focal point.
 
 \section{Proposed Method}
 \begin{figure}[tbp]
@@ -402,11 +378,13 @@ resulting in less user insight into the model's behavior compared to LIME.
     point, and the dashed line represents the learned approximation model.
   }
 \end{figure}
+
 \subsection{Previous Work}
 We specifically focuses on \emph{local} and \emph{model-agnostic} methods.
 In this section,
 we briefly review existing research on local model-agnostic explanations,
 particularly focusing on studies closely related to our proposed method.
+
 \subsubsection[LIME]{%
   LIME (Local Interpretable Model-agnostic Explanations)
   \cite{ribeiro2016why}
@@ -554,7 +532,6 @@ we can select the rule that enables explanation with high accuracy and generalit
       \end{algorithm}
     }
 }
-
 The algorithm of our method
 is mainly based on that used in Anchor\cite{ribeiro2018anchors}.
 For non-convex optimization problems like \cref{eq:main_problem},
@@ -625,7 +602,7 @@ The pseudo code is presented in \cref{alg:largest_valid_cand}.
   need to query the black-box model multiple times
   to get labels for perturbed samples, which is computationally expensive.
   The number of queries required for LIME is $|\mathcal{Z}_p|$,
-  where $|\mathcal{Z}_p|$ is the number of perturbed samples.
+  where $|\mathcal{Z}_p|$ is the number of perturbed samples selected by the user.
   On the other hand,
   the number of queries required for Anchor and R-LIME is
   $\mathcal{O}(B\cdot m^2+m^2\cdot\mathcal{O}_{\mathrm{MAB}[B\cdot m,B]})$,
