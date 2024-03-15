@@ -1,6 +1,3 @@
-[submodule "MyRef"]
-	path = paper/MyRef
-	url = git@github.com:G-Ohara/MyRef.git
 [submodule "python/R-LIME"]
 	path = experiments/R-LIME
 	url = git@github.com:G-Ohara/R-LIME.git
@@ -10,3 +7,6 @@
 [submodule "experiments/exp_adv/RLIME"]
 	path = experiments/exp_adv/RLIME
 	url = git@github.com:G-Ohara/R-LIME.git
+[submodule "paper/myref"]
+	path = paper/myref
+	url = git@github.com:g-ohara/myref.git
