@@ -43,6 +43,8 @@
 \usepackage{graphicx} % for \includegraphics
 \usepackage{pgffor} % for \foreach
 \usepackage[labelformat=simple]{subcaption} % for subfigure environment
+\usepackage{tikz}
+\usetikzlibrary{positioning}
 
 % The following code is used to remove the warning with bibliography:
 % ------------------------------
@@ -181,23 +183,6 @@ into \emph{model-dependent} and \emph{model-agnostic} methods
 based on their dependence on the model's structure.
 Furthermore, model-agnostic methods are classified into
 \emph{global} and \emph{local} methods based on their locality in input space.
-% This paper specifically focuses
-% on \emph{model-agnostic} and \emph{local} methods,
-% which do not rely on the models' structure
-% and explain the models' behavior
-% in the vicinity of a given input (focal point).
-% For example, LIME (Local Interpretable Model-agnostic Explanations)
-% \cite{ribeiro2016why} approximates the complex model's decision boundary
-% locally using a simpler model around the given focal point.
-% Although LIME enables users to interpret the local behavior of complex models,
-% it does not explicitly provide the effective scope of the explanation
-% \cite{ribeiro2018anchors}.
-% This limitation can lead
-% users to overgeneralize the knowledge derived from the explanation.
-% Without a clear indication of the scope of the explanation,
-% users might mistakenly apply
-% the derived knowledge to instances outside this scope,
-% potentially leading to misunderstanding of the black-box model's behavior.
 \begin{figure}[tbp]
   \def\scale{0.38}
   \centering
@@ -249,12 +234,14 @@ Furthermore, model-agnostic methods are classified into
     for a sentiment prediction model.
   }\label{fig:example}
 \end{figure}
+
 In this paper,
 we focus on local model-agnostic methods.
-An example of explanations by LIME and Anchor
+An example of explanations by LIME~\cite{ribeiro2016why} and
+Anchor~\cite{ribeiro2018anchors}
 for a sentiment prediction model is illustrated in \cref{fig:example}.
-LIME~\cite{ribeiro2016why} approximates the complex decision boundary
-locally using a linear model around the given focal point,
+LIME approximates the complex decision boundary
+linearly around the given focal point,
 then provides the weights of the linear model as the contribution of each feature
 to the output.
 The explanation by LIME (\cref{fig:example-lime}) provides suggests that
@@ -265,13 +252,13 @@ users might mistakenly apply the knowledge derived from the explanation
 to other instances far from the focal point,
 potentially leading to misunderstanding of the black-box model's behavior
 \cite{ribeiro2018anchors}.
-For example,
-user may apply the insights derived from the explanation
+For this example,
+user may apply the derived insights
 to the sentence ``This book is not good.''
 and mistakenly conclude that the word ``not''
 mainly contributes to the positive prediction for this sentence as well,
-which is incorrect obviously.
-Anchor~\cite{ribeiro2018anchors} represents a rectangular region
+which is obviously incorrect.
+Anchor represents a rectangular region
 containing the focal point,
 that maximizes the probability of the black-box classifier outputting
 the same label as the focal point.
@@ -293,55 +280,83 @@ R-LIME locally approximates a complex decision boundary linearly
 in a rectangular region and maximizes the region
 as long as the accuracy of the linear classifier is
 higher than a given threshold.
-The resulting rectangular region is interpretable for users because it is
+The rectangular region is interpretable for users because it is
 expressed as a conjunction of feature predicates (\cref{fig:example-rlime}).
+An example of the explanation by R-LIME for a sentiment prediction model
+is illustrated in \cref{fig:example-rlime}.
+It is clear that users can apply the insights derived from the explanation
+only to the sentences containing the word ``not''.
 
 \section{Related Work}
+\begin{figure}[tbp]
+  \centering
+  \def\w{2.2}
+  \def\ww{4.4}
+  \def\h{0.7}
+  \def\hh{1.4}
+  \def\hhh{2.1}
+  \def\hhhh{2.8}
+  \begin{tikzpicture}[scale=0.9,nodestyle/.style={rectangle,node font=\normalsize\itshape,auto}]
+    \node[nodestyle] (post-hoc) at (0,0){post-hoc};
+    \node[nodestyle] (dependent) at (-\w,-\hh){model-dependent};
+    \node[nodestyle] (agnostic) at (\w,-\hh){\textbf{model-agnostic}};
+    \node[nodestyle] (global) at (0,-\hhhh){global};
+    \node[nodestyle] (local) at (\ww,-\hhhh){\textbf{local}};
+    \draw(post-hoc) -- (0,-\h);
+    \draw(dependent) -- (-\w,-\h) -- (\w,-\h) -- (agnostic);
+    \draw(agnostic) -- (\w,-\hhh);
+    \draw(global) -- (0,-\hhh)  -- (\ww,-\hhh) -- (local);
+  \end{tikzpicture}
+  \caption{%
+    Categorization of post-hoc explanation methods.
+    We focus on \emph{model-agnostic} and \emph{local} methods,
+    which explain model's local behavior using only its output.
+  }\label{fig:post-hoc}
+\end{figure}
 In this chapter,
-we overview existing research on post-hoc explanations,
-which explain the behavior of complex models already trained.
-They are categorized
-into \emph{model-dependent} and \emph{model-agnostic} methods
-based on their dependence on the model's structure.
+we overview existing research on post-hoc explanation methods,
+which explain the behavior of black-box models already trained.
+As shown in \cref{fig:post-hoc},
+post-hoc methods are classified into several categories.
 
+First, they are categorized into \emph{model-dependent} and \emph{model-agnostic} methods
+based on their dependence on the model's structure.
 Model-dependent methods,
 such as Deep Taylor Decomposition (DTD)~\cite{montavon2017explaining}
 and Layer-wise Relevance Propagation (LRP)~\cite{bach2015pixel},
-primarily focus on deep neural networks and
-explain the models' behavior using their parameters~\cite{samek2021explaining}.
-While these methods can provide detailed explanations
-(e.g., layer-wise explanations for neural networks)
-using the models' internal parameters,
+most of which focus on neural networks and
+explain the model's behavior using its parameters~\cite{samek2021explaining}.
+While these methods provide detailed explanations
+(e.g., layer-wise explanations for neural networks),
 it is often challenging
 to apply the same method to models with different structures.
-
 On the other hand,
-model-agnostic methods
-do not rely on the models' parameters and utilize only their output.
-Although these methods are applicable to any model,
+model-agnostic methods use only the output of the model.
+Although they are applicable to any model,
 they cannot explain the reasoning process inside the model.
-Furthermore, model-agnostic methods are classified into
+
+Then, model-agnostic methods are classified into
 \emph{global} and \emph{local} methods based on their locality in input space.
 Global methods,
 such as Partial Dependence Plots (PDP)~\cite{friedman2001greedy}
 and Accumulated Local Effects (ALE)~\cite{apley2020visualizing},
-aim to explain the model's behavior across the entire input space,
-seeking explanations valid for any input.
+aim to explain the model's behavior across the entire input space.
+% seeking explanations valid for any input.
 However, providing global explanations becomes challenging
 as the model's complexity increases.
 In contrast, local methods,
-such as LIME (Local Interpretable Model-agnostic Explanations)~\cite{ribeiro2016why}
+such as Local Interpretable Model-agnostic Explanations (LIME)
+\cite{ribeiro2016why}
 and Anchor~\cite{ribeiro2018anchors},
 % SHAP~\cite{lundberg2017unified},
 % EXPLAN~\cite{rasouli2020explan},
 % LORE (Local Rule-based Explanations)~\cite{guidotti2018local}
 % and BELLA (Black box model Explanations by Local Linear Approximations)
 % \cite{radulovic2023bella},
-explain output of the model for a specific input
-(focal point) in the vicinity of that input.
-While local methods offer more simple and accurate explanations
+explain model's behavior in the vicinity of a specific input.
+While local methods offer explanations more simple and accurate
 than global methods,
-the scope of the explanation is limited to the vicinity of the focal point.
+the scope of the explanation is limited locally.
 
 \section{Proposed Method}
 \begin{figure}[tbp]
@@ -390,14 +405,19 @@ particularly focusing on studies closely related to our proposed method.
   \cite{ribeiro2016why}
 }
 LIME locally
-approximates a trained black-box classifier $f: \mathbb{R}^m \to \{0,1\}$
+approximates a black-box classifier $f: \mathbb{R}^m \to \{0,1\}$
 around a focal point $x \in \mathbb{R}^m$
 by a linear classifier $g: \mathbb{R}^m \to \{0,1\}$
 (\cref{fig:lime}).
-The process involves:
+The approximation is performed by the following two steps:
 \begin{enumerate}
-  \item Obtaining a set of perturbed samples $\mathcal{Z}_p$ around $x$
+  \item Generating a set of perturbed samples $\mathcal{Z}_p$ around $x$
         and the set of pseudo-labels $f(\mathcal{Z}_p) = \{f(z) \mid z \in \mathcal{Z}_p\}$.
+        (i) $x$ is converted into a binary vector
+        $x'\in\{0,1\}^{m'}$,
+        (ii) perturbed samples are generated by drawing non-zero elements
+        from $x'$ uniformly at random,
+        and (iii) the perturbed samples are converted back to the original space.
   \item Learning a linear classifier $g$
         using $\mathcal{Z}_p$ and $f(\mathcal{Z}_p)$
         by minimizing the following loss function:
@@ -532,7 +552,7 @@ we can select the rule that enables explanation with high accuracy and generalit
       \end{algorithm}
     }
 }
-The algorithm of our method
+The algorithm of R-LIME
 is mainly based on that used in Anchor\cite{ribeiro2018anchors}.
 For non-convex optimization problems like \cref{eq:main_problem},
 greedy search are often used.
@@ -551,11 +571,12 @@ $T(x)$ is the set of attribute-value pairs (predicates) that are true for $x$,
 and $T(x)\setminus A$ is the set of predicates in $T(x)$ not included in rule $A$.
 
 \subsubsection{Selection of Candidate Rules with Maximum Accuracy}
-Given the set of generated candidate rules $\cands$,
+Given the set of candidate rules $\cands$,
 the algorithm selects the top $B$ candidates with the highest accuracy.
-This is treated as an optimal arm identification problem in the multi-armed bandit framework.
-Each candidate rule $A_i\in\cands$ is considered an arm,
-and their accuracy $\Prec(A_i)$ is treated as the distribution of rewards.
+This problem can be formulated
+as best arm identification in the multi-armed bandit framework.
+Each candidate rule $A_i\in\cands$ is considered as an arm,
+and its accuracy $\Prec(A_i)$ is considered as the distribution of rewards.
 By sampling $z\sim\mathcal{D}(\cdot|A_i)$
 and obtaining the reward $\mathbbm{1}_{f(z)=g_i(z)}$ for each trial,
 the algorithm updates $g_i$ using the sampled perturbation vector $z$
@@ -598,6 +619,7 @@ The pseudo code is presented in \cref{alg:largest_valid_cand}.
 
 \ifnum\mode=1
   \subsection{Computational Complexity}
+  % \subsubsection{Number of Queries}
   Post-hoc explanation methods including LIME, Anchor, and R-LIME
   need to query the black-box model multiple times
   to get labels for perturbed samples, which is computationally expensive.
@@ -608,9 +630,17 @@ The pseudo code is presented in \cref{alg:largest_valid_cand}.
   $\mathcal{O}(B\cdot m^2+m^2\cdot\mathcal{O}_{\mathrm{MAB}[B\cdot m,B]})$,
   where $B$ is the beam width, $m$ is the number of features, and
   $\mathcal{O}_{\mathrm{MAB}[B\cdot m,B]}$ is the computational complexity of
-  pure exploration problem of finding the $B$ best arms among $B\cdot m$ arms.
+  best arm identification finding the $B$ best arms among $B\cdot m$ arms.
   $\mathcal{O}_{\mathrm{MAB}[B\cdot m,B]}$ depends on hyperparameters
-  such as threshold $\tau$, confidence level $1-\delta$ and tolerance $\epsilon$.
+  such as beam width $B$, confidence level $1-\delta$ and tolerance $\epsilon$.
+  % \subsubsection{Updating the Linear Classifier}
+  % For Anchor, each trial is composed of sampling a perturbation vector $z$
+  % and getting output $f(z)$.
+  % But for R-LIME, a trial
+  % includes additionally updating the linear classifier $g$ by $z$ and $f(z)$.
+  % If we use support vector machine (SVM) as the linear classifier and
+  % update it by stochastic gradient descent (SGD)~\cite{robbins1951stochastic},
+  % the computational complexity of updating $g$ for each trial is $\mathcal{O}(m^2)$.
 \fi
 
 \section{Experiments}
@@ -677,7 +707,7 @@ was split into training data (7,639 instances) and test data (955 instances).
 A random forest model with 50 trees was trained using the training data.
 Subsequently, LIME and R-LIME explanations were generated
 for two instances extracted from the test data (\cref{fig:instance}).
-In R-LIME, logistic regression was used as the linear approximation model,
+For R-LIME, logistic regression was used as the linear approximation model,
 and the distribution $\mathcal{D}$ was a multivariate normal distribution
 estimated from the training data.
 The beam width was set to $B=10$,
@@ -942,7 +972,7 @@ could suppress the excessive expansion of the approximation region.
     \input{tex/tab_exp_adv}
   \end{table}
 }
-In R-LIME,
+For R-LIME,
 the problem of selecting the rule with the highest accuracy is formulated
 as the optimal arm identification problem in multi-armed bandit theory,
 solved using the KL-LUCB algorithm \cite{kaufmann2013information}.
