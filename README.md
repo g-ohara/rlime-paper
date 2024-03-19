@@ -11,7 +11,7 @@ This repository contains items below:
   - paper.tex
   - paper.pdf
   - .latexindent.yaml
-  - MyRef/ (references [git@github.com:G-Ohara/MyRef.git])
+  - [myref/](https://github.com/g-ohara/myref.git) (reference)
   - src/ (images)
   - style/ (.bst and .sty files)
   - tex/ (.tex files included by paper.tex)
