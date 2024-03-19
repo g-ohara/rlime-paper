@@ -139,28 +139,28 @@
   % 150--250 words.
   \begin{abstract}
     In recent years,
-    complex machine learning models such as deep neural networks
-    have been used in various industrial fields due to their high accuracy.
+    complex machine learning models have been introduced
+    in various industrial fields due to their high accuracy.
     However,
-    its complexity has been a major obstacle to implementation
-    in decision-making situations where transparency of the decision process
-    is required.
+    their complexity has been a major obstacle to implementation
+    in sensitive decision-making situations.
     In order to address this problem,
     various post-hoc explanation methods have been proposed,
     but they have not been able to achieve interpretability of
     both the explanation and its scope.
     We propose a new method, R-LIME,
     which interprets complex classifiers in an interpretable scope.
-    R-LIME locally approximizes a complex decision boundary linearly
+    R-LIME locally approximates a decision boundary of a black-box classifier
     in a rectangular region
     and maximizes the region as long as the accuracy of the linear
-    classifier is higher than a specified threshold.
+    classifier is higher than a given threshold.
     The resulting rectangular region is interpretable for users because it is
     expressed as a conjunction of feature predicates.
-    We demonstrate the effectiveness of the proposed method through qualitative
+    Comparing R-LIME with the existing method,
+    we demonstrate the effectiveness of the proposed method through qualitative
     and quantitative experiments using a real-world dataset.
     Finally, we discuss limitations and future work of the proposed method.
-    % 148 words
+    % 161 words
     \keywords{Interpretable machine learning \and Local surrogate model}
   \end{abstract}
 \fi
@@ -335,7 +335,7 @@ model-agnostic methods use only the output of the model.
 Although they are applicable to any model,
 they cannot explain the reasoning process inside the model.
 
-Then, model-agnostic methods are classified into
+Furthermore, model-agnostic methods are categorized into
 \emph{global} and \emph{local} methods based on their locality in input space.
 Global methods,
 such as Partial Dependence Plots (PDP)~\cite{friedman2001greedy}
@@ -619,28 +619,53 @@ The pseudo code is presented in \cref{alg:largest_valid_cand}.
 
 \ifnum\mode=1
   \subsection{Computational Complexity}
-  % \subsubsection{Number of Queries}
+  % \subsubsection{Sample Complexity}
   Post-hoc explanation methods including LIME, Anchor, and R-LIME
-  need to query the black-box model multiple times
-  to get labels for perturbed samples, which is computationally expensive.
-  The number of queries required for LIME is $|\mathcal{Z}_p|$,
-  where $|\mathcal{Z}_p|$ is the number of perturbed samples selected by the user.
+  need to sample a perturbation vector
+  and get the output of the black-box model multiple times,
+  which is computationally expensive.
+  The number of samples required for LIME is $|\mathcal{Z}_p|$,
+  which is the number of samples designated by the user.
   On the other hand,
-  the number of queries required for Anchor and R-LIME is
-  $\mathcal{O}(B\cdot m^2+m^2\cdot\mathcal{O}_{\mathrm{MAB}[B\cdot m,B]})$,
-  where $B$ is the beam width, $m$ is the number of features, and
-  $\mathcal{O}_{\mathrm{MAB}[B\cdot m,B]}$ is the computational complexity of
-  best arm identification finding the $B$ best arms among $B\cdot m$ arms.
-  $\mathcal{O}_{\mathrm{MAB}[B\cdot m,B]}$ depends on hyperparameters
-  such as beam width $B$, confidence level $1-\delta$ and tolerance $\epsilon$.
-  % \subsubsection{Updating the Linear Classifier}
-  % For Anchor, each trial is composed of sampling a perturbation vector $z$
-  % and getting output $f(z)$.
-  % But for R-LIME, a trial
-  % includes additionally updating the linear classifier $g$ by $z$ and $f(z)$.
-  % If we use support vector machine (SVM) as the linear classifier and
-  % update it by stochastic gradient descent (SGD)~\cite{robbins1951stochastic},
-  % the computational complexity of updating $g$ for each trial is $\mathcal{O}(m^2)$.
+  the expected number of samples required for Anchor and R-LIME is bounded by
+  $\mathcal{O}[m\cdot\mathcal{O}_{\mathrm{MAB}[B\cdot m,B]}]$,
+  where $\mathcal{O}_{\mathrm{MAB}[B\cdot m,B]}$
+  is the expected number of samples
+  for best arm identification finding the best $B$ arms from $B\cdot m$ arms.
+  For KL-LUCB algorithm~\cite{kaufmann2013information},
+  the expected number of samples is bounded by
+  % \begin{equation}
+  %   \mathcal{O}\left[H_{\epsilon}\log\frac{H_\epsilon}{\delta}\right],
+  % \end{equation}
+  % where $H_{\epsilon}$ is sample complexity of the problem
+  % \cite{kaufmann2013information}.
+  \begin{equation}
+    \mathcal{O}_{\mathrm{MAB}[B\cdot m,B]}=
+    \mathcal{O}\left[\frac{Bm}{\epsilon^2}\log\frac{Bm}{\epsilon^2\delta}\right].
+  \end{equation}
+
+  % \subsubsection{Complexity of Each Trial}
+  Each trial of KL-LUCB algorithm consists of sampling a perturbation vector $z$,
+  getting output $f(z)$, and updating the linear classifier $g$.
+  If we sample a perturbation vector from a multivariate normal distribution
+  using Cholesky decomposition in advance ($\mathcal{O}(2^m\cdot m^3)$),
+  we can sample $z$ in $\mathcal{O}(m^2)$.
+  If we use random forest as the black-box model,
+  the complexity of getting output is $\mathcal{O}(1)$.
+  If we use logistic regression as the linear classifier and
+  update it by stochastic gradient descent (SGD)~\cite{robbins1951stochastic},
+  the computational complexity of updating $g$ for each trial is
+  $\mathcal{O}(m)$.
+  Then the computational complexity of each trial is $\mathcal{O}(m^2)$.
+
+  % \subsubsection{Total Complexity}
+  Overall, the complexity of R-LIME is bounded by
+  \begin{equation}
+    \mathcal{O}\left[
+      2^m\cdot m^3+\frac{Bm^4}{\epsilon^2}\log\frac{Bm}{\epsilon^2\delta}
+      \right],
+  \end{equation}
+  which is very sensitive to the number of features $m$.
 \fi
 
 \section{Experiments}
@@ -893,7 +918,7 @@ obtained by R-LIME and calculated the local accuracy of both methods.
 \subsubsection{Experimental Results}
 \begin{figure}[tbp]
   \centering
-  \includegraphics[width=0.53\textwidth]{experiments/exp2/box_plot}
+  \includegraphics[width=0.5\textwidth]{experiments/exp2/box_plot}
   \caption[Comparison of Local Accuracy between R-LIME and LIME]{%
     Comparison of local accuracy between LIME and R-LIME\@.
     R-LIME achieved higher and less variable accuracy compared to LIME
@@ -912,19 +937,19 @@ the variability in the accuracy of LIME widens.
 This indicates that the linear classifiers learned by LIME may not function
 effectively as approximation models depending on how the region is selected.
 
-\section{Challenges and Future Perspectives}
+\section{Challenges and Future Work}
  {%
   \def\imgwidth{0.47\textwidth}
   \begin{figure}[t]
     \centering
     \begin{subfigure}[t]{\imgwidth}
       \centering
-      \includegraphics[width=0.75\textwidth]{visual-rlime3}
+      \includegraphics[width=0.7\textwidth]{visual-rlime3}
       \caption{R-LIME for balanced label distribution.}\label{fig:balanced}
     \end{subfigure}
     \begin{subfigure}[t]{\imgwidth}
       \centering
-      \includegraphics[width=0.75\textwidth]{visual-rlime-imbalanced}
+      \includegraphics[width=0.7\textwidth]{visual-rlime-imbalanced}
       \caption{R-LIME for imbalanced label distribution.
       }\label{fig:imbalanced}
     \end{subfigure}
@@ -936,7 +961,6 @@ effectively as approximation models depending on how the region is selected.
     }
   \end{figure}
  }
-
 
 \subsection{Behavior Regarding Imbalanced Label Distribution}
 R-LIME may generate less useful explanations
@@ -995,17 +1019,24 @@ While the deviation was relatively small considering confidence level $1-\delta=
 we should modify the selection algorithm to consider the varying accuracy.
 
 \section{Conclusion}
-We identified challenges in existing methods for local model-agnostic post-hoc
-explanations of black-box classifiers and proposed R-LIME to address them.
-We represented the rectangular region for local linear approximation as a
-conjunction of feature predicates and proposed an algorithm to
-maximize coverage under the constraint of minimum approximation accuracy.
+We argued that the interpreting the outputs of black-box models is crucial
+for their application in sensitive domains,
+and identified challenges in existing methods for local model-agnostic post-hoc
+explanations of black-box classifiers.
+To address these challenges,
+we proposed R-LIME, a method that locally approximates the decision boundary
+of a black-box classifier linearly and provides a rectangular approximation region,
+which is interpretable for users due to being expressed as a conjunction of feature predicates.
+We proposed an algorithm to
+maximize coverage of the approximation region
+as long as the accuracy of the linear approximation model exceeds a given threshold.
 Comparing the outputs of LIME and R-LIME on the real-world dataset,
 we demonstrated that R-LIME provides a clear application scope of the
-explanation and can be evaluated by users for its reliability and generality.
-However, we discussed the instability of behavior concerning imbalanced label
+explanation, can be evaluated by users for its reliability and generality,
+and achieves higher and less variable local accuracy compared to LIME\@.
+However, we discussed the instability of behavior against imbalanced label
 distributions and raised questions about the theoretical validity of using
-the KL-LUCB algorithm.
+the KL-LUCB algorithm for our problem.
 
 \ifnum\mode=0
   \acknowledge
