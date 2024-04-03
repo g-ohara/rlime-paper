@@ -90,15 +90,18 @@
   }
   \date{2024年3月}
   % \institute{%
-  % 	Laboratory for Pattern Recognition and Machine Learning,\\
-  % 	Division of Computer Science and Information Technology,\\
-  % 	Department of Electronics and Information Engineering,\\
-  % 	School of Engineering, Hokkaido University
+  %   Laboratory for Pattern Recognition and Machine Learning,\\
+  %   Division of Computer Science and Information Technology,\\
+  %   Department of Electronics and Information Engineering,\\
+  %   School of Engineering, Hokkaido University
   % }
 \else
+  % The title of the paper
   \title{%
     R-LIME: Rectangular Constraints and Optimization for Local Interpretable
-    Model-agnostic Explanation Methods}
+    Model-agnostic Explanation Methods
+  }
+
   % Abbreviated title for the running head
   \titlerunning{%
     R-LIME: Rectangular Constraints and Optimization for LIME Methods
@@ -159,8 +162,7 @@
     Comparing R-LIME with the existing method,
     we demonstrate the effectiveness of the proposed method through qualitative
     and quantitative experiments using a real-world dataset.
-    Finally, we discuss limitations and future work of the proposed method.
-    % 161 words
+    % 150 words
     \keywords{Interpretable machine learning \and Local surrogate model}
   \end{abstract}
 \fi
@@ -296,12 +298,27 @@ only to the sentences containing the word ``not''.
   \def\hh{1.4}
   \def\hhh{2.1}
   \def\hhhh{2.8}
-  \begin{tikzpicture}[scale=0.9,nodestyle/.style={rectangle,node font=\normalsize\itshape,auto}]
+  \begin{tikzpicture}[scale=0.9,nodestyle/.style={rectangle,auto}]
     \node[nodestyle] (post-hoc) at (0,0){post-hoc};
-    \node[nodestyle] (dependent) at (-\w,-\hh){model-dependent};
+    \node[nodestyle] (dependent) at (-\w,-\hh){%
+      \begin{tabular}{c}
+        model-dependent \\
+        (DTD~\cite{montavon2017explaining}, LRP~\cite{bach2015pixel})
+      \end{tabular}
+    };
     \node[nodestyle] (agnostic) at (\w,-\hh){\textbf{model-agnostic}};
-    \node[nodestyle] (global) at (0,-\hhhh){global};
-    \node[nodestyle] (local) at (\ww,-\hhhh){\textbf{local}};
+    \node[nodestyle] (global) at (0,-\hhhh){%
+      \begin{tabular}{c}
+        global \\
+        (PDP~\cite{friedman2001greedy}, ALE~\cite{apley2020visualizing})
+      \end{tabular}
+    };
+    \node[nodestyle] (local) at (\ww,-\hhhh){%
+      \begin{tabular}{c}
+        \textbf{local} \\
+        (LIME~\cite{ribeiro2016why}, Anchor~\cite{ribeiro2018anchors})
+      \end{tabular}
+    };
     \draw(post-hoc) -- (0,-\h);
     \draw(dependent) -- (-\w,-\h) -- (\w,-\h) -- (agnostic);
     \draw(agnostic) -- (\w,-\hhh);
@@ -313,13 +330,14 @@ only to the sentences containing the word ``not''.
     which explain model's local behavior using only its output.
   }\label{fig:post-hoc}
 \end{figure}
-In this chapter,
+In this section,
 we overview existing research on post-hoc explanation methods,
 which explain the behavior of black-box models already trained.
 As shown in \cref{fig:post-hoc},
 post-hoc methods are classified into several categories.
 
-First, they are categorized into \emph{model-dependent} and \emph{model-agnostic} methods
+They are broadly divided into
+\emph{model-dependent} and \emph{model-agnostic} methods
 based on their dependence on the model's structure.
 Model-dependent methods,
 such as Deep Taylor Decomposition (DTD)~\cite{montavon2017explaining}
@@ -395,7 +413,7 @@ the scope of the explanation is limited locally.
 \end{figure}
 
 \subsection{Previous Work}
-We specifically focuses on \emph{local} and \emph{model-agnostic} methods.
+We specifically focus on \emph{local} and \emph{model-agnostic} methods.
 In this section,
 we briefly review existing research on local model-agnostic explanations,
 particularly focusing on studies closely related to our proposed method.
@@ -619,7 +637,6 @@ The pseudo code is presented in \cref{alg:largest_valid_cand}.
 
 \ifnum\mode=1
   \subsection{Computational Complexity}
-  % \subsubsection{Sample Complexity}
   Post-hoc explanation methods including LIME, Anchor, and R-LIME
   need to sample a perturbation vector
   and get the output of the black-box model multiple times,
@@ -633,39 +650,21 @@ The pseudo code is presented in \cref{alg:largest_valid_cand}.
   is the expected number of samples
   for best arm identification finding the best $B$ arms from $B\cdot m$ arms.
   For KL-LUCB algorithm~\cite{kaufmann2013information},
-  the expected number of samples is bounded by
-  % \begin{equation}
-  %   \mathcal{O}\left[H_{\epsilon}\log\frac{H_\epsilon}{\delta}\right],
-  % \end{equation}
-  % where $H_{\epsilon}$ is sample complexity of the problem
-  % \cite{kaufmann2013information}.
   \begin{equation}
     \mathcal{O}_{\mathrm{MAB}[B\cdot m,B]}=
     \mathcal{O}\left[\frac{Bm}{\epsilon^2}\log\frac{Bm}{\epsilon^2\delta}\right].
   \end{equation}
-
-  % \subsubsection{Complexity of Each Trial}
-  Each trial of KL-LUCB algorithm consists of sampling a perturbation vector $z$,
-  getting output $f(z)$, and updating the linear classifier $g$.
-  If we sample a perturbation vector from a multivariate normal distribution
-  using Cholesky decomposition in advance ($\mathcal{O}(2^m\cdot m^3)$),
-  we can sample $z$ in $\mathcal{O}(m^2)$.
-  If we use random forest as the black-box model,
-  the complexity of getting output is $\mathcal{O}(1)$.
-  If we use logistic regression as the linear classifier and
-  update it by stochastic gradient descent (SGD)~\cite{robbins1951stochastic},
-  the computational complexity of updating $g$ for each trial is
-  $\mathcal{O}(m)$.
-  Then the computational complexity of each trial is $\mathcal{O}(m^2)$.
-
-  % \subsubsection{Total Complexity}
-  Overall, the complexity of R-LIME is bounded by
+  Then the total expected number of samples for Anchor and R-LIME is bounded by
   \begin{equation}
-    \mathcal{O}\left[
-      2^m\cdot m^3+\frac{Bm^4}{\epsilon^2}\log\frac{Bm}{\epsilon^2\delta}
-      \right],
+    \mathcal{O}\left[\frac{Bm^2}{\epsilon^2}\log\frac{Bm}{\epsilon^2\delta}\right].
   \end{equation}
-  which is very sensitive to the number of features $m$.
+
+  For each iteration of KL-LUCB algorithm, R-LIME needs to update
+  the linear classifier $g_i$, which is not required in Anchor.
+  But if we use logistic regression as the linear classifier,
+  the computational complexity of updating $g_i$ is $\mathcal{O}(m)$,
+  which is negligible compared to the complexity of sampling a perturbation vector
+  and getting the output of the black-box model.
 \fi
 
 \section{Experiments}
@@ -980,7 +979,11 @@ Another solution involves adding constraints
 to limit the label distribution bias within the approximation region.
 In addition to \cref{eq:const_prec}, adding a constraint like
 \begin{equation}
-  {\left(\mathbb{E}_{z\sim\mathcal{D}(z\mid A)}[\mathbbm{1}_{f(z)=1}]-\frac{1}{2}\right)}^2<\mu
+  {%
+    \left(
+    \mathbb{E}_{z\sim\mathcal{D}(z\mid A)}[\mathbbm{1}_{f(z)=1}]-\frac{1}{2}
+    \right)
+  }^2<\mu
 \end{equation}
 could suppress the excessive expansion of the approximation region.
 
@@ -1015,14 +1018,15 @@ The true accuracy was calculated based on 1,000 instances sampled
 within the approximation region.
 The results in \cref{tab:reward} show a mean deviation of 0.012
 with a standard deviation of 0.017.
-While the deviation was relatively small considering confidence level $1-\delta=0.95$,
-we should modify the selection algorithm to consider the varying accuracy.
+By considering the confidence level $1-\delta=0.95$,
+the deviation was relatively small.
+While there are concerns about the theoretical validity of using the KL-LUCB algorithm,
+the results suggest that the deviation is not significant in practice.
 
 \section{Conclusion}
-We argued that the interpreting the outputs of black-box models is crucial
-for their application in sensitive domains,
-and identified challenges in existing methods for local model-agnostic post-hoc
-explanations of black-box classifiers.
+Existing methods for
+local model-agnostic explanations of black-box classifiers have limitations
+that they do not explicitly indicate the application scope of the explanations.
 To address these challenges,
 we proposed R-LIME, a method that locally approximates the decision boundary
 of a black-box classifier linearly and provides a rectangular approximation region,
@@ -1053,22 +1057,11 @@ the KL-LUCB algorithm for our problem.
   for their helpful advice and cooperation throughout the research process.
 \fi
 
-% \subsubsection{Acknowledgements}
-% Please place your acknowledgments at
-% the end of the paper, preceded by an unnumbered run-in heading (i.e.
-% 3rd-level heading).
-
-%
-% ---- Bibliography ----
-%
-% BibTeX users should specify bibliography style 'splncs04'.
-% References will then be sorted and formatted in the correct style.
-%
 \ifnum\mode=0
   \bibliographystyle{style/prml}
 \else
   \bibliographystyle{style/splncs04}
 \fi
 \bibliography{myref/myref}
-%
+
 \end{document}
