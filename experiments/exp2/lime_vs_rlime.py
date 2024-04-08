@@ -2,7 +2,6 @@
 
 import csv
 import multiprocessing
-import sys
 from functools import partial
 
 import numpy as np
@@ -10,14 +9,10 @@ import pandas as pd  # type: ignore
 from lime import lime_tabular  # type: ignore
 from sklearn.ensemble import RandomForestClassifier  # type: ignore
 
-sys.path.append("RLIME")
-import mylime  # type: ignore
-import newlime_base  # type: ignore
-import newlime_tabular
-import newlime_utils
-from newlime_base import Arm
-from newlime_types import IntArray
-from sampler import Sampler
+from rlime import mylime, newlime_base, newlime_tabular, newlime_utils
+from rlime.newlime_base import Arm
+from rlime.newlime_types import IntArray
+from rlime.sampler import Sampler
 
 
 def main() -> None:

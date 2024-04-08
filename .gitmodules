@@ -2,7 +2,7 @@
 	path = experiments/R-LIME
 	url = git@github.com:G-Ohara/R-LIME.git
 [submodule "experiments/exp2/R-LIME"]
-	path = experiments/exp2/RLIME
+	path = experiments/exp2/rlime
 	url = git@github.com:G-Ohara/R-LIME.git
 [submodule "experiments/exp_adv/RLIME"]
 	path = experiments/exp_adv/RLIME
