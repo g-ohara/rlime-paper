@@ -152,39 +152,38 @@
     but they have not been able to achieve interpretability of
     both the explanation and its scope.
     We propose a new method, R-LIME,
-    which interprets complex classifiers in an interpretable scope.
+    which interprets a complex classifier in an interpretable scope.
     R-LIME locally approximates a decision boundary of a black-box classifier
     in a rectangular region
     and maximizes the region as long as the accuracy of the linear
     classifier is higher than a given threshold.
     The resulting rectangular region is interpretable for users because it is
     expressed as a conjunction of feature predicates.
-    Comparing R-LIME with the existing method,
-    we demonstrate the effectiveness of the proposed method through qualitative
-    and quantitative experiments using a real-world dataset.
+    We demonstrate the effectiveness of the proposed method through
+    qualitative and quantitative comparisons with the existing method
+    using a real-world dataset.
     % 150 words
     \keywords{Interpretable machine learning \and Local surrogate model}
   \end{abstract}
 \fi
 
 \section{Introduction}
-Machine learning models, such as deep learning and random forests,
-have been widely employed in various industrial applications
+Machine learning models, such as deep neural networks and random forests,
+have been widely introduced in various industrial fields
 due to their significant improvement in accuracy in recent years.
 However,
 the increasing complexity and black-box nature of these models pose challenges,
-particularly in critical decision-making scenarios like healthcare and finance,
-where the opacity of decision process becomes a major obstacle to
-implementation.
-Consequently,
+particularly in critical decision-making scenarios such as healthcare and finance,
+where the opacity of decision process becomes a major obstacle to implementation.
+In order to address this problem,
 there has been extensive research in the field of post-hoc explanations
 for machine learning models~\cite{%
   guidotti2018local,radulovic2023bella,ribeiro2016why,ribeiro2018anchors}.
 Existing post-hoc explanation methods are categorized
 into \emph{model-dependent} and \emph{model-agnostic} methods
-based on their dependence on the model's structure.
-Furthermore, model-agnostic methods are classified into
-\emph{global} and \emph{local} methods based on their locality in input space.
+based on their dependence on the model's structure,
+and the latter are further classified into \emph{global} and \emph{local} methods
+based on their locality in input space~\cite{samek2021explaining}.
 \begin{figure}[tbp]
   \def\scale{0.38}
   \centering
@@ -238,15 +237,16 @@ Furthermore, model-agnostic methods are classified into
 \end{figure}
 
 In this paper,
-we focus on local model-agnostic methods.
-An example of explanations by LIME~\cite{ribeiro2016why} and
-Anchor~\cite{ribeiro2018anchors}
+we focus on \emph{local} and \emph{model-agnostic} methods.
+LIME~\cite{ribeiro2016why} and Anchor~\cite{ribeiro2018anchors}
+are representative local model-agnostic methods.
+An example of explanations by LIME and Anchor
 for a sentiment prediction model is illustrated in \cref{fig:example}.
 LIME approximates the complex decision boundary
 linearly around the given focal point,
 then provides the weights of the linear model as the contribution of each feature
 to the output.
-The explanation by LIME (\cref{fig:example-lime}) provides suggests that
+The explanation by LIME (\cref{fig:example-lime}) suggests that
 the word ``not'' mainly contributes to the positive prediction,
 but does not explicitly indicate the effective scope.
 Without the scope,
@@ -260,15 +260,13 @@ to the sentence ``This book is not good.''
 and mistakenly conclude that the word ``not''
 mainly contributes to the positive prediction for this sentence as well,
 which is obviously incorrect.
-Anchor represents a rectangular region
-containing the focal point,
-that maximizes the probability of the black-box classifier outputting
-the same label as the focal point.
+Anchor maximizes the coverage of a rectangular region containing the focal point
+as long as the probability of the black-box classifier outputting
+the same label as the focal point within the region exceeds a given threshold.
 While Anchor provides an effective scope of the explanation,
-the information it includes is less than LIME,
-limiting its utility~\cite{ribeiro2018anchors}.
+users can get less insight from the explanation compared to LIME\@.
 The explanation by Anchor (\cref{fig:example-anchor})
-suggests that changing words other than ``not'' and ``bad''
+suggests that replacing words other than ``not'' and ``bad''
 has little impact on the classifier's output.
 While it clearly cannot be applied to the sentence ``This book is not good''
 because of not including the word ``bad'',
@@ -277,13 +275,13 @@ resulting in less user insight into the model's behavior compared to LIME.
 
 To address this limitation of LIME,
 we propose a new method called R-LIME (Ruled LIME),
-which interprets complex classifiers in an interpretable region.
+which provides both the contributions of each feature to the output
+and the effective scope of the explanation.
 R-LIME locally approximates a complex decision boundary linearly
 in a rectangular region and maximizes the region
-as long as the accuracy of the linear classifier is
-higher than a given threshold.
+as long as the accuracy of the linear classifier exceeds a given threshold.
 The rectangular region is interpretable for users because it is
-expressed as a conjunction of feature predicates (\cref{fig:example-rlime}).
+expressed as a conjunction of feature predicates.
 An example of the explanation by R-LIME for a sentiment prediction model
 is illustrated in \cref{fig:example-rlime}.
 It is clear that users can apply the insights derived from the explanation
@@ -372,7 +370,7 @@ and Anchor~\cite{ribeiro2018anchors},
 % and BELLA (Black box model Explanations by Local Linear Approximations)
 % \cite{radulovic2023bella},
 explain model's behavior in the vicinity of a specific input.
-While local methods offer explanations more simple and accurate
+While they offer explanations more simple and accurate
 than global methods,
 the scope of the explanation is limited locally.
 
@@ -406,9 +404,9 @@ the scope of the explanation is limited locally.
     }\label{fig:rlime}
   \end{subfigure}
   \caption[Visual comparison of LIME, Anchor and R-LIME]{%
-    Visual comparison of LIME, Anchor and R-LIME (our proposed method).
-    The solid line represents the rectangular region containing the focal
-    point, and the dashed line represents the learned approximation model.
+    Visual comparison of LIME, Anchor and R-LIME (our method).
+    The dashed line represents the learned approximation model,
+    and the solid line represents the rectangular region containing the focal point.
   }
 \end{figure}
 
@@ -456,23 +454,25 @@ users cannot assess the effective scope of the explanation
 \subsubsection[Anchor]{%
   Anchor~\cite{ribeiro2018anchors}
 }\label{sec:anchor}
-Anchor represents a rectangular region containing the focal point $x$,
-expressed as a conjunction of feature predicates (a rule),
-that maximizes the probability of the black-box classifier $f$
-outputting $f(x)$ within the region.
+Anchor maximizes the coverage of a rectangular region
+containing the focal point $x$,
+expressed as a conjunction of feature predicates (a rule)
+as long as the probability of the black-box classifier $f$
+outputting $f(x)$ within the region exceeds a given threshold $\tau$
+(\cref{fig:anchor}).
 It aims to highlight important features
-contributing significantly to the output (\cref{fig:anchor}).
-For a discrete $m$-dimensional input space $\ispace$
-with a trained black-box classifier $f: \ispace \to \{0,1\}$,
-an instance $x \in \ispace$,
+contributing significantly to the output.
+For a discrete $m$-dimensional input space $\ispace$,
+a trained black-box classifier $f: \ispace \to \{0,1\}$,
+an instance $x \in \ispace$
 and a distribution $\mathcal{D}$ over the input space,
 a rule $A(z) = a_{i_1}(z) \wedge a_{i_2}(z) \wedge \dots \wedge a_{i_t}(z)$ is defined.
-The predicates $a_i(z)$ evaluate to true ($=1$) when $z_i = x_i$ and false ($=0$) otherwise.
+The predicate $a_i(z)$ evaluates to true ($=1$) when $z_i = x_i$ and false ($=0$) otherwise.
 The accuracy $\Prec(A)$ and coverage $\Cov(A)$ of the rule $A$ are defined as follows:
 \begin{align}
   \Prec(A) & =\mathbb{E}_{z\sim\mathcal{D}(z|A)}
   [\mathbbm{1}_{f(z)=f(x)}], \label{eq:anchor_def_prec} \\
-  \Cov(A)  & =\mathbb{E}_{z\sim\mathcal{D}(z)}[A(z)].
+  \Cov(A)  & =\mathbb{E}_{z\sim\mathcal{D}(z)}[A(z)],
 \end{align}
 where $\mathcal{D}(z|A)$ is the conditional distribution in the region
 where the rule $A$ returns true.
