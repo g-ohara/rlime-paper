@@ -292,8 +292,8 @@ only to the sentences containing the word ``not''.
 \section{Related Work}
 \begin{figure}[tbp]
   \centering
-  \def\w{2.2}
-  \def\ww{4.4}
+  \def\w{2.5}
+  \def\ww{5.0}
   \def\h{0.7}
   \def\hh{1.4}
   \def\hhh{2.1}
@@ -316,7 +316,7 @@ only to the sentences containing the word ``not''.
     \node[nodestyle] (local) at (\ww,-\hhhh){%
       \begin{tabular}{c}
         \textbf{local} \\
-        (LIME~\cite{ribeiro2016why}, Anchor~\cite{ribeiro2018anchors})
+        (LIME~\cite{ribeiro2016why}, Anchor~\cite{ribeiro2018anchors}, \underline{R-LIME})
       \end{tabular}
     };
     \draw(post-hoc) -- (0,-\h);
@@ -665,6 +665,7 @@ The pseudo code is presented in \cref{alg:largest_valid_cand}.
   the computational complexity of updating $g_i$ is $\mathcal{O}(m)$,
   which is negligible compared to the complexity of sampling a perturbation vector
   and getting the output of the black-box model.
+  Overall, the computational complexity of R-LIME is comparable to that of Anchor.
 \fi
 
 \section{Experiments}
