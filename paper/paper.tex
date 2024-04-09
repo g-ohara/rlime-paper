@@ -523,13 +523,6 @@ where $G$ is the set of possible linear classifiers.
 By solving the optimization problem in \cref{eq:main_problem}
 under the modified accuracy definition in \cref{eq:def_prec},
 we can select the rule that enables explanation with high accuracy and generality.
-% The characteristics of R-LIME are listed below:
-% \begin{itemize}
-% 	\item The approximation region is optimal and interpretable.
-% 	\item The dataset is not directly accessed, and only the distribution is utilized.
-% 	\item The number of samples is dynamically determined
-% 	      based on the estimated accuracy without the need for predefining it.
-% \end{itemize}
 
 \subsection{Algorithm}\label{sec:alg}
 {%
@@ -576,16 +569,17 @@ For non-convex optimization problems like \cref{eq:main_problem},
 greedy search are often used.
 However,
 greedy methods tend to converge to local optima, and to address this,
-R-LIME utilizes beam search,
+R-LIME uses beam search,
 which selects multiple candidates at each iteration.
-The pseudo code is shown in \cref{alg:greedy_search}.
+The pseudo-code is shown in \cref{alg:greedy_search}.
 
 \subsubsection{Generation of New Candidate Rules}
 To generate new candidate rules,
 one additional predicate is added to each of the $B$ candidate rules
 selected in the previous iteration.
-The pseudo code is shown in \cref{alg:generate_cands}.
-$T(x)$ is the set of attribute-value pairs (predicates) that are true for $x$,
+The pseudo-code is shown in \cref{alg:generate_cands}.
+$T(x)$ is the set of predicates $\{a_1,\dots,a_m\}$,
+where $a_i(z)$ evaluates to true when $z_i=x_i$ and false otherwise,
 and $T(x)\setminus A$ is the set of predicates in $T(x)$ not included in rule $A$.
 
 \subsubsection{Selection of Candidate Rules with Maximum Accuracy}
@@ -594,14 +588,14 @@ the algorithm selects the top $B$ candidates with the highest accuracy.
 This problem can be formulated
 as best arm identification in the multi-armed bandit framework.
 Each candidate rule $A_i\in\cands$ is considered as an arm,
-and its accuracy $\Prec(A_i)$ is considered as the distribution of rewards.
+and reward of arm $a_i$ follows a Bernoulli distribution
+with $P(X=1)=\Prec(A_i)$.
 By sampling $z\sim\mathcal{D}(\cdot|A_i)$
 and obtaining the reward $\mathbbm{1}_{f(z)=g_i(z)}$ for each trial,
-the algorithm updates $g_i$ using the sampled perturbation vector $z$
-and the pseudo-label $f(z)$ after each trial.
+the algorithm updates $g_i$ using $z$ and $f(z)$ after each trial.
 To efficiently select the rule (arm) with the highest accuracy,
 we employ the KL-LUCB algorithm \cite{kaufmann2013information}.
-The pseudo code is shown in \cref{alg:best_cands}.
+The pseudo-code is shown in \cref{alg:best_cands}.
 For tolerance $\epsilon\in[0,1]$, the KL-LUCB algorithm guarantees below:
 \begin{equation}
   P(\underset{A\in\cands}{\min}\Prec(A)\ge
@@ -629,7 +623,7 @@ and the iteration is terminated.
 If $\mathcal{A}$ does not contain any rule satisfying \cref{eq:stop_condition},
 it returns \textbf{null},
 and proceeds to the next iteration.
-The pseudo code is presented in \cref{alg:largest_valid_cand}.
+The pseudo-code is presented in \cref{alg:largest_valid_cand}.
 
 % The algorithmic procedure outlined above approximates
 % the solution to the optimization problem in \cref{eq:main_problem}
