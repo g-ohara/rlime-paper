@@ -31,7 +31,7 @@ def main() -> None:
         med.set_color("black")
 
     for i, tau_percent in enumerate([70, 80, 90]):
-        plt.text(1.0 + 2.5 * i, 0.3, r"$\tau=$" + f"0.{tau_percent}")
+        plt.text(1.0 + 2.5 * i, 0.33, r"$\tau=$" + f"0.{tau_percent}")
 
     plt.hlines(
         [0.7, 0.8, 0.9],
