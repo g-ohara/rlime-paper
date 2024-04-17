@@ -1,9 +1,10 @@
 \caption{%
-  Selecting the largest rule satisfying the constraint
+  Searching a rule with highest coverage under constraint
 }\label{alg:largest_valid_cand}
 \begin{algorithmic}[1]
   \Function{LargestCand}{$\mathcal{A},\tau,\delta$}
   \State$A^*\gets\textbf{null}$
+  \Comment{If no rule satisfies the constraint, return $\textbf{null}$}
   \ForAll{$A\in\mathcal{A}$ s.t. $\Prec_{l}(A,\delta)>\tau$}
   \IIf{$\Cov(A)>\Cov(A^*)$}{$A^*\gets A$}
   \EndFor%

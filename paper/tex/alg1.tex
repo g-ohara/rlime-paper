@@ -18,19 +18,9 @@
   \State$t\gets t+1$
   \State$\cands_t\gets$ \Call{GenerateCands}
   {$\mathcal{A}_{t-1}$}
-  % \Comment{Generate new candidate rules from $\mathcal{A}_{t-1}$}
-  \Comment{Generate new candidate rules from $\mathcal{A}_{t-1}$}
   \State$\mathcal{A}_t\gets$ \Call{B-BestCands}
   {$\cands_{t},\mathcal{D},B,\epsilon,\delta$}
-  % \Comment{Select $B$ best candidate rules from $\cands_t$}
-  \Comment{Select $B$ best candidate rules from $\cands_t$}
   \State$A^*\gets$ \Call{LargestCand}
   {$\mathcal{A}_t,\tau,\delta$}
-  % \Comment{%
-  %   Select the largest rule satisfying Eq.~\eqref{eq:main_problem}
-  % }
-  \Comment{%
-    Select the largest rule satisfying Eq.~\eqref{eq:main_problem}
-  }
   \EndWhile%
 \end{algorithmic}

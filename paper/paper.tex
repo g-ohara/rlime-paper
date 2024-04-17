@@ -145,7 +145,7 @@
     complex machine learning models have been introduced
     in various industrial fields due to their high accuracy.
     However,
-    their complexity has been a major obstacle to implementation
+    their increasing complexity has been a major obstacle to implementation
     in sensitive decision-making situations.
     In order to address this problem,
     various post-hoc explanation methods have been proposed,
@@ -153,27 +153,28 @@
     both the explanation and its scope.
     We propose a new method, R-LIME,
     which interprets a complex classifier in an interpretable scope.
-    R-LIME locally approximates a decision boundary of a black-box classifier
-    in a rectangular region
-    and maximizes the region as long as the accuracy of the linear
-    classifier exceeds a given threshold.
+    R-LIME locally and linearly approximates a complex decision boundary
+    of a black-box classifier in a rectangular region
+    and maximizes the region as long as the approximation accuracy
+    exceeds a given threshold.
     The resulting rectangular region is interpretable for users because it is
     expressed as a conjunction of feature predicates.
     Through qualitative and quantitative comparisons with the existing method
     on a real-world dataset,
     we demonstrate that R-LIME provides more reliable and interpretable
     explanations than existing methods.
-    % 150 words
+    % 153 words
     \keywords{Interpretable machine learning \and Local surrogate model}
   \end{abstract}
 \fi
 
 \section{Introduction}
-Machine learning models, such as deep neural networks and random forests,
+In recent years,
+complex machine learning models, such as deep neural networks and random forests,
 have been widely introduced in various industrial fields
-due to their significant improvement in accuracy in recent years.
+due to their significant improvement in accuracy.
 However,
-the increasing complexity and black-box nature of these models pose challenges,
+their increasing complexity and black-box nature pose challenges,
 particularly in critical decision-making scenarios such as healthcare and finance,
 where the opacity of decision process becomes a major obstacle to implementation.
 In order to address this problem,
@@ -232,7 +233,7 @@ based on their locality in input space~\cite{samek2021explaining}.
   \end{subfigure}
   \caption[Example of explanations by LIME, Anchor and R-LIME]{%
     Example of explanations by LIME~\cite{ribeiro2016why},
-    Anchor~\cite{ribeiro2018anchors} and R-LIME (our proposed method).
+    Anchor~\cite{ribeiro2018anchors} and R-LIME (our proposed method)
     for a sentiment prediction model.
   }\label{fig:example}
 \end{figure}
@@ -243,20 +244,20 @@ LIME~\cite{ribeiro2016why} and Anchor~\cite{ribeiro2018anchors}
 are representative local model-agnostic methods.
 An example of explanations by LIME and Anchor
 for a sentiment prediction model is illustrated in \cref{fig:example}.
-LIME approximates the complex decision boundary
-linearly around the given focal point,
+LIME linearly approximates the complex decision boundary
+around the given focal point,
 then provides the weights of the linear model as the contribution of each feature
 to the output.
 The explanation by LIME (\cref{fig:example-lime}) suggests that
 the word ``not'' mainly contributes to the positive prediction,
-but does not explicitly indicate the effective scope.
+but does not explicitly indicate its effective scope.
 Without the scope,
 users might mistakenly apply the knowledge derived from the explanation
 to other instances far from the focal point,
 potentially leading to misunderstanding of the black-box model's behavior
 \cite{ribeiro2018anchors}.
 For this example,
-user may apply the derived insights
+users may apply the derived insights
 to the sentence ``This book is not good.''
 and mistakenly conclude that the word ``not''
 mainly contributes to the positive prediction for this sentence as well,
@@ -265,7 +266,7 @@ Anchor maximizes the coverage of a rectangular region containing the focal point
 as long as the probability of the black-box classifier outputting
 the same label as the focal point within the region exceeds a given threshold.
 While Anchor provides an effective scope of the explanation,
-users can get less insight from the explanation compared to LIME\@.
+users can get less insight compared to LIME\@.
 The explanation by Anchor (\cref{fig:example-anchor})
 suggests that replacing words other than ``not'' and ``bad''
 has little impact on the classifier's output.
@@ -274,11 +275,11 @@ because of not including the word ``bad'',
 the explanation does not provide details about the influence of each word,
 resulting in less user insight into the model's behavior compared to LIME.
 
-To address this limitation of LIME,
+To address these limitations,
 we propose a new method called R-LIME (Ruled LIME),
 which provides both the contributions of each feature to the output
 and the effective scope of the explanation.
-R-LIME locally approximates a complex decision boundary linearly
+R-LIME linearly approximates a complex decision boundary
 in a rectangular region and maximizes the region
 as long as the accuracy of the linear classifier exceeds a given threshold.
 The region is interpretable for users because it is
@@ -339,8 +340,8 @@ They are broadly divided into
 \emph{model-dependent} and \emph{model-agnostic} methods
 based on their dependence on the model's structure.
 Model-dependent methods,
-such as Deep Taylor Decomposition (DTD)~\cite{montavon2017explaining}
-and Layer-wise Relevance Propagation (LRP)~\cite{bach2015pixel},
+such as deep Taylor decomposition (DTD)~\cite{montavon2017explaining}
+and layer-wise relevance propagation (LRP)~\cite{bach2015pixel},
 most of which focus on neural networks and
 explain the model's behavior using its parameters~\cite{samek2021explaining}.
 While these methods provide detailed explanations
@@ -355,21 +356,15 @@ they cannot explain the reasoning process inside the model.
 Furthermore, model-agnostic methods are categorized into
 \emph{global} and \emph{local} methods based on their locality in input space.
 Global methods,
-such as Partial Dependence Plots (PDP)~\cite{friedman2001greedy}
-and Accumulated Local Effects (ALE)~\cite{apley2020visualizing},
+such as partial dependence plots (PDP)~\cite{friedman2001greedy}
+and accumulated local effects (ALE)~\cite{apley2020visualizing},
 aim to explain the model's behavior across the entire input space.
-% seeking explanations valid for any input.
 However, providing global explanations becomes challenging
 as the model's complexity increases.
 In contrast, local methods,
-such as Local Interpretable Model-agnostic Explanations (LIME)
+such as local interpretable model-agnostic explanations (LIME)
 \cite{ribeiro2016why}
 and Anchor~\cite{ribeiro2018anchors},
-% SHAP~\cite{lundberg2017unified},
-% EXPLAN~\cite{rasouli2020explan},
-% LORE (Local Rule-based Explanations)~\cite{guidotti2018local}
-% and BELLA (Black box model Explanations by Local Linear Approximations)
-% \cite{radulovic2023bella},
 explain model's behavior in the vicinity of a specific input.
 While they offer explanations more simple and accurate
 than global methods,
@@ -406,7 +401,7 @@ the scope of the explanation is limited locally.
   \end{subfigure}
   \caption[Visual comparison of LIME, Anchor and R-LIME]{%
     Visual comparison of LIME, Anchor and R-LIME (our method).
-    The dashed line represents the learned approximation model,
+    The dashed line represents the local linear approximation model,
     and the solid line represents the rectangular region containing the focal point.
   }
 \end{figure}
@@ -426,7 +421,7 @@ approximates a black-box classifier $f: \mathbb{R}^m \to \{0,1\}$
 around a focal point $x \in \mathbb{R}^m$
 by a linear classifier $g: \mathbb{R}^m \to \{0,1\}$
 (\cref{fig:lime}).
-The approximation is performed by the following two steps:
+The approximation is performed by the following steps:
 \begin{enumerate}
   \item Generating a set of perturbed samples $\mathcal{Z}_p$ around $x$
         and the set of pseudo-labels $f(\mathcal{Z}_p) = \{f(z) \mid z \in \mathcal{Z}_p\}$.
@@ -444,12 +439,12 @@ The approximation is performed by the following two steps:
           \pi_x(z){\left(f(z)-g(z)\right)}^2,
         \end{equation}
         where $\pi_x(z)$ is a weight function designed to be larger for samples
-        closer to $x$, typically implemented using an exponential kernel.
+        closer to $x$, typically defined using an exponential kernel.
 \end{enumerate}
 LIME provides valuable insights into the local behavior of the model
 by showing the contribution of each feature to the output $f(x)$.
-However, due to not explicitly indicating the perturbation region,
-users cannot assess the effective scope of the explanation
+However, it does not explicitly indicate the region for generating perturbed samples,
+making it difficult for users to assess the effective scope of the explanation
 \cite{ribeiro2018anchors}.
 
 \subsubsection[Anchor]{%
@@ -469,6 +464,8 @@ an instance $x \in \ispace$
 and a distribution $\mathcal{D}$ over the input space,
 a rule $A(z) = a_{i_1}(z) \wedge a_{i_2}(z) \wedge \dots \wedge a_{i_t}(z)$ is defined.
 The predicate $a_i(z)$ evaluates to true ($=1$) when $z_i = x_i$ and false ($=0$) otherwise.
+The reliability of the explanation is defined as the ``accuracy'' of the rule,
+and the generality of the explanation is defined as the ``coverage'' of the rule.
 The accuracy $\Prec(A)$ and coverage $\Cov(A)$ of the rule $A$ are defined as follows:
 \begin{align}
   \Prec(A) & =\mathbb{E}_{z\sim\mathcal{D}(z|A)}
@@ -480,7 +477,7 @@ where the rule $A$ returns true.
 $\Prec(A)$ represents the probability that the output of $f$ matches
 between the perturbation $z\sim\mathcal{D}(z|A)$ and the focal point $x$,
 and $\Cov(A)$ expresses the probability that the perturbation $z$ fits into $A$.
-Anchor maximizes coverage under the constraint that
+Anchor maximizes coverage as long as
 the accuracy of the rule $A$ exceeds a given threshold $\tau$.
 However, \cref{eq:anchor_def_prec} is not directly computable.
 Introducing a confidence level $1-\delta$ $(0\le\delta\le1)$,
@@ -498,31 +495,30 @@ Thus, the following optimization problem is solved:
 
 \subsection{Overview}
 We propose R-LIME,
-a method that aims to address the limitations of LIME~\cite{ribeiro2016why},
+a method that aims to address the limitations of LIME~\cite{ribeiro2016why}
 and Anchor~\cite{ribeiro2018anchors}.
 Our method locally approximates the given black-box classifier $f$
-around the focal point $x$ by a linear classifier $g$ similar to LIME and BELLA,
-but samples perturbation from a rectangular region similar to Anchor
+around the focal point $x$ by a linear classifier $g$ similar to LIME,
+but generates the perturbed samples
+from a rectangular region similar to Anchor
 so that the generality of approximation is explicitly provided
 (\cref{fig:rlime}).
-The accuracy of $g$ is defined as the ``accuracy'' of the rule,
-and the generality of explanations is defined as the ``coverage'' of the rule.
 
 Anchor maximizes the coverage of region $A$
 as long as the probability of the output of the black-box classifier $f$ matching $f(x)$
 within $A$ exceeds a given threshold $\tau$.
-The proposed method, on the other hand, learns an linear classifier $g$
+R-LIME, on the other hand, learns a linear classifier $g$
 within the rectangular region $A$ and maximizes the coverage of $A$
 under lower constraints on the accuracy of $g$.
-We modify the Anchor's definition of accuracy in \cref{eq:anchor_def_prec}
+We modify Anchor's definition of accuracy in \cref{eq:anchor_def_prec}
 as follows:
 \begin{equation}
   \Prec(A)=\underset{g\in G}{\max}\ \mathbb{E}_{z\sim\mathcal{D}(z|A)}
-  [\mathbbm{1}_{f(z)=g(z)}]. \label{eq:def_prec}
+  [\mathbbm{1}_{f(z)=g(z)}], \label{eq:def_prec}
 \end{equation}
-where $G$ is the set of possible linear classifiers.
+where $G$ is a hypothesis space of possible linear classifiers.
 By solving the optimization problem in \cref{eq:main_problem}
-under the modified accuracy definition in \cref{eq:def_prec},
+under the modified definition of accuracy in \cref{eq:def_prec},
 we can select the rule that enables explanation with high accuracy and generality.
 
 \subsection{Algorithm}\label{sec:alg}
@@ -540,7 +536,7 @@ we can select the rule that enables explanation with high accuracy and generalit
       learned within $A$.
       The initial value of $A$ is an empty rule (entire input space),
       and predicates are added to $A$, reducing coverage.
-      The process continues until $\Prec(A)\ge\tau$,
+      The process continues until $\Prec(A)\ge\tau$ is satisfied,
       at which point the rule with the maximum coverage is output.
     }
   \end{figure}
@@ -568,24 +564,22 @@ The algorithm of R-LIME
 is mainly based on that used in Anchor\cite{ribeiro2018anchors}.
 For non-convex optimization problems like \cref{eq:main_problem},
 greedy search are often used.
-However,
-greedy methods tend to converge to local optima, and to address this,
-R-LIME uses beam search,
-which selects multiple candidates at each iteration.
+But greedy methods tend to converge to local optima,
+so we use beam search, which selects multiple candidates at each iteration.
 The pseudo-code is shown in \cref{alg:greedy_search}.
 
-\subsubsection{Generation of New Candidate Rules}
+\subsubsection{Generating New Candidate Rules}
 To generate new candidate rules,
 one additional predicate is added to each of the $B$ candidate rules
 selected in the previous iteration.
 The pseudo-code is shown in \cref{alg:generate_cands}.
 $T(x)$ is the set of predicates $\{a_1,\dots,a_m\}$,
-where $a_i(z)$ evaluates to true when $z_i=x_i$ and false otherwise,
-and $T(x)\setminus A$ is the set of predicates in $T(x)$ not included in rule $A$.
+where $a_i(z)$ evaluates to true when $z_i=x_i$ and false otherwise.
+$T(x)\setminus A$ is the set of predicates in $T(x)$ not included in rule $A$.
 
-\subsubsection{Selection of Candidate Rules with Maximum Accuracy}
+\subsubsection{Searching Rules with Highest Accuracy}
 Given the set of candidate rules $\cands$,
-the algorithm selects the top $B$ candidates with the highest accuracy.
+the algorithm selects the $B$ candidate rules with the highest accuracy.
 This problem can be formulated
 as best arm identification in the multi-armed bandit framework.
 Each candidate rule $A_i\in\cands$ is considered as an arm,
@@ -594,7 +588,7 @@ with $P(X=1)=\Prec(A_i)$.
 By sampling $z\sim\mathcal{D}(\cdot|A_i)$
 and obtaining the reward $\mathbbm{1}_{f(z)=g_i(z)}$ for each trial,
 the algorithm updates $g_i$ using $z$ and $f(z)$ after each trial.
-To efficiently select the rule (arm) with the highest accuracy,
+To efficiently search the rule (arm) with the highest accuracy,
 we employ the KL-LUCB algorithm \cite{kaufmann2013information}.
 The pseudo-code is shown in \cref{alg:best_cands}.
 For tolerance $\epsilon\in[0,1]$, the KL-LUCB algorithm guarantees below:
@@ -606,21 +600,21 @@ However,
 the KL-LUCB algorithm assumes that the reward distribution for each arm
 remains unchanged,
 while our method updates the classifier $g_i$ with each sampling,
-which may not satisfy this assumption.
+which may not satisfy the assumption.
 This issue is discussed further in \cref{sec:reward}.
 
-\subsubsection{Selection of the Rule with Maximum Coverage Meeting the Constraint}
-To satisfy the constraint imposed by \cref{eq:const_prec}, rule $A$ needs to fulfill the lower bound constraint:
+\subsubsection{Searching a Rule with Highest Coverage under Constraint}
+To satisfy the constraint imposed by \cref{eq:const_prec},
+a rule $A$ needs to meet the following condition:
 \begin{equation}
-  \Prec_{l}(A,\delta)>\tau
-  \label{eq:stop_condition}
+  \Prec_{l}(A,\delta)>\tau,\label{eq:stop_condition}
 \end{equation}
 where $\Prec_{l}(A,\delta)$ is the lower limit of
 the $100(1-\delta)$\% confidence interval for $\Prec(A)$.
-If the received set of candidate rules, $\mathcal{A}$,
-includes a rule satisfying \cref{eq:stop_condition},
+If the set of candidate rules $\mathcal{A}$
+includes rules satisfying \cref{eq:stop_condition},
 the one with the maximum coverage among them is selected,
-and the iteration is terminated.
+then the iteration is terminated.
 If $\mathcal{A}$ does not contain any rule satisfying \cref{eq:stop_condition},
 it returns \textbf{null},
 and proceeds to the next iteration.
@@ -656,16 +650,18 @@ The pseudo-code is presented in \cref{alg:largest_valid_cand}.
 
   For each iteration of KL-LUCB algorithm, R-LIME needs to update
   the linear classifier $g_i$, which is not required in Anchor.
-  But if we use logistic regression as the linear classifier,
-  the computational complexity of updating $g_i$ is $\mathcal{O}(m)$,
-  which is negligible compared to the complexity of sampling a perturbation vector
-  and getting the output of the black-box model.
+  If we use logistic regression as the linear classifier
+  and update it by stochastic gradient descent (SGD) \cite{robbins1951stochastic},
+  the computational complexity of updating $g_i$ is $\mathcal{O}(m)$.
+  It is negligible compared to the complexity of generating a perturbed sample,
+  which is $\mathcal{O}(m^2)$ if we get a sample
+  from a multivariate normal distribution using Cholesky decomposition in advance.
   Overall, the computational complexity of R-LIME is comparable to that of Anchor.
 \fi
 
 \section{Experiments}
 To verify the effectiveness of the proposed method,
-We compare LIME and R-LIME using a real-world dataset.
+we compared LIME and R-LIME using a real-world dataset.
 
 \subsection{Qualitative Evaluation}
 \subsubsection{Experimental Setup}\label{sec:exp_setting}
@@ -708,7 +704,7 @@ We compare LIME and R-LIME using a real-world dataset.
 }
 
 We used the recidivism dataset \cite{schmidt1988predicting} for our experiments.
-The dataset contains information on 9549 prisoners released from
+The dataset contains personal information on 9549 prisoners released from
 North Carolina prisons between July 1, 1979, and June 30, 1980.
 The dataset includes 19 items such as race (\emph{Race}), gender (\emph{Gender}),
 presence of alcohol dependence (\emph{Alcohol}),
@@ -719,23 +715,24 @@ we treated the binary classification problem of predicting
 the presence of recidivism (\emph{Recidivism}) as the target label.
 We discretized continuous features and removed missing values,
 resulting in 15 features.
-This problem setting can be considered as a case
-where a machine learning model is introduced to decide parole for prisoners.
-Since such decisions can have a significant impact on a person's life,
-it is crucial for users to interpret the outputs of black-box models appropriately.
 
-The dataset, after removing missing values,
-was split into training data (7639 instances) and test data (955 instances).
-A random forest model with 50 trees was trained using the training data.
+We splitted the dataset into training data (7639 instances) and test data (955 instances),
+and trained a random forest model with 50 trees as the black-box classifier
+using the training data.
 Then, LIME and R-LIME explanations were generated
 for two instances extracted from the test data (\cref{fig:instance}).
-For R-LIME, logistic regression was used as the linear approximation model,
-and the distribution $\mathcal{D}$ was a multivariate normal distribution
-estimated from the training data.
+For R-LIME, we used logistic regression as the linear approximation model,
+and a multivariate normal distribution estimated from the training data
+as the distribution $\mathcal{D}$.
 The beam width was set to $B=10$,
 the confidence coefficient to $1-\delta=0.95$,
 and the tolerance of the KL-LUCB algorithm to $\epsilon=0.05$.
-Accuracy thresholds $\tau$ were set to $\tau=0.70,0.80,0.90$.
+The accuracy threshold $\tau$ was set to $\tau=0.70,0.80,0.90$.
+
+This problem setting can be considered as a case
+where a complex machine learning model is introduced to decide parole for prisoners.
+Since such decisions can have a significant impact on a person's life,
+it is crucial for users to interpret the outputs of black-box models appropriately.
   {%
 
     \def\dir{experiments/exp1}
@@ -774,7 +771,9 @@ Accuracy thresholds $\tau$ were set to $\tau=0.70,0.80,0.90$.
           }
         \vspace{-15pt}
         \caption[Two instances sampled from recidivism dataset]{%
-          Two instances sampled from recidivism dataset.
+          Two instances sampled from training data of recidivism dataset.
+          Each number in parentheses represents the integer value assigned
+          to the corresponding categorical value.
         }\label{fig:instance}
       \end{figure}
     }
@@ -866,19 +865,19 @@ Accuracy thresholds $\tau$ were set to $\tau=0.70,0.80,0.90$.
 \subsubsection{Experimental Results}
 The results of the experiment are shown in \cref{fig:A,fig:B}.
 The values assigned to each feature name represent the contribution
-(weights of the learned linear classifier)
+(weight of the linear classifier)
 to the output of the black-box classifier,
 normalized such that the absolute sum is 1.
 The figures display the 5 features with the highest absolute contribution.
 
 Explanations generated by LIME (\cref{fig:A-lime,fig:B-lime}) provide insights
-that attributes such as having a prior offenses (\emph{Priors}),
-being served for a long time in prison (\emph{MonthsServed}),
+that having a prior offenses (\emph{Priors}),
+being served for a long time in prison (\emph{Months-Served}),
 and committing a crime against property (\emph{Crime against Property})
 primarily contribute to the positive prediction
 (prediction that the prisoner will be re-arrested).
 On the other hand,
-attributes like older age (\emph{Age}), being married (\emph{Married}),
+being elderly (\emph{Age}), being married (\emph{Married}),
 and being of white race (\emph{Race}) contribute to the negative prediction
 (prediction that the prisoner will not be re-arrested).
 While these LIME explanations provide valuable insights into the behavior of
@@ -891,14 +890,14 @@ as a conjunction of feature predicates.
 For example, the explanation for instance A
 under $\tau=0.70$ (\cref{fig:A-rlime-70}) indicates that it is applicable
 only to married prisoner (\emph{Married} $=$\emph{Yes}).
-Furthermore, the explanations provide their accuracy and coverage,
-allowing users to evaluate reliability of the explanations.
+R-LIME explanations also provide their accuracy and coverage,
+allowing users to evaluate reliability and generality of the explanations.
 For example, the coverage of the explanation for instance B under $\tau=0.90$
 (\cref{fig:B-rlime-90}) is 0.01\%,
 indicating that the decision boundaries around instance B are complex,
 making it challenging to obtain a high-accuracy linear approximation.
-This allows users to discern that the application scope of this explanation is
-very narrow, limiting its utility.
+This information allows users to discern that
+the application scope of this explanation is very narrow, limiting its utility.
 
 \subsection{Quantitative Evaluation}\label{sec:exp2}
 \subsubsection{Experimental Setup}
@@ -906,7 +905,7 @@ To demonstrate that R-LIME learns a highly accurate linear approximation model
 in the optimized approximation region,
 we conducted a comparison of the local accuracy of explanations
 between LIME and R-LIME\@.
-Using the same settings as in \cref{sec:exp_setting},
+Under the same settings as in \cref{sec:exp_setting},
 we randomly sampled 100 instances from the test data of the recidivism dataset
 and generated explanations using LIME and R-LIME (with $\tau=0.70,0.80,0.90$).
 We then sampled 10,000 instances within the rectangular region
@@ -922,12 +921,13 @@ obtained by R-LIME and calculated the local accuracy of both methods.
   }\label{fig:box_plot}
 \end{figure}
 The results are presented in \cref{fig:box_plot},
-showing the distribution of the accuracy of the linear approximation models
+showing the distribution of the local accuracy of the linear classifiers
 learned by LIME and R-LIME\@.
 R-LIME achieved higher accuracy compared to LIME for all values of $\tau$.
 This suggests that the linear classifiers learned by LIME and R-LIME
 differ significantly,
-and R-LIME learns a high-accuracy linear classifier adapted to the rectangular region.
+and R-LIME learns a high-accuracy linear classifier
+adapted to the optimized rectangular region.
 Additionally, as $\tau$ increases,
 the variability in the accuracy of LIME widens.
 This indicates that the linear classifiers learned by LIME may not function
@@ -961,8 +961,8 @@ effectively as approximation models depending on how the region is selected.
 \subsection{Behavior Regarding Imbalanced Label Distribution}
 R-LIME may generate less useful explanations
 when the distribution of black-box classifier outputs is imbalanced.
-When the ratio of the minority label is less than $1-\tau$,
-where $\tau$ is the threshold for the accuracy of the linear classifier,
+When the ratio of outputting the minority label is less than $1-\tau$,
+where $\tau$ is the accuracy threshold,
 the approximation region generated by R-LIME covers the entire input space,
 and the learned linear classifier always outputs the majority label
 (\cref{fig:imbalanced}).
@@ -989,8 +989,10 @@ could suppress the excessive expansion of the approximation region.
   \begin{table}[tbp]
     \centering
     \caption[Deviation between the estimated accuracy and the true accuracy]{%
-      Deviation between the estimated accuracy and the true accuracy.
-      Deviation was relatively small considering confidence level $1-\delta=0.95$.
+      Deviation between the estimated accuracy and the true accuracy
+      of the linear classifier learned by R-LIME.
+      The deviation $0.012\pm0.017$ was relatively small
+      considering the confidence level $1-\delta=0.95$.
     }\label{tab:reward}
     \input{tex/tab_exp_adv}
   \end{table}
@@ -1018,15 +1020,18 @@ with a standard deviation of 0.017.
 By considering the confidence level $1-\delta=0.95$,
 the deviation was relatively small.
 While there are concerns about the theoretical validity of using the KL-LUCB algorithm,
-these results suggest that the deviation is not significant in practice.
+our results suggest that the deviation is not significant in practice.
 
 \section{Conclusion}
 Existing methods for
-local model-agnostic explanations of black-box classifiers have limitations
-that they do not explicitly indicate the application scope of the explanations.
+local model-agnostic explanations of black-box classifiers,
+such as LIME and Anchor,
+have limitations that they cannot achieve interpretability of
+both the explanation and its application scope.
 To address these challenges,
-we proposed R-LIME, a method that locally approximates the decision boundary
-of a black-box classifier linearly and provides a rectangular approximation region,
+we proposed R-LIME,
+a method that locally and linearly approximates the decision boundary
+of a black-box classifier and provides a rectangular approximation region,
 which is interpretable for users due to being expressed as a conjunction of feature predicates.
 We proposed an algorithm to
 maximize coverage of the approximation region
