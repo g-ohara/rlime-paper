@@ -1,15 +1,8 @@
 services:
-  latex:
-    image: genjiohara/latex
-    container_name: RLIME_paper-paper
-    build:
-      context: .
-      dockerfile: Dockerfile
+  tex:
+    image: genjiohara/texlive-full
     volumes:
-      - ./:/root/workspace
-      - ../experiments:/root/workspace/experiments
-      - /tmp/.X11-unix:/tmp/.X11-unix
-    environment:
-      - DISPLAY=$DISPLAY
-    working_dir: /root/workspace
-    tty: true
+      - ./:/root/
+      - ../experiments:/root/experiments
+    working_dir: /root/
+    command: sh -c "latexmk -pvc paper.tex"
