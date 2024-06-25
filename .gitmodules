@@ -1,12 +1,15 @@
 [submodule "python/R-LIME"]
-	path = experiments/R-LIME
+	path = src/experiments/R-LIME
 	url = git@github.com:G-Ohara/R-LIME.git
 [submodule "experiments/exp2/R-LIME"]
-	path = experiments/exp2/rlime
+	path = src/experiments/exp2/rlime
 	url = git@github.com:G-Ohara/R-LIME.git
 [submodule "experiments/exp_adv/RLIME"]
-	path = experiments/exp_adv/RLIME
+	path = src/experiments/exp_adv/RLIME
 	url = git@github.com:G-Ohara/R-LIME.git
 [submodule "paper/myref"]
-	path = paper/myref
+	path = src/myref
 	url = git@github.com:g-ohara/myref.git
+[submodule "src/tex-template"]
+	path = src/tex-template
+	url = git@github.com:g-ohara/tex-template.git

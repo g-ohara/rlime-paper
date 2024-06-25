@@ -1,0 +1,1 @@
+src/tex-template/latexmkrc

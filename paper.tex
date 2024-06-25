@@ -8,7 +8,7 @@
 \ifnum\mode=0
   \documentclass[11pt]{article}
   \usepackage{luatexja}
-  \usepackage{style/prmlthesis}
+  \usepackage{src/style/prmlthesis}
   \usepackage[a4paper]{geometry}
 \else
   \documentclass[runningheads]{llncs}
@@ -54,7 +54,7 @@
 \apptocmd{\sloppy}{\hbadness 10000\relax}{}{}
 
 % set the path for figures
-\graphicspath{{./src/}{../python/data/}{../experiments/}}
+\graphicspath{{./src/}{../python/data/}{src/experiments/}}
 
 % set the label format for subcaption
 \renewcommand\thesubfigure{(\alph{subfigure})}
@@ -69,7 +69,7 @@
 \fi
 
 % import the TeX file containing macro definitions
-\input{tex/macro}
+\input{src/tex/macro}
 
 \begin{document}
 
@@ -544,19 +544,19 @@ we can select the rule that enables explanation with high accuracy and generalit
   \ifnum\mode=0
     \begin{algorithm}[t]
       \small
-      \input{tex/alg1}
+      \input{src/tex/alg1}
     \end{algorithm}
   \else
     \begin{algorithm}[p]
       \small
-      \input{tex/alg1}
+      \input{src/tex/alg1}
     \end{algorithm}
   \fi
 
   \foreach \alg in {2,3,4}{%
       \begin{algorithm}[p]
         \small
-        \input{tex/alg\alg}
+        \input{src/tex/alg\alg}
       \end{algorithm}
     }
 }
@@ -735,7 +735,7 @@ Since such decisions can have a significant impact on a person's life,
 it is crucial for users to interpret the outputs of black-box models appropriately.
   {%
 
-    \def\dir{experiments/exp1}
+    \def\dir{src/experiments/exp1}
     \def\Asample{0012}
     \def\Bsample{0011}
     \def\index#1{\ifnum#1=0 \Asample \else \Bsample \fi}
@@ -913,7 +913,7 @@ obtained by R-LIME and calculated the local accuracy of both methods.
 \subsubsection{Experimental Results}
 \begin{figure}[tbp]
   \centering
-  \includegraphics[width=0.5\textwidth]{experiments/exp2/box_plot}
+  \includegraphics[width=0.5\textwidth]{src/experiments/exp2/box_plot}
   \caption[Comparison of Local Accuracy between R-LIME and LIME]{%
     Comparison of local accuracy between LIME and R-LIME\@.
     R-LIME achieved higher and less variable accuracy compared to LIME
@@ -994,7 +994,7 @@ could suppress the excessive expansion of the approximation region.
       The deviation $0.012\pm0.017$ was relatively small
       considering the confidence level $1-\delta=0.95$.
     }\label{tab:reward}
-    \input{tex/tab_exp_adv}
+    \input{src/tex/tab_exp_adv}
   \end{table}
 }
 For R-LIME,
@@ -1060,10 +1060,10 @@ the KL-LUCB algorithm for our problem.
 \fi
 
 \ifnum\mode=0
-  \bibliographystyle{style/prml}
+  \bibliographystyle{src/style/prml}
 \else
-  \bibliographystyle{style/splncs04}
+  \bibliographystyle{src/style/splncs04}
 \fi
-\bibliography{myref/myref}
+\bibliography{src/myref/myref}
 
 \end{document}
