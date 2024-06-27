@@ -1,26 +1,26 @@
-\caption{R-LIME}\label{alg:greedy_search}
+\caption{R-LIME}\label{alg:greedy-search}
 \begin{algorithmic}[1]
-  \Require{%
-    Black-box model $f$, Target instance $x$,
-    Distribution $\mathcal{D}$,
-    Threshold $\tau$, Beam width $B$, Tolerance $\epsilon$,
-    Confidence level $1-\delta$
-  }
-  \Ensure{%
-    Rule $A^*$ satisfying Eq.~\eqref{eq:main_problem}
-  }
-  \State{$A^*\gets\textbf{null},\ \mathcal{A}_0\gets\emptyset,\ t\gets0$}
-  % \Comment{%
-  %   Initialize the set of candidate rules $\mathcal{A}_0$ to $\emptyset$
-  % }
-  \Comment{Initialize the set of candidate rules $\mathcal{A}_0$ to $\emptyset$}
-  \While{$A^*=\textbf{null}$}
-  \State$t\gets t+1$
-  \State$\cands_t\gets$ \Call{GenerateCands}
-  {$\mathcal{A}_{t-1}$}
-  \State$\mathcal{A}_t\gets$ \Call{B-BestCands}
-  {$\cands_{t},\mathcal{D},B,\epsilon,\delta$}
-  \State$A^*\gets$ \Call{LargestCand}
-  {$\mathcal{A}_t,\tau,\delta$}
-  \EndWhile%
+	\Require{%
+		Black-box model $f$, Target instance $x$,
+		Distribution $\mathcal{D}$,
+		Threshold $\tau$, Beam width $B$, Tolerance $\epsilon$,
+		Confidence level $1-\delta$
+	}
+	\Ensure{%
+		Rule $A^*$ satisfying Eq.~\eqref{eq:main-problem}
+	}
+	\State{$A^*\gets\textbf{null},\ \mathcal{A}_0\gets\emptyset,\ t\gets0$}
+	% \Comment{%
+	%   Initialize the set of candidate rules $\mathcal{A}_0$ to $\emptyset$
+	% }
+	\Comment{Initialize the set of candidate rules $\mathcal{A}_0$ to $\emptyset$}
+	\While{$A^*=\textbf{null}$}
+	\State$t\gets t+1$
+	\State$\cands_t\gets$ \Call{GenerateCands}
+	{$\mathcal{A}_{t-1}$}
+	\State$\mathcal{A}_t\gets$ \Call{B-BestCands}
+	{$\cands_{t},\mathcal{D},B,\epsilon,\delta$}
+	\State$A^*\gets$ \Call{LargestCand}
+	{$\mathcal{A}_t,\tau,\delta$}
+	\EndWhile%
 \end{algorithmic}

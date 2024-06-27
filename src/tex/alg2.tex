@@ -1,15 +1,15 @@
-\caption{Generating new candidate rules}\label{alg:generate_cands}
+\caption{Generating new candidate rules}\label{alg:generate-cands}
 \begin{algorithmic}[1]
-  \Function{GenerateCands}{$\mathcal{A},x$}
-  \IIf{$\mathcal{A}=\emptyset$}{\Return{$\{\mathit{true}\}$}}
-    \Comment{An initial empty rule always returns $\mathit{true}$}
-  \State$\cands\gets\emptyset$
-  \ForAll{$A\in\mathcal{A}$}
-  \ForAll{$a\in (T(x)\setminus A)$}
-  \State$\cands\gets\bar{\mathcal{A}}\cup(A\wedge a)$
-  \Comment{Get a new rule by adding a new predicate $a$ to $A$}
-  \EndFor%
-  \EndFor%
-  \State\Return{$\cands$}
-  \EndFunction%
+	\Function{GenerateCands}{$\mathcal{A},x$}
+	\IIf{$\mathcal{A}=\emptyset$}{\Return{$\{\mathit{true}\}$}}
+	\Comment{An initial empty rule always returns $\mathit{true}$}
+	\State$\cands\gets\emptyset$
+	\ForAll{$A\in\mathcal{A}$}
+	\ForAll{$a\in (T(x)\setminus A)$}
+	\State$\cands\gets\bar{\mathcal{A}}\cup(A\wedge a)$
+	\Comment{Get a new rule by adding a new predicate $a$ to $A$}
+	\EndFor%
+	\EndFor%
+	\State\Return{$\cands$}
+	\EndFunction%
 \end{algorithmic}
