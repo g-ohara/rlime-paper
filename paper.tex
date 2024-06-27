@@ -88,8 +88,48 @@
   Sapporo 060--0814, JAPAN,\\
   \email{\{genji-ohara, kimura5, mine\}@ist.hokudai.ac.jp}}
 
+\section*{Reviewer Response}
+\subsection*{Reviewer \#1}
+Suggestions for Rebuttal:
+\begin{enumerate}
+  \setlength{\itemsep}{15pt}
+  \item Offer guidance on how to select optimal parameters for different
+        datasets and models.
+  \item Include a discussion of other model-agnostic interpretability methods,
+        such as SHAP, to provide a more comprehensive overview.
+
+        \vspace{10pt}
+        \hspace{.02\textwidth}
+        \begin{minipage}{.92\textwidth}%
+          Thank you for your suggestion. We added an overview of other
+          model-agnostic interpretability methods to the related work section.
+        \end{minipage}
+
+  \item Add experimental comparisons with more other model-agnostic \\
+        interpretability methods to better evaluate R-LIME's effectiveness.
+\end{enumerate}
+
+\subsection*{Reviewer \#4}
+The authors should kindly explain why there is not a quantitative comparison
+between their proposed method R-LIME and Anchor. The lack of the comparison
+makes it hard to evaluate the impact of the proposed model.
+
+\subsection*{Reviewer \#5}
+\begin{itemize}
+  \setlength{\itemsep}{15pt}
+  \item It would be beneficial to move the comparison of R-LIME with Anchor
+        and LIME to the Related Work section for improved clarity and
+        organization.
+  \item The authors should consider exploring a more compatible method than the
+        KL-LUCB algorithm to achieve higher accuracy. Although the experimental
+        results suggest a minor effect, there may be potential underlying issues
+        that need to be addressed.
+  \item The title of the `Challenges and Future Work' section could be more
+        aptly replaced with `Discussion' to better reflect the content.
+\end{itemize}
+
 % typeset the header of the contribution
-\maketitle              %
+\maketitle
 
 % The abstract should briefly summarize the contents of the paper in
 % 150--250 words.
