@@ -1,8 +1,0 @@
-services:
-  texlab:
-    image: genjiohara/texlab
-    container_name: rlime-paper-texlab
-    volumes:
-      - ./:${PWD}
-    working_dir: ${PWD}
-    tty: true
