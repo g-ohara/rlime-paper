@@ -45,7 +45,7 @@
 \apptocmd{\sloppy}{\hbadness10000\relax}{}{}
 
 % set the path for figures
-\graphicspath{{./src/img}{./src/experiments/exp1}{./src/experiments/exp2}}
+\graphicspath{{./src/img}{./src/experiments/exp1/ver1/examples/output}{./src/experiments/exp2}}
 
 % set the label format for subcaption
 \renewcommand\thesubfigure{(\alph{subfigure})}
@@ -715,7 +715,7 @@ Since such decisions can have a significant impact on a person's life,
 it is crucial for users to interpret the outputs of black-box models appropriately.
   {%
 
-    \def\dir{src/experiments/exp1}
+    \def\dir{src/experiments/exp1/ver1/examples/output}
     \def\Asample{0012}
     \def\Bsample{0011}
     \def\index#1{\ifnum#1=0 \Asample\else\Bsample\fi}
@@ -825,6 +825,26 @@ it is crucial for users to interpret the outputs of black-box models appropriate
         \caption[Explanation for Instance B by LIME and R-LIME]{%
           Explanation for Instance B by LIME and R-LIME\@.
         }\label{fig:B}
+      \end{figure}
+      \newcommand{\anchorsubfigure}[2]{
+        \def\dir{src/experiments/exp1/ver2/examples}
+        \begin{subfigure}[t]{\imgwidth}
+          \centering
+          \includegraphics[scale=\scale]{\dir/anchor-#1-#2}
+          \vspacebeforecaption{}
+          \caption{$\tau=0.#2$}
+          \vspacebase{}
+        \end{subfigure}
+      }
+      \begin{figure}[tbp]
+        \centering
+        \foreach{\tauloop}in{70,80,90}{\anchorsubfigure{\Asample}{\tauloop}}
+        \caption{Explanation for Instance A by Anchor.}
+      \end{figure}
+      \begin{figure}[tbp]
+        \centering
+        \foreach{\tauloop}in{70,80,90}{\anchorsubfigure{\Bsample}{\tauloop}}
+        \caption{Explanation for Instance B by Anchor.}
       \end{figure}
     }
   }
