@@ -16,3 +16,6 @@
 [submodule "src/experiments/exp1/ver1"]
 	path = src/experiments/exp1/ver1
 	url = git@github.com:g-ohara/rlime.git
+[submodule "src/experiments/test/src/rlime-examples"]
+	path = src/experiments/exp2b/src/rlime-examples
+	url = git@github.com:g-ohara/rlime-examples.git

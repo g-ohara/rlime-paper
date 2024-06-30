@@ -17,11 +17,12 @@ def main() -> None:
         accs.append(lime_acc)
         accs.append(rlime_acc)
 
+    plt.rcParams["font.size"] = 15
     bp = plt.boxplot(
         accs,
-        labels=["LIME", "R-LIME"] * 3,
+        tick_labels=["LIME", "R-LIME"] * 3,
         widths=0.7,
-        positions=[1, 2, 3.5, 4.5, 6, 7],
+        positions=[1, 2.2, 3.7, 4.9, 6.4, 7.6],
         showfliers=False,
         patch_artist=True,
     )
@@ -31,17 +32,18 @@ def main() -> None:
         med.set_color("black")
 
     for i, tau_percent in enumerate([70, 80, 90]):
-        plt.text(1.0 + 2.5 * i, 0.33, r"$\tau=$" + f"0.{tau_percent}")
+        plt.text(0.9 + 2.7 * i, 0.30, r"$\tau=$" + f"0.{tau_percent}")
 
     plt.hlines(
         [0.7, 0.8, 0.9],
-        [0, 2.5, 5],
-        [3.0, 5.5, 8],
+        [0, 2.7, 5.4],
+        [3.0, 5.7, 8.4],
         colors="black",
         linestyles="dashed",
     )
     # plt.title("Accuracy of LIME and R-LIME")
     plt.ylabel("Accuracy")
+    plt.tight_layout()
     plt.savefig("box_plot.eps")
 
 

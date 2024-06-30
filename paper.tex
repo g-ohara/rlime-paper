@@ -22,6 +22,7 @@
 \def\caption@documentclass{elsarticle}
 \makeatother
 
+\usepackage[export]{adjustbox} % for valign option in \includegraphics
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 \usepackage{amssymb} % for \mathbb
@@ -29,6 +30,7 @@
 \usepackage{bbm} % for \mathbbm
 \usepackage{booktabs} % for \toprule, \midrule, \bottomrule
 \usepackage{cleveref} % for \cref
+\usepackage{color,soul} % for \hl
 \usepackage{csvsimple} % for \csvreader
 \usepackage[T1]{fontenc} % for T1 font encoding
 \usepackage{graphicx} % for \includegraphics
@@ -45,7 +47,7 @@
 \apptocmd{\sloppy}{\hbadness10000\relax}{}{}
 
 % set the path for figures
-\graphicspath{{./src/img}{./src/experiments/exp1/ver1/examples/output}{./src/experiments/exp2}}
+\graphicspath{{./src/img}{./src/experiments}}
 
 % set the label format for subcaption
 \renewcommand\thesubfigure{(\alph{subfigure})}
@@ -88,47 +90,93 @@
   Sapporo 060--0814, JAPAN,\\
   \email{\{genji-ohara, kimura5, mine\}@ist.hokudai.ac.jp}}
 
-\section*{Reviewer Response}
-\subsection*{Reviewer \#1}
-Suggestions for Rebuttal:
-\begin{enumerate}
-  \setlength{\itemsep}{15pt}
-  \item Offer guidance on how to select optimal parameters for different
-        datasets and models.
-  \item Include a discussion of other model-agnostic interpretability methods,
-        such as SHAP, to provide a more comprehensive overview.
+{%
+  \newenvironment{mycomment}{
+    \vspace{10pt}\hspace{.02\textwidth}\begin{minipage}{.92\textwidth}
+      }{\end{minipage}}
+  \section*{Reviewer Response}
+  We would like to appriciate all the reviewers for their very helpful comments.
+  We added an overview of other existing methods, discussion about parameter
+  selection, and comparisons between Anchor and R-LIME\@.
+  Below are suggestions from reviewers and our response.
 
-        \vspace{10pt}
-        \hspace{.02\textwidth}
-        \begin{minipage}{.92\textwidth}%
-          Thank you for your suggestion. We added an overview of other
-          model-agnostic interpretability methods to the related work section.
-        \end{minipage}
+  \subsection*{Reviewer \#1}
+  Suggestions for Rebuttal:
+  \begin{enumerate}
+    \setlength{\itemsep}{15pt}
+    \item Offer guidance on how to select optimal parameters for different
+          datasets and models.
 
-  \item Add experimental comparisons with more other model-agnostic \\
-        interpretability methods to better evaluate R-LIME's effectiveness.
-\end{enumerate}
+          \begin{mycomment}
+            Thank you for your suggestion. We added guidance on how parameters
+            should be selected in practical use cases to \cref{sec:discussion}.
+          \end{mycomment}
 
-\subsection*{Reviewer \#4}
-The authors should kindly explain why there is not a quantitative comparison
-between their proposed method R-LIME and Anchor. The lack of the comparison
-makes it hard to evaluate the impact of the proposed model.
+    \item Include a discussion of other model-agnostic interpretability methods,
+          such as SHAP, to provide a more comprehensive overview.
 
-\subsection*{Reviewer \#5}
-\begin{itemize}
-  \setlength{\itemsep}{15pt}
-  \item It would be beneficial to move the comparison of R-LIME with Anchor
-        and LIME to the Related Work section for improved clarity and
-        organization.
-  \item The authors should consider exploring a more compatible method than the
-        KL-LUCB algorithm to achieve higher accuracy. Although the experimental
-        results suggest a minor effect, there may be potential underlying issues
-        that need to be addressed.
-  \item The title of the `Challenges and Future Work' section could be more
-        aptly replaced with `Discussion' to better reflect the content.
-\end{itemize}
+          \begin{mycomment}
+            Thank you for your suggestion. We added an overview of other
+            model-agnostic interpretability methods to \cref{sec:related-work}.
+          \end{mycomment}
 
-% typeset the header of the contribution
+    \item Add experimental comparisons with more other model-agnostic \\
+          interpretability methods to better evaluate R-LIME's effectiveness.
+
+          \begin{mycomment}
+            Thank you for your suggestion. We additionally conducted qualitative
+            and quantitative comparisons between Anchor and R-LIME,
+            which demonstrated that R-LIME is more effective than Anchor.
+          \end{mycomment}
+  \end{enumerate}
+
+  \subsection*{Reviewer \#4}
+  The authors should kindly explain why there is not a quantitative comparison
+  between their proposed method R-LIME and Anchor. The lack of the comparison
+  makes it hard to evaluate the impact of the proposed model.
+
+  \begin{mycomment}
+    Thank you for your insightful comments.
+  \end{mycomment}
+
+  \subsection*{Reviewer \#5}
+  \begin{itemize}
+    \setlength{\itemsep}{15pt}
+    \item It would be beneficial to move the comparison of R-LIME with Anchor
+          and LIME to the Related Work section for improved clarity and
+          organization.
+
+          \begin{mycomment}
+            Thank you for your suggestion.
+
+            \ldots
+          \end{mycomment}
+
+    \item The authors should consider exploring a more compatible method than the
+          KL-LUCB algorithm to achieve higher accuracy. Although the experimental
+          results suggest a minor effect, there may be potential underlying issues
+          that need to be addressed.
+
+          \begin{mycomment}
+            Thank you for your valuable feedback.
+            It is true that there are theoretical issues for using the KL-LUCB
+            algorithm, although our results suggest that its practical effect
+            is negligible.
+            We leave the issues to the future work because of our limited time.
+          \end{mycomment}
+
+    \item The title of the `Challenges and Future Work' section could be more
+          aptly replaced with `Discussion' to better reflect the content.
+
+          \begin{mycomment}
+            Thank you for your suggestion. We renamed the section to `Discussion'.
+          \end{mycomment}
+  \end{itemize}
+}
+
+% Reset page number and typeset title
+\newpage
+\setcounter{page}{1}
 \maketitle
 
 % The abstract should briefly summarize the contents of the paper in
@@ -277,7 +325,7 @@ is shown in \cref{fig:example-rlime}.
 It is clear that users can apply the insights derived from the explanation
 only to the sentences containing the word ``not''.
 
-\section{Related Work}
+\section{Related Work}\label{sec:related-work}
 \begin{figure}[tbp]
   \centering
   \def\w{2.5}
@@ -351,7 +399,8 @@ However, providing global explanations becomes challenging
 as the model's complexity increases.
 In contrast, local methods,
 such as local interpretable model-agnostic explanations
-(LIME)~\cite{ribeiro2016why} and Anchor~\cite{ribeiro2018anchors},
+(LIME)~\cite{ribeiro2016why}, Anchor~\cite{ribeiro2018anchors} and
+\hl{shapley additive explanations (SHAP)}~\cite{lundberg2017unified},
 explain model's behavior in the vicinity of a specific input.
 While they offer explanations more simple and accurate
 than global methods,
@@ -751,100 +800,72 @@ it is crucial for users to interpret the outputs of black-box models appropriate
     }
     {%
       \def\scale{0.315}
-      \def\imgwidth{0.495\textwidth}
+      \def\dir{exp1/ver1/examples/output}
+      \def\imgwidth{0.3\textwidth}
       \def\hspacebase{\hspace{-1.5em}}
       \def\vspacebase{\vspace{0.5em}}
       \def\vspacebeforecaption{\vspace{-0.4em}}
-      \begin{figure}[p]
-        \centering
-        \begin{subfigure}[t]{\imgwidth}
+
+      \newcommand{\limesubfigure}[2]{
+        \begin{subfigure}[t]{\textwidth}
+          \hspace{#2}
+          \includegraphics[scale=\scale]{exp1/ver1/examples/output/lime-\index{#1}}
+          \caption{LIME}\label{fig:lime-#1}
+          \vspace{1.0em}
+        \end{subfigure}
+      }
+      \newcommand{\anchorsubfigure}[1]{
+        \foreach{\a} in {70,80,90}{
+            \begin{subfigure}[t]{\textwidth}
+              \centering
+              \includegraphics[scale=0.33]{exp1/ver2/examples/anchor-\index{#1}-\a}
+              \caption{\hl{Anchor ($\tau=0.\a$)}}
+              \vspace{1.0em}
+            \end{subfigure}
+          }
+      }
+      \newcommand{\rlimesubfigure}[3]{
+        \begin{subfigure}[t]{\textwidth}
           \hspacebase{}
-          \hspace{1.0em}
-          \includegraphics[scale=\scale]{lime-\Asample}
+          \hspace{#3}
+          \includegraphics[scale=\scale]{exp1/ver1/examples/output/newlime-\index{#1}-#2}
           \vspacebeforecaption{}
-          \caption{LIME}\label{fig:A-lime}
+          \caption{R-LIME ($\tau=0.#2$)}\label{fig:rlime-#1-#2}
           \vspacebase{}
         \end{subfigure}
-        \begin{subfigure}[t]{\imgwidth}
-          \hspacebase{}
-          \hspace{0.5em}
-          \includegraphics[scale=\scale]{newlime-\Asample-70}
-          \vspacebeforecaption{}
-          \caption{R-LIME ($\tau=0.70$)}\label{fig:A-rlime-70}
-          \vspacebase{}
+      }
+      \begin{figure}[t]
+        \begin{subfigure}[t]{0.45\textwidth}
+          \centering
+          \limesubfigure{0}{-10pt}
+          \anchorsubfigure{0}
         \end{subfigure}
-        \begin{subfigure}[t]{\imgwidth}
-          \hspacebase{}
-          \includegraphics[scale=\scale]{newlime-\Asample-80}
-          \vspacebeforecaption{}
-          \caption{R-LIME ($\tau=0.80$)}
-        \end{subfigure}
-        \begin{subfigure}[t]{\imgwidth}
-          \hspacebase{}
-          \hspace{-0.5em}
-          \includegraphics[scale=\scale]{newlime-\Asample-90}
-          \vspacebeforecaption{}
-          \caption{R-LIME ($\tau=0.90$)}
+        \hfill
+        \begin{subfigure}[t]{0.45\textwidth}
+          \rlimesubfigure{0}{70}{-10pt}
+
+          \vspace{12pt}
+          \rlimesubfigure{0}{90}{-22pt}
         \end{subfigure}
         \caption[Explanation for Instance A by LIME and R-LIME]{%
           Explanation for Instance A by LIME and R-LIME\@.
         }\label{fig:A}
       \end{figure}
-      \begin{figure}[p]
-        \centering
-        \begin{subfigure}[t]{\imgwidth}
-          \hspacebase{}
-          \hspace{-0.7em}
-          \includegraphics[scale=\scale]{lime-\Bsample}
-          \vspacebeforecaption{}
-          \caption{LIME}\label{fig:B-lime}
-          \vspacebase{}
+      \begin{figure}[t]
+        \begin{subfigure}[t]{0.45\textwidth}
+          \limesubfigure{1}{-30pt}
+          \anchorsubfigure{1}
         \end{subfigure}
-        \begin{subfigure}[t]{\imgwidth}
-          \hspacebase{}
-          \hspace{0.5em}
-          \includegraphics[scale=\scale]{newlime-\Bsample-70}
-          \vspacebeforecaption{}
-          \caption{R-LIME ($\tau=0.70$)}
-          \vspacebase{}
-        \end{subfigure}
-        \begin{subfigure}[t]{\imgwidth}
-          \hspacebase{}
-          \hspace{-0.8em}
-          \includegraphics[scale=\scale]{newlime-\Bsample-80}
-          \vspacebeforecaption{}
-          \caption{R-LIME ($\tau=0.80$)}
-        \end{subfigure}
-        \begin{subfigure}[t]{\imgwidth}
-          \hspacebase{}
-          \hspace{-0.8em}
-          \includegraphics[scale=\scale]{newlime-\Bsample-90}
-          \vspacebeforecaption{}
-          \caption{R-LIME ($\tau=0.90$)}\label{fig:B-rlime-90}
+        \hfill
+        \begin{subfigure}[t]{0.45\textwidth}
+          \rlimesubfigure{1}{70}{-10pt}
+
+          \vspace{18pt}
+          \rlimesubfigure{1}{90}{-25pt}
         \end{subfigure}
         \caption[Explanation for Instance B by LIME and R-LIME]{%
           Explanation for Instance B by LIME and R-LIME\@.
         }\label{fig:B}
-      \end{figure}
-      \newcommand{\anchorsubfigure}[2]{
-        \def\dir{src/experiments/exp1/ver2/examples}
-        \begin{subfigure}[t]{\imgwidth}
-          \centering
-          \includegraphics[scale=\scale]{\dir/anchor-#1-#2}
-          \vspacebeforecaption{}
-          \caption{$\tau=0.#2$}
-          \vspacebase{}
-        \end{subfigure}
-      }
-      \begin{figure}[tbp]
-        \centering
-        \foreach{\tauloop}in{70,80,90}{\anchorsubfigure{\Asample}{\tauloop}}
-        \caption{Explanation for Instance A by Anchor.}
-      \end{figure}
-      \begin{figure}[tbp]
-        \centering
-        \foreach{\tauloop}in{70,80,90}{\anchorsubfigure{\Bsample}{\tauloop}}
-        \caption{Explanation for Instance B by Anchor.}
       \end{figure}
     }
   }
@@ -856,7 +877,7 @@ to the output of the black-box classifier,
 normalized such that the absolute sum is 1.
 The figures display the 5 features with the highest absolute contribution.
 
-Explanations generated by LIME (\cref{fig:A-lime,fig:B-lime}) provide insights
+Explanations generated by LIME (\cref{fig:lime-0,fig:lime-1}) provide insights
 that having a prior offenses (\emph{Priors}),
 being served for a long time in prison (\emph{Months-Served}),
 and committing a crime against property (\emph{Crime against Property})
@@ -874,18 +895,44 @@ leaving users unable to determine to which prisoners the explanations are applic
 In contrast, R-LIME expresses the application scope of explanations
 as a conjunction of feature predicates.
 For example, the explanation for instance A
-under $\tau=0.70$ (\cref{fig:A-rlime-70}) indicates that it is applicable
+under $\tau=0.70$ (\cref{fig:rlime-0-70}) indicates that it is applicable
 only to married prisoner (\emph{Married} $=$\emph{Yes}).
 R-LIME explanations also provide their accuracy and coverage,
 allowing users to evaluate reliability and generality of the explanations.
 For example, the coverage of the explanation for instance B under $\tau=0.90$
-(\cref{fig:B-rlime-90}) is 0.01\%,
+(\cref{fig:rlime-1-90}) is 0.01\%,
 indicating that the decision boundaries around instance B are complex,
 making it challenging to obtain a high-accuracy linear approximation.
 This information allows users to discern that
 the application scope of this explanation is very narrow, limiting its utility.
 
-\subsection{Quantitative Evaluation}
+\begin{figure}[t]
+  \begin{subfigure}[t]{0.48\textwidth}
+    \centering
+    \includegraphics[scale=0.36,valign=t]{exp2/box_plot}
+    \caption[Comparison of Local Accuracy between R-LIME and LIME]{%
+      Comparison of local accuracy between LIME and R-LIME\@.
+      R-LIME achieved higher and less variable accuracy compared to LIME\@.
+    }\label{fig:box-plot}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{0.48\textwidth}
+    \centering
+    \includegraphics[scale=0.35,valign=t]{exp2b/comp_cov}
+    \vspace{3pt}
+    \caption[Comparison of Coverage between Anchor and R-LIME]{%
+      \hl{%
+        Comparison of coverage between Anchor and R-LIME\@.
+        R-LIME achieved higher coverage compared to Anchor
+        for almost values of $\tau$, especially for relatively small $\tau$.
+      }
+    }\label{fig:coverage}
+  \end{subfigure}
+  \caption{Comparison of existing methods (LIME, Anchor) and R-LIME.}
+\end{figure}
+
+\subsection{Quantitative Evaluation: LIME vs. R-LIME}
+
 \subsubsection{Experimental Setup}
 To demonstrate that R-LIME learns a highly accurate linear approximation model
 in the optimized approximation region,
@@ -896,16 +943,8 @@ we randomly sampled 100 instances from the test data of the recidivism dataset
 and generated explanations using LIME and R-LIME (with $\tau=0.70,0.80,0.90$).
 We then sampled 10,000 instances within the rectangular region
 obtained by R-LIME and calculated the local accuracy of both methods.
+
 \subsubsection{Experimental Results}
-\begin{figure}[tbp]
-  \centering
-  \includegraphics[width=0.5\textwidth]{box_plot}
-  \caption[Comparison of Local Accuracy between R-LIME and LIME]{%
-    Comparison of local accuracy between LIME and R-LIME\@.
-    R-LIME achieved higher and less variable accuracy compared to LIME
-    for all values of $\tau$.
-  }\label{fig:box-plot}
-\end{figure}
 The results are presented in \cref{fig:box-plot},
 showing the distribution of the local accuracy of the linear classifiers
 learned by LIME and R-LIME\@.
@@ -919,8 +958,36 @@ the variability in the accuracy of LIME widens.
 This indicates that the linear classifiers learned by LIME may not function
 effectively as approximation models depending on how the region is selected.
 
-\section{Challenges and Future Work}
- {%
+\subsection{\hl{Quantitative Evaluation: Anchor vs. R-LIME}}
+\subsubsection{\hl{Experimental Setup}}
+\hl{
+  To demonstrate that R-LIME explanations are more general than Anchor,
+  we conducted a comparison of the coverage of explanations
+  between Anchor and R-LIME\@.
+  Under the same settings as in
+}\cref{sec:exp-setting},
+\hl{
+  we generated Anchor and R-LIME explanations
+  for 100 instances from the test data of the recidivism dataset,
+  under the values of $\tau=0.70,0.80,0.90$.
+}
+
+\subsubsection{\hl{Experimental Results}}
+\hl{The results are presented in} \cref{fig:coverage},
+\hl{
+  showing the coverage of the explanations by Anchor and R-LIME\@.
+  The coverage of explanations generated by R-LIME is higher compared to Anchor
+  for almost values of $\tau$, especially for relatively small $\tau$.
+  It is because of the flexibility of the linear approximation models learned by
+  R-LIME, which captures the decision boundary more precisely.
+  In contrast,
+  Anchor uses only the intervals of each feature discretized in advance,
+  which cannot capture the decision boundary flexibly and makes its scope narrow.
+}
+
+
+\section{\hl{Discussion}}\label{sec:discussion}
+{%
   \def\imgwidth{0.47\textwidth}
   \begin{figure}[t]
     \centering
@@ -942,7 +1009,7 @@ effectively as approximation models depending on how the region is selected.
       linear approximation model always outputs the majority label.
     }\label{fig:imbalanced}
   \end{figure}
- }
+}
 
 \subsection{Behavior Regarding Imbalanced Label Distribution}
 R-LIME may generate less useful explanations
