@@ -1,8 +1,6 @@
 """Compare LIME and R-LIME on the recidivism dataset."""
 
 import csv
-import multiprocessing
-from functools import partial
 from pathlib import Path
 
 import numpy as np
@@ -31,18 +29,22 @@ def main() -> None:
     for tau in [0.90]:
         print(f"tau = {tau:.2f}")
 
-        result_list = multiprocessing.Manager().list()
+        # result_list = multiprocessing.Manager().list()
 
-        func = partial(
-            compare_lime_and_newlime,
-            dataset=dataset,
-            black_box=black_box,
-            tau=tau,
-            result_list=result_list,
-        )
+        # func = partial(
+        #     compare_lime_and_newlime,
+        #     dataset=dataset,
+        #     black_box=black_box,
+        #     tau=tau,
+        #     result_list=result_list,
+        # )
 
-        with multiprocessing.Pool() as pool:
-            pool.map(func, range(sample_num))
+        # with multiprocessing.Pool() as pool:
+        #     pool.map(func, range(sample_num))
+
+        result_list: list[tuple[float, float]] = []
+        for idx in range(sample_num):
+            compare_lime_and_newlime(idx, dataset, black_box, tau, result_list)
 
         lime_acc, rlime_acc = zip(*result_list)
         print("LIME")
@@ -65,6 +67,7 @@ def calc_accuracy(
     lime_weights: list[float],
     rlime_weights: list[float],
     lime_scaler: StandardScaler,
+    rlime_scaler: StandardScaler,
 ) -> tuple[float, float]:
     """Calculate the precision of LIME and R-LIME.
 
@@ -86,9 +89,6 @@ def calc_accuracy(
     tuple[float, float]
         The precision of LIME and R-LIME.
     """
-    rlime_scaler = StandardScaler()
-    rlime_scaler.fit(samples)
-
     # Get predictions of LIME and R-LIME.
     lime_pred = np.dot(lime_scaler.transform(samples), lime_weights) > 0
     rlime_pred = np.dot(rlime_scaler.transform(samples), rlime_weights) > 0
@@ -132,6 +132,9 @@ def compare_lime_and_newlime(
 
     lime_weights, scaler = rlime_lime.explain(trg, sampler, 5000)
 
+    scale_samples, _ = sampler.sample(10000, ())
+    rlime_scaler = StandardScaler().fit(scale_samples)
+
     def get_rlime_weights() -> tuple[list[float], Rule] | None:
         try:
             csv_name = (
@@ -142,7 +145,6 @@ def compare_lime_and_newlime(
                 reader = csv.reader(f)
                 weights = [float(x) for x in next(reader)]
                 rule = tuple([int(x) for x in next(reader)])
-                print(next(reader))
             return weights, Rule(rule)
         except FileNotFoundError:
             print(f"Process {idx:03d} Found No explanations.")
@@ -150,11 +152,14 @@ def compare_lime_and_newlime(
 
     if (result := get_rlime_weights()) is not None:
         rlime_weights, rule = result
+        print(rule)
         samples, labels = sampler.sample(10000, rule)
-        print(rlime_weights, rule)
+        print(trg)
+        print(samples[0])
+        rlime_scaler = StandardScaler().fit(samples)
 
         lime_acc, rlime_acc = calc_accuracy(
-            samples, labels, lime_weights, rlime_weights, scaler
+            samples, labels, lime_weights, rlime_weights, scaler, rlime_scaler
         )
 
         # Print and save the results.

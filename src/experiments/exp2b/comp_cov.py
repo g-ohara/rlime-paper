@@ -7,8 +7,7 @@ from statistics import mean, stdev
 import matplotlib.pyplot as plt
 
 EXAMPLES_DIR_NAME = "src/rlime-examples/examples"
-
-sample_num = 100
+SAMPLE_NUM = 703
 
 
 def get_weights(idx: int) -> list[float] | None:
@@ -69,9 +68,9 @@ def main() -> None:
 
     tau_list = [65, 70, 75, 80, 85, 90]
     for tau in tau_list:
-        anchor_covs = [get_anchor_cov(idx, tau) for idx in range(sample_num)]
+        anchor_covs = [get_anchor_cov(idx, tau) for idx in range(SAMPLE_NUM)]
         anchor_covs = [x for x in anchor_covs if x is not None]
-        rlime_covs = [get_rlime_cov(idx, tau) for idx in range(sample_num)]
+        rlime_covs = [get_rlime_cov(idx, tau) for idx in range(SAMPLE_NUM)]
         rlime_covs = [x for x in rlime_covs if x is not None]
 
         print("----")

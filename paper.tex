@@ -60,7 +60,126 @@
 % import the TeX file containing macro definitions
 \input{src/tex/macro}
 
+
 \begin{document}
+
+\newenvironment{mycomment}{
+  \vspace{10pt}\hspace{.02\textwidth}\begin{minipage}{.92\textwidth}
+    }{\end{minipage}}
+
+\section*{Reviewer Response}
+We deeply appriciate all the reviewers who made valuable and insightful comments
+on our paper and gave us the opportunity to submit a revised version.
+We have done our best for the revision according to their comments as shown below.
+We also would like to thank in advance all the reviewers for reconsidering
+the suitability of our revised paper for the conference.
+
+\subsection*{Summary of revisions}
+We would like to appriciate all the reviewers for their clear and insightful
+comments.
+We improved our paper from the original version according to their comments.
+The major revision points are listed as follows:
+\begin{enumerate}
+  \item We added an overview of other existing methods to \cref{sec:related-work}.
+  \item We added discussion about parameter selection in \cref{sec:param}.
+  \item We conducted comparisons between Anchor and R-LIME to \cref{sec:related-work}.
+\end{enumerate}
+Please see below for a point-by-point response to each reviewer's comments.
+
+\subsection*{Responding to Reviewer \#1}
+Suggestions for Rebuttal:
+\begin{enumerate}
+  \setlength{\itemsep}{15pt}
+  \item Offer guidance on how to select optimal parameters for different
+        datasets and models.
+
+        \begin{mycomment}
+          We would appreciate for your suggestion.
+          We added \cref{sec:param} as a guidance on how parameters should be
+          selected in practice.
+        \end{mycomment}
+
+  \item Include a discussion of other model-agnostic interpretability methods,
+        such as SHAP, to provide a more comprehensive overview.
+
+        \begin{mycomment}
+          Thank you for your valuable suggestion.
+          We should add an overview of other model-agnostic interpretability
+          methods, but we only added names of some other methods to
+          \cref{sec:related-work} because of lack of space.
+        \end{mycomment}
+
+  \item Add experimental comparisons with more other model-agnostic \\
+        interpretability methods to better evaluate R-LIME's effectiveness.
+
+        \begin{mycomment}
+          We would like to appriciate your sharp observations.
+          We additionally conducted qualitative and quantitative comparisons
+          between Anchor and R-LIME,
+          which demonstrated that R-LIME generates more informative and
+          general explanations than Anchor (see \cref{sec:exp-qual,sec:exp-anchor}).
+        \end{mycomment}
+\end{enumerate}
+\subsection*{Responding to Reviewer \#4}
+The authors should kindly explain why there is not a quantitative comparison
+between their proposed method R-LIME and Anchor. The lack of the comparison
+makes it hard to evaluate the impact of the proposed model.
+
+\begin{mycomment}
+  We would appreciate for your insightful comments.
+  We additionally conducted qualitative and quantitative comparisons
+  between Anchor and R-LIME,
+  which demonstrated that R-LIME generates more informative and
+  general explanations than Anchor (see \cref{sec:exp-qual,sec:exp-anchor}).
+\end{mycomment}
+
+\subsection*{Responding to Reviewer \#5}
+\begin{itemize}
+  \setlength{\itemsep}{15pt}
+  \item It would be beneficial to move the comparison of R-LIME with Anchor
+        and LIME to the Related Work section for improved clarity and
+        organization.
+
+        \begin{mycomment}
+          We would like to appriciate for your insightful suggestion.
+          We interpreted your suggestrion to mean that we should move
+          \cref{fig:example} and its explanation to \cref{sec:related-work}.
+          We discussed about the most understandable structure of our paper.
+          And for clarity, we concluded that we should present effectiveness
+          of R-LIME compared to existing methods closely related to our method
+          in \cref{sec:introduction},
+          before we overview other existing methods in \cref{sec:related-work}.
+        \end{mycomment}
+
+  \item The authors should consider exploring a more compatible method than the
+        KL-LUCB algorithm to achieve higher accuracy. Although the experimental
+        results suggest a minor effect, there may be potential underlying issues
+        that need to be addressed.
+
+        \begin{mycomment}
+          Thank you for your valuable feedback.
+          It is true that we must address theoretical issues for using
+          KL-LUCB algorithm, although our results suggest that its practical
+          effect is negligible.
+          We focus on presenting our novel framework for local interpretability,
+          not on the detailed algorithm.
+          Thus, we leave the issues for future work because of lack of space.
+          But we deeply appreciate for your sharp observations.
+        \end{mycomment}
+
+  \item The title of the `Challenges and Future Work' section could be more
+        aptly replaced with `Discussion' to better reflect the content.
+
+        \begin{mycomment}
+          Thank you for your suggestion. We renamed the section to `Discussion'
+          for clearly reflecting the content.
+        \end{mycomment}
+\end{itemize}
+
+\newcommand{\sampleindex}[1]{\ifnum#1=0 \Asample\else\Bsample\fi}
+\def\AB#1{\ifnum#1=0 A\else B\fi}
+
+\def\paper{
 
 % The title of the paper
 \title{%
@@ -90,93 +209,6 @@
   Sapporo 060--0814, JAPAN,\\
   \email{\{genji-ohara, kimura5, mine\}@ist.hokudai.ac.jp}}
 
-{%
-  \newenvironment{mycomment}{
-    \vspace{10pt}\hspace{.02\textwidth}\begin{minipage}{.92\textwidth}
-      }{\end{minipage}}
-  \section*{Reviewer Response}
-  We would like to appriciate all the reviewers for their very helpful comments.
-  We added an overview of other existing methods, discussion about parameter
-  selection, and comparisons between Anchor and R-LIME\@.
-  Below are suggestions from reviewers and our response.
-
-  \subsection*{Reviewer \#1}
-  Suggestions for Rebuttal:
-  \begin{enumerate}
-    \setlength{\itemsep}{15pt}
-    \item Offer guidance on how to select optimal parameters for different
-          datasets and models.
-
-          \begin{mycomment}
-            Thank you for your suggestion. We added guidance on how parameters
-            should be selected in practical use cases to \cref{sec:discussion}.
-          \end{mycomment}
-
-    \item Include a discussion of other model-agnostic interpretability methods,
-          such as SHAP, to provide a more comprehensive overview.
-
-          \begin{mycomment}
-            Thank you for your suggestion. We added an overview of other
-            model-agnostic interpretability methods to \cref{sec:related-work}.
-          \end{mycomment}
-
-    \item Add experimental comparisons with more other model-agnostic \\
-          interpretability methods to better evaluate R-LIME's effectiveness.
-
-          \begin{mycomment}
-            Thank you for your suggestion. We additionally conducted qualitative
-            and quantitative comparisons between Anchor and R-LIME,
-            which demonstrated that R-LIME is more effective than Anchor.
-          \end{mycomment}
-  \end{enumerate}
-
-  \subsection*{Reviewer \#4}
-  The authors should kindly explain why there is not a quantitative comparison
-  between their proposed method R-LIME and Anchor. The lack of the comparison
-  makes it hard to evaluate the impact of the proposed model.
-
-  \begin{mycomment}
-    Thank you for your insightful comments.
-  \end{mycomment}
-
-  \subsection*{Reviewer \#5}
-  \begin{itemize}
-    \setlength{\itemsep}{15pt}
-    \item It would be beneficial to move the comparison of R-LIME with Anchor
-          and LIME to the Related Work section for improved clarity and
-          organization.
-
-          \begin{mycomment}
-            Thank you for your suggestion.
-
-            \ldots
-          \end{mycomment}
-
-    \item The authors should consider exploring a more compatible method than the
-          KL-LUCB algorithm to achieve higher accuracy. Although the experimental
-          results suggest a minor effect, there may be potential underlying issues
-          that need to be addressed.
-
-          \begin{mycomment}
-            Thank you for your valuable feedback.
-            It is true that there are theoretical issues for using the KL-LUCB
-            algorithm, although our results suggest that its practical effect
-            is negligible.
-            We leave the issues to the future work because of our limited time.
-          \end{mycomment}
-
-    \item The title of the `Challenges and Future Work' section could be more
-          aptly replaced with `Discussion' to better reflect the content.
-
-          \begin{mycomment}
-            Thank you for your suggestion. We renamed the section to `Discussion'.
-          \end{mycomment}
-  \end{itemize}
-}
-
-% Reset page number and typeset title
-\newpage
-\setcounter{page}{1}
 \maketitle
 
 % The abstract should briefly summarize the contents of the paper in
@@ -208,7 +240,7 @@
   \keywords{Interpretable machine learning \and Local surrogate model}
 \end{abstract}
 
-\section{Introduction}
+\section{Introduction}\label{sec:introduction}
 In recent years,
 complex machine learning models, such as deep neural networks and random forests,
 have been widely introduced in various industrial fields
@@ -219,8 +251,8 @@ particularly in critical decision-making scenarios such as healthcare and financ
 where the opacity of decision process becomes a major obstacle to implementation.
 In order to address this problem,
 there has been extensive research in the field of post-hoc explanations
-for machine learning models~\cite{%
-  guidotti2018local,radulovic2023bella,ribeiro2016why,ribeiro2018anchors}.
+for machine learning models
+~\cite{guidotti2018local,ribeiro2016why,ribeiro2018anchors}.
 Existing post-hoc explanation methods are categorized
 into \emph{model-dependent} and \emph{model-agnostic} methods
 based on their dependence on the model's structure,
@@ -384,8 +416,8 @@ While these methods provide detailed explanations
 (e.g., layer-wise explanations for neural networks),
 it is often challenging
 to apply the same method to models with different structures.
-On the other hand,
-model-agnostic methods use only the output of the model.
+In contrast,
+model-agnostic methods use only the model's output.
 Although they are applicable to any model,
 they cannot explain the reasoning process inside the model.
 
@@ -398,7 +430,8 @@ aim to explain the model's behavior across the entire input space.
 However, providing global explanations becomes challenging
 as the model's complexity increases.
 In contrast, local methods,
-such as local interpretable model-agnostic explanations
+such as \hl{indivisual conditional expectation (ICE)}~\cite{goldstein2015peeking},
+local interpretable model-agnostic explanations
 (LIME)~\cite{ribeiro2016why}, Anchor~\cite{ribeiro2018anchors} and
 \hl{shapley additive explanations (SHAP)}~\cite{lundberg2017unified},
 explain model's behavior in the vicinity of a specific input.
@@ -694,7 +727,7 @@ Overall, the computational complexity of R-LIME is comparable to that of Anchor.
 To verify the effectiveness of the proposed method,
 we compared LIME and R-LIME using a real-world dataset.
 
-\subsection{Qualitative Evaluation}
+\subsection{Qualitative Evaluation}\label{sec:exp-qual}
 \subsubsection{Experimental Setup}\label{sec:exp-setting}
 {%
   \renewcommand{\arraystretch}{1.05}
@@ -767,10 +800,8 @@ it is crucial for users to interpret the outputs of black-box models appropriate
     \def\dir{src/experiments/exp1/ver1/examples/output}
     \def\Asample{0012}
     \def\Bsample{0011}
-    \def\index#1{\ifnum#1=0 \Asample\else\Bsample\fi}
 
     {%
-      \def\AB#1{\ifnum#1=0 A\else B\fi}
       \renewcommand{\arraystretch}{1.02}
       \begin{figure}[tbp]
         \foreach\a in {0,1}{%
@@ -780,7 +811,7 @@ it is crucial for users to interpret the outputs of black-box models appropriate
               \begin{tabular}{p{14em}m{16em}}
                 \toprule
                 \csvreader[no head, late after line= \\]{%
-                  \dir/\index{\a}.csv
+                  \dir/\sampleindex{\a}.csv
                 }{}{%
                 \ifnum\thecsvrow=16 \midrule\fi\csvcoli & \csvcolii % chktex 1
                 }
@@ -798,77 +829,9 @@ it is crucial for users to interpret the outputs of black-box models appropriate
         }\label{fig:instance}
       \end{figure}
     }
-    {%
-      \def\scale{0.315}
-      \def\dir{exp1/ver1/examples/output}
-      \def\imgwidth{0.3\textwidth}
-      \def\hspacebase{\hspace{-1.5em}}
-      \def\vspacebase{\vspace{0.5em}}
-      \def\vspacebeforecaption{\vspace{-0.4em}}
-
-      \newcommand{\limesubfigure}[2]{
-        \begin{subfigure}[t]{\textwidth}
-          \hspace{#2}
-          \includegraphics[scale=\scale]{exp1/ver1/examples/output/lime-\index{#1}}
-          \caption{LIME}\label{fig:lime-#1}
-          \vspace{1.0em}
-        \end{subfigure}
-      }
-      \newcommand{\anchorsubfigure}[1]{
-        \foreach{\a} in {70,80,90}{
-            \begin{subfigure}[t]{\textwidth}
-              \centering
-              \includegraphics[scale=0.33]{exp1/ver2/examples/anchor-\index{#1}-\a}
-              \caption{\hl{Anchor ($\tau=0.\a$)}}
-              \vspace{1.0em}
-            \end{subfigure}
-          }
-      }
-      \newcommand{\rlimesubfigure}[3]{
-        \begin{subfigure}[t]{\textwidth}
-          \hspacebase{}
-          \hspace{#3}
-          \includegraphics[scale=\scale]{exp1/ver1/examples/output/newlime-\index{#1}-#2}
-          \vspacebeforecaption{}
-          \caption{R-LIME ($\tau=0.#2$)}\label{fig:rlime-#1-#2}
-          \vspacebase{}
-        \end{subfigure}
-      }
-      \begin{figure}[t]
-        \begin{subfigure}[t]{0.45\textwidth}
-          \centering
-          \limesubfigure{0}{-10pt}
-          \anchorsubfigure{0}
-        \end{subfigure}
-        \hfill
-        \begin{subfigure}[t]{0.45\textwidth}
-          \rlimesubfigure{0}{70}{-10pt}
-
-          \vspace{12pt}
-          \rlimesubfigure{0}{90}{-22pt}
-        \end{subfigure}
-        \caption[Explanation for Instance A by LIME and R-LIME]{%
-          Explanation for Instance A by LIME and R-LIME\@.
-        }\label{fig:A}
-      \end{figure}
-      \begin{figure}[t]
-        \begin{subfigure}[t]{0.45\textwidth}
-          \limesubfigure{1}{-30pt}
-          \anchorsubfigure{1}
-        \end{subfigure}
-        \hfill
-        \begin{subfigure}[t]{0.45\textwidth}
-          \rlimesubfigure{1}{70}{-10pt}
-
-          \vspace{18pt}
-          \rlimesubfigure{1}{90}{-25pt}
-        \end{subfigure}
-        \caption[Explanation for Instance B by LIME and R-LIME]{%
-          Explanation for Instance B by LIME and R-LIME\@.
-        }\label{fig:B}
-      \end{figure}
-    }
   }
+
+\input{src/fig-examples}
 \subsubsection{Experimental Results}
 The results of the experiment are shown in \cref{fig:A,fig:B}.
 The values assigned to each feature name represent the contribution
@@ -891,6 +854,20 @@ While these LIME explanations provide valuable insights into the behavior of
 the black-box model,
 they do not explicitly indicate the application scope of the explanations,
 leaving users unable to determine to which prisoners the explanations are applicable.
+
+\hl{
+  Anchor provides conditions for the model's output to be fixed with high
+  probability.
+  For example,
+  the explanation for instance A under $\tau=0.70$
+} (\cref{fig:anchor-0-70})
+\hl{
+  means that the model will predict with 75.66 \% probability
+  that the prisoner will commit no more crimes
+  when a prisoner is older than 33 and has one prior offense.
+  Although it clearly provides the explanation's application scope,
+  it does not provide details about how these conditions affect the model's output.
+}
 
 In contrast, R-LIME expresses the application scope of explanations
 as a conjunction of feature predicates.
@@ -931,6 +908,7 @@ the application scope of this explanation is very narrow, limiting its utility.
   \caption{Comparison of existing methods (LIME, Anchor) and R-LIME.}
 \end{figure}
 
+\vspace{-1pt}
 \subsection{Quantitative Evaluation: LIME vs. R-LIME}
 
 \subsubsection{Experimental Setup}
@@ -944,6 +922,7 @@ and generated explanations using LIME and R-LIME (with $\tau=0.70,0.80,0.90$).
 We then sampled 10,000 instances within the rectangular region
 obtained by R-LIME and calculated the local accuracy of both methods.
 
+\vspace{-5pt}
 \subsubsection{Experimental Results}
 The results are presented in \cref{fig:box-plot},
 showing the distribution of the local accuracy of the linear classifiers
@@ -958,7 +937,7 @@ the variability in the accuracy of LIME widens.
 This indicates that the linear classifiers learned by LIME may not function
 effectively as approximation models depending on how the region is selected.
 
-\subsection{\hl{Quantitative Evaluation: Anchor vs. R-LIME}}
+\subsection{\hl{Quantitative Evaluation: Anchor vs. R-LIME}}\label{sec:exp-anchor}
 \subsubsection{\hl{Experimental Setup}}
 \hl{
   To demonstrate that R-LIME explanations are more general than Anchor,
@@ -986,8 +965,8 @@ effectively as approximation models depending on how the region is selected.
 }
 
 
-\section{\hl{Discussion}}\label{sec:discussion}
-{%
+\section{\hl{Discussion}}
+ {%
   \def\imgwidth{0.47\textwidth}
   \begin{figure}[t]
     \centering
@@ -1009,7 +988,7 @@ effectively as approximation models depending on how the region is selected.
       linear approximation model always outputs the majority label.
     }\label{fig:imbalanced}
   \end{figure}
-}
+ }
 
 \subsection{Behavior Regarding Imbalanced Label Distribution}
 R-LIME may generate less useful explanations
@@ -1075,6 +1054,19 @@ the deviation was relatively small.
 While there are concerns about the theoretical validity of using the KL-LUCB algorithm,
 our results suggest that the deviation is not significant in practice.
 
+\subsection{\hl{Parameter Selection}}\label{sec:param}
+
+\hl{
+  R-LIME requires some hyperparameters to be selected by users,
+  such as the threshold of accuracy $\tau$, beam width $B$, tolerance $\epsilon$
+  and confidence level $\delta$.
+  $B$ should be large and $\epsilon$ and $\delta$ should be small for
+  accurate results, as long as the computational cost is acceptable.
+  $\tau$ should be carefully selected by users, sometimes interactively,
+  considering the tradeoff between
+  the accuracy and generality of the explanation.
+}
+
 \section{Conclusion}
 Existing methods for
 local model-agnostic explanations of black-box classifiers,
@@ -1097,7 +1089,18 @@ Finally, we discussed the instability of behavior against imbalanced label
 distributions and raised questions about the theoretical validity of using
 the KL-LUCB algorithm for our problem.
 
+\newpage
 \bibliographystyle{src/style/splncs04}
 \bibliography{src/myref/myref}
+}
+
+% Reset page number and typeset title
+\newpage
+\setcounter{page}{1}
+\paper{}
+\renewcommand{\hl}[1]{#1}
+% \newpage
+% \setcounter{page}{1}
+% \paper{}
 
 \end{document}
