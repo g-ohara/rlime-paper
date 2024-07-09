@@ -82,7 +82,8 @@ The major revision points are listed as follows:
 \begin{enumerate}
   \item We added an overview of other existing methods to \cref{sec:related-work}.
   \item We added discussion about parameter selection in \cref{sec:param}.
-  \item We conducted comparisons between Anchor and R-LIME to \cref{sec:related-work}.
+  \item We conducted qualitative and quantitative comparisons
+        between Anchor and R-LIME in \cref{sec:exp-qual,sec:exp-anchor}.
 \end{enumerate}
 Please see below for a point-by-point response to each reviewer's comments.
 
@@ -831,7 +832,112 @@ it is crucial for users to interpret the outputs of black-box models appropriate
     }
   }
 
-\input{src/fig-examples}
+  {%
+    \def\scale{0.315}
+    \def\dir{exp1/ver1/examples/output}
+    \def\imgwidth{0.3\textwidth}
+    \def\hspacebase{\hspace{-1.5em}}
+    \def\vspacebase{\vspace{0.5em}}
+    \def\vspacebeforecaption{\vspace{-0.4em}}
+    \begin{figure}[t]
+      \begin{subfigure}[t]{0.45\textwidth}
+        \centering
+        \begin{subfigure}[t]{\textwidth}
+          \hspace{-10pt}
+          \includegraphics[scale=\scale]{exp1/ver1/examples/output/lime-0012}
+          \caption{LIME}\label{fig:lime-0}
+          \vspace{1.0em}
+        \end{subfigure}
+
+        \vspace{10pt}
+        \begin{subfigure}[t]{\textwidth}
+          \centering
+          \includegraphics[scale=0.33]{exp1/ver2/examples/anchor-0012-70}  % chktex 8
+          \caption{\hl{Anchor ($\tau=0.70$)}}\label{fig:anchor-0-70}
+          \vspace{1.0em}
+        \end{subfigure}
+
+        \vspace{10pt}
+        \begin{subfigure}[t]{\textwidth}
+          \centering
+          \includegraphics[scale=0.33]{exp1/ver2/examples/anchor-0012-90}  % chktex 8
+          \caption{\hl{Anchor ($\tau=0.90$)}}
+          \vspace{1.0em}
+        \end{subfigure}
+      \end{subfigure}
+      \hfill
+      \begin{subfigure}[t]{0.45\textwidth}
+        \begin{subfigure}[t]{\textwidth}
+          \hspacebase{}
+          \hspace{-5pt}
+          \includegraphics[scale=\scale]{exp1/ver1/examples/output/newlime-0012-70}  % chktex 8
+          \vspacebeforecaption{}
+          \caption{R-LIME ($\tau=0.70$)}\label{fig:rlime-0-70}
+          \vspacebase{}
+        \end{subfigure}
+        \begin{subfigure}[t]{\textwidth}
+          \hspacebase{}
+          \hspace{-17pt}
+          \includegraphics[scale=\scale]{exp1/ver1/examples/output/newlime-0012-90}  % chktex 8
+          \vspacebeforecaption{}
+          \caption{R-LIME ($\tau=0.90$)}
+          \vspacebase{}
+        \end{subfigure}
+      \end{subfigure}
+      \caption[Explanation for Instance A by LIME and R-LIME]{%
+        Explanation for Instance A by LIME and R-LIME\@.
+      }\label{fig:A}
+    \end{figure}
+    \begin{figure}[t]
+      \begin{subfigure}[t]{0.45\textwidth}
+        \begin{subfigure}[t]{\textwidth}
+          \hspace{-26.5pt}
+          \includegraphics[scale=\scale]{exp1/ver1/examples/output/lime-0011}
+          \caption{LIME}\label{fig:lime-1}
+          \vspace{1.0em}
+        \end{subfigure}
+
+        \vspace{10pt}
+        \begin{subfigure}[t]{\textwidth}
+          \centering
+          \includegraphics[scale=0.33]{exp1/ver2/examples/anchor-0011-70}  % chktex 8
+          \caption{\hl{Anchor ($\tau=0.70$)}}
+          \vspace{1.0em}
+        \end{subfigure}
+
+        \vspace{10pt}
+        \begin{subfigure}[t]{\textwidth}
+          \centering
+          \includegraphics[scale=0.33]{exp1/ver2/examples/anchor-0011-90}  % chktex 8
+          \caption{\hl{Anchor ($\tau=0.90$)}}
+          \vspace{1.0em}
+        \end{subfigure}
+      \end{subfigure}
+      \hfill
+      \begin{subfigure}[t]{0.45\textwidth}
+        \begin{subfigure}[t]{\textwidth}
+          \hspacebase{}
+          \hspace{-5pt}
+          \includegraphics[scale=\scale]{exp1/ver1/examples/output/newlime-0011-70}  % chktex 8
+          \vspacebeforecaption{}
+          \caption{R-LIME ($\tau=0.90$)}
+          \vspacebase{}
+        \end{subfigure}
+        \begin{subfigure}[t]{\textwidth}
+          \hspacebase{}
+          \hspace{-20pt}
+          \includegraphics[scale=\scale]{exp1/ver1/examples/output/newlime-0011-90}  % chktex 8
+          \vspacebeforecaption{}
+          \caption{R-LIME ($\tau=0.90$)}\label{fig:rlime-1-90}
+          \vspacebase{}
+        \end{subfigure}
+      \end{subfigure}
+      \caption[Explanation for Instance B by LIME and R-LIME]{%
+        Explanation for Instance B by LIME and R-LIME\@.
+      }\label{fig:B}
+    \end{figure}
+  }
+
 \subsubsection{Experimental Results}
 The results of the experiment are shown in \cref{fig:A,fig:B}.
 The values assigned to each feature name represent the contribution
@@ -922,7 +1028,6 @@ and generated explanations using LIME and R-LIME (with $\tau=0.70,0.80,0.90$).
 We then sampled 10,000 instances within the rectangular region
 obtained by R-LIME and calculated the local accuracy of both methods.
 
-\vspace{-5pt}
 \subsubsection{Experimental Results}
 The results are presented in \cref{fig:box-plot},
 showing the distribution of the local accuracy of the linear classifiers
@@ -948,7 +1053,7 @@ effectively as approximation models depending on how the region is selected.
 \hl{
   we generated Anchor and R-LIME explanations
   for 100 instances from the test data of the recidivism dataset,
-  under the values of $\tau=0.70,0.80,0.90$.
+  under the values of $\tau=0.65,0.70,0.75,0.80,0.85,0.90$.
 }
 
 \subsubsection{\hl{Experimental Results}}
