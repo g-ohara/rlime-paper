@@ -60,34 +60,48 @@
 % import the TeX file containing macro definitions
 \input{src/tex/macro}
 
+% TODO REBUTTAL: Please enter paper ID
+\def\paperID{735} % *** Enter the paper ID here
+
 
 \begin{document}
-
-\newenvironment{mycomment}{
-  \vspace{10pt}\hspace{.02\textwidth}\begin{minipage}{.92\textwidth}
-    }{\end{minipage}}
-
-\section*{Reviewer Response}
-We deeply appriciate all the reviewers who made valuable and insightful comments
+\begin{center}
+  % smaller title font only for rebuttal
+  % additional two empty lines at the end of the title
+  \vspace*{-22pt}
+  \begin{tabular}[t]{c}{
+      \large\bf
+      Paper ID \paperID{}
+    }
+  \end{tabular}
+  \par
+  % additional small space at the end of the author name
+  % additional empty line at the end of the title block
+\end{center}
+We deeply appriciate all the reviewers who made sharp and valuable comments
 on our paper and gave us the opportunity to submit a revised version.
 We have done our best for the revision according to their comments as shown below.
 We also would like to thank in advance all the reviewers for reconsidering
 the suitability of our revised paper for the conference.
 
-\subsection*{Summary of revisions}
+\section*{Summary of revisions}
 We would like to appriciate all the reviewers for their clear and insightful
 comments.
 We improved our paper from the original version according to their comments.
 The major revision points are listed as follows:
 \begin{enumerate}
-  \item We added an overview of other existing methods to \cref{sec:related-work}.
+  \item We added an overview of other existing methods in \cref{sec:related-work}.
   \item We added discussion about parameter selection in \cref{sec:param}.
   \item We conducted qualitative and quantitative comparisons
         between Anchor and R-LIME in \cref{sec:exp-qual,sec:exp-anchor}.
 \end{enumerate}
 Please see below for a point-by-point response to each reviewer's comments.
 
-\subsection*{Responding to Reviewer \#1}
+\newenvironment{mycomment}{
+  \vspace{10pt}\hspace{.02\textwidth}\begin{minipage}{.92\textwidth}
+    }{\end{minipage}}
+
+\section*{Responding to Reviewer \#1}
 Suggestions for Rebuttal:
 \begin{enumerate}
   \setlength{\itemsep}{15pt}
@@ -107,7 +121,7 @@ Suggestions for Rebuttal:
           Thank you for your valuable suggestion.
           We should add an overview of other model-agnostic interpretability
           methods, but we only added names of some other methods to
-          \cref{sec:related-work} because of lack of space.
+          \cref{sec:related-work}, because of lack of space.
         \end{mycomment}
 
   \item Add experimental comparisons with more other model-agnostic \\
@@ -121,7 +135,7 @@ Suggestions for Rebuttal:
           general explanations than Anchor (see \cref{sec:exp-qual,sec:exp-anchor}).
         \end{mycomment}
 \end{enumerate}
-\subsection*{Responding to Reviewer \#4}
+\section*{Responding to Reviewer \#4}
 The authors should kindly explain why there is not a quantitative comparison
 between their proposed method R-LIME and Anchor. The lack of the comparison
 makes it hard to evaluate the impact of the proposed model.
@@ -134,7 +148,7 @@ makes it hard to evaluate the impact of the proposed model.
   general explanations than Anchor (see \cref{sec:exp-qual,sec:exp-anchor}).
 \end{mycomment}
 
-\subsection*{Responding to Reviewer \#5}
+\section*{Responding to Reviewer \#5}
 \begin{itemize}
   \setlength{\itemsep}{15pt}
   \item It would be beneficial to move the comparison of R-LIME with Anchor
@@ -656,15 +670,15 @@ By sampling $z\sim\mathcal{D}(\cdot|A_i)$
 and obtaining the reward $\mathbbm{1}_{f(z)=g_i(z)}$ for each trial,
 the algorithm updates $g_i$ using $z$ and $f(z)$ after each trial.
 To efficiently search the rule (arm) with the highest accuracy,
-we employ the KL-LUCB algorithm~\cite{kaufmann2013information}.
+we employ KL-LUCB algorithm~\cite{kaufmann2013information}.
 The pseudo-code is shown in \cref{alg:best-cands}.
-For tolerance $\epsilon\in[0,1]$, the KL-LUCB algorithm guarantees below:
+For tolerance $\epsilon\in[0,1]$, KL-LUCB algorithm guarantees below:
 \begin{equation}
   P(\underset{A\in\cands}{\min}\Prec(A)\ge
   \underset{A'\in\mathcal{A}}{\min}\Prec(A')-\epsilon)\ge1-\delta.
 \end{equation}
 However,
-the KL-LUCB algorithm assumes that the reward distribution for each arm
+KL-LUCB algorithm assumes that the reward distribution for each arm
 remains unchanged,
 while our method updates the classifier $g_i$ with each sampling,
 which may not satisfy the assumption.
@@ -691,7 +705,7 @@ The pseudo-code is presented in \cref{alg:largest-valid-cand}.
 % the solution to the optimization problem in \cref{eq:main-problem}
 % under the definition of accuracy in \cref{eq:def-prec}. 
 
-\subsection{Computational Complexity}
+\subsection{Computational Complexity}\label{subsec:complexity}
 Post-hoc explanation methods including LIME, Anchor, and R-LIME
 need to sample a perturbation vector
 and get the output of the black-box model multiple times,
@@ -725,9 +739,11 @@ from a multivariate normal distribution using Cholesky decomposition in advance.
 Overall, the computational complexity of R-LIME is comparable to that of Anchor.
 
 \section{Experiments}
-To verify the effectiveness of the proposed method,
-we compared LIME and R-LIME using a real-world dataset.
+To verify the effectiveness of our method,
+we compared LIME, \hl{Anchor} and R-LIME using a real-world dataset.
+\hl{Our code for R-LIME is available on GitHub}\footnote{\url{https://github.com/g-ohara/rlime}}.
 
+\newpage
 \subsection{Qualitative Evaluation}\label{sec:exp-qual}
 \subsubsection{Experimental Setup}\label{sec:exp-setting}
 {%
@@ -782,20 +798,20 @@ resulting in 15 features.
 We splitted the dataset into training data (7639 instances) and test data (955 instances),
 and trained a random forest model with 50 trees as the black-box classifier
 using the training data.
-Then, LIME and R-LIME explanations were generated
+Then, we generate LIME, \hl{Anchor} and R-LIME explanations
 for two instances extracted from the test data (\cref{fig:instance}).
 For R-LIME, we used logistic regression as the linear approximation model,
 and a multivariate normal distribution estimated from the training data
 as the distribution $\mathcal{D}$.
-The beam width was set to $B=10$,
+\hl{For both Anchor and R-LIME,} the beam width was set to $B=10$,
 the confidence coefficient to $1-\delta=0.95$,
-and the tolerance of the KL-LUCB algorithm to $\epsilon=0.05$.
-The accuracy threshold $\tau$ was set to $\tau=0.70,0.80,0.90$.
+and the tolerance of KL-LUCB algorithm to $\epsilon=0.05$.
+The accuracy threshold $\tau$ was set to $\tau=0.70,0.90$.
 
 This problem setting can be considered as a case
 where a complex machine learning model is introduced to decide parole for prisoners.
 Since such decisions can have a significant impact on a person's life,
-it is crucial for users to interpret the outputs of black-box models appropriately.
+it is crucial for users to appropriately interpret the outputs of black-box models.
   {%
 
     \def\dir{src/experiments/exp1/ver1/examples/output}
@@ -961,13 +977,13 @@ the black-box model,
 they do not explicitly indicate the application scope of the explanations,
 leaving users unable to determine to which prisoners the explanations are applicable.
 
-\hl{
+\hl{%
   Anchor provides conditions for the model's output to be fixed with high
   probability.
   For example,
   the explanation for instance A under $\tau=0.70$
 } (\cref{fig:anchor-0-70})
-\hl{
+\hl{%
   means that the model will predict with 75.66 \% probability
   that the prisoner will commit no more crimes
   when a prisoner is older than 33 and has one prior offense.
@@ -975,8 +991,9 @@ leaving users unable to determine to which prisoners the explanations are applic
   it does not provide details about how these conditions affect the model's output.
 }
 
-In contrast, R-LIME expresses the application scope of explanations
-as a conjunction of feature predicates.
+In contrast to LIME and Anchor,
+R-LIME provides both contribution of each feature to the output and
+the application scope of the explanation.
 For example, the explanation for instance A
 under $\tau=0.70$ (\cref{fig:rlime-0-70}) indicates that it is applicable
 only to married prisoner (\emph{Married} $=$\emph{Yes}).
@@ -1044,13 +1061,13 @@ effectively as approximation models depending on how the region is selected.
 
 \subsection{\hl{Quantitative Evaluation: Anchor vs. R-LIME}}\label{sec:exp-anchor}
 \subsubsection{\hl{Experimental Setup}}
-\hl{
+\hl{%
   To demonstrate that R-LIME explanations are more general than Anchor,
   we conducted a comparison of the coverage of explanations
   between Anchor and R-LIME\@.
   Under the same settings as in
 }\cref{sec:exp-setting},
-\hl{
+\hl{%
   we generated Anchor and R-LIME explanations
   for 100 instances from the test data of the recidivism dataset,
   under the values of $\tau=0.65,0.70,0.75,0.80,0.85,0.90$.
@@ -1058,7 +1075,7 @@ effectively as approximation models depending on how the region is selected.
 
 \subsubsection{\hl{Experimental Results}}
 \hl{The results are presented in} \cref{fig:coverage},
-\hl{
+\hl{%
   showing the coverage of the explanations by Anchor and R-LIME\@.
   The coverage of explanations generated by R-LIME is higher compared to Anchor
   for almost values of $\tau$, especially for relatively small $\tau$.
@@ -1095,7 +1112,7 @@ effectively as approximation models depending on how the region is selected.
   \end{figure}
  }
 
-\subsection{Behavior Regarding Imbalanced Label Distribution}
+\subsection{Behavior for Imbalanced Label Distribution}
 R-LIME may generate less useful explanations
 when the distribution of black-box classifier outputs is imbalanced.
 When the ratio of outputting the minority label is less than $1-\tau$,
@@ -1137,7 +1154,7 @@ could suppress the excessive expansion of the approximation region.
 For R-LIME,
 the problem of selecting the rule with the highest accuracy is formulated
 as the best arm identification problem in multi-armed bandit framework,
-and solved using the KL-LUCB algorithm~\cite{kaufmann2013information}.
+and solved using KL-LUCB algorithm~\cite{kaufmann2013information}.
 However, this algorithm assumes that the reward distribution remains constant,
 while in R-LIME,
 the reward distribution (accuracy of the linear approximation)
@@ -1156,20 +1173,23 @@ The results in \cref{tab:reward} show a mean deviation of 0.012
 with a standard deviation of 0.017.
 By considering the confidence level $1-\delta=0.95$,
 the deviation was relatively small.
-While there are concerns about the theoretical validity of using the KL-LUCB algorithm,
+While there are concerns about the theoretical validity of using KL-LUCB algorithm,
 our results suggest that the deviation is not significant in practice.
 
 \subsection{\hl{Parameter Selection}}\label{sec:param}
 
-\hl{
-  R-LIME requires some hyperparameters to be selected by users,
+\hl{In} \cref{subsec:complexity},
+\hl{%
+  we discussed about the computational complexity of R-LIME,
+  which depends on some hyperparameters.
+  R-LIME requires the hyperparameters to be selected by users,
   such as the threshold of accuracy $\tau$, beam width $B$, tolerance $\epsilon$
   and confidence level $\delta$.
   $B$ should be large and $\epsilon$ and $\delta$ should be small for
   accurate results, as long as the computational cost is acceptable.
-  $\tau$ should be carefully selected by users, sometimes interactively,
-  considering the tradeoff between
-  the accuracy and generality of the explanation.
+  On the other hand, $\tau$ should be carefully selected by users,
+  sometimes interactively, considering the tradeoff between
+  the accuracy and generality of generated explanation.
 }
 
 \section{Conclusion}
@@ -1186,13 +1206,14 @@ which is interpretable for users due to being expressed as a conjunction of feat
 We proposed an algorithm to
 maximize coverage of the approximation region
 as long as the accuracy of the linear approximation model exceeds a given threshold.
-Comparing the outputs of LIME and R-LIME on the real-world dataset,
-we demonstrated that R-LIME provides a clear application scope of the
-explanation, can be evaluated by users for its reliability and generality,
-and achieves higher and less variable local accuracy compared to LIME\@.
-Finally, we discussed the instability of behavior against imbalanced label
-distributions and raised questions about the theoretical validity of using
-the KL-LUCB algorithm for our problem.
+Comparing R-LIME with existing methods on the real-world dataset,
+we demonstrated that R-LIME achieves interpretability of both the explanation
+and its application scope,
+and provides explanations more accurate than LIME and more general than Anchor.
+Finally,
+we discussed the instability of behavior against imbalanced label distributions,
+raised questions about the theoretical validity of using KL-LUCB algorithm,
+and hyperparameter tuning in practice.
 
 \newpage
 \bibliographystyle{src/style/splncs04}
@@ -1204,8 +1225,8 @@ the KL-LUCB algorithm for our problem.
 \setcounter{page}{1}
 \paper{}
 \renewcommand{\hl}[1]{#1}
-% \newpage
-% \setcounter{page}{1}
-% \paper{}
+\newpage
+\setcounter{page}{1}
+\paper{}
 
 \end{document}
