@@ -78,23 +78,24 @@
   % additional small space at the end of the author name
   % additional empty line at the end of the title block
 \end{center}
-We deeply appriciate all the reviewers who made sharp and valuable comments
+We deeply appreciate all the reviewers who made sharp and valuable comments
 on our paper and gave us the opportunity to submit a revised version.
 We have done our best for the revision according to their comments as shown below.
-We also would like to thank in advance all the reviewers for reconsidering
-the suitability of our revised paper for the conference.
+We also thank in advance all the reviewers for reconsidering
+our revised paper's suitability for the conference.
 
 \section*{Summary of revisions}
-We would like to appriciate all the reviewers for their clear and insightful
+We appreciate all the reviewers for their clear and insightful
 comments.
-We improved our paper from the original version according to their comments.
+We have improved our paper based on their comments.
 The major revision points are listed as follows:
-\begin{enumerate}
-  \item We added an overview of other existing methods in \cref{sec:related-work}.
+\begin{itemize}
+  \item We mentioned the names of other existing methods in \cref{sec:related-work}.
   \item We added discussion about parameter selection in \cref{sec:param}.
   \item We conducted qualitative and quantitative comparisons
         between Anchor and R-LIME in \cref{sec:exp-qual,sec:exp-anchor}.
-\end{enumerate}
+  \item We renamed the section `Challenges and Future Work' to `Discussion'.
+\end{itemize}
 Please see below for a point-by-point response to each reviewer's comments.
 
 \newenvironment{mycomment}{
@@ -109,9 +110,9 @@ Suggestions for Rebuttal:
         datasets and models.
 
         \begin{mycomment}
-          We would appreciate for your suggestion.
-          We added \cref{sec:param} as a guidance on how parameters should be
-          selected in practice.
+          We appreciate your suggestion.
+          We added \cref{sec:param} to provide guidance on
+          how parameters should be selected in practice.
         \end{mycomment}
 
   \item Include a discussion of other model-agnostic interpretability methods,
@@ -119,16 +120,17 @@ Suggestions for Rebuttal:
 
         \begin{mycomment}
           Thank you for your valuable suggestion.
-          We should add an overview of other model-agnostic interpretability
-          methods, but we only added names of some other methods to
-          \cref{sec:related-work}, because of lack of space.
+          Although we acknowledge the importance of including an overview of
+          other model-agnostic interpretability methods,
+          due to space constraints, we only mentioned the names of some
+          other methods in \cref{sec:related-work}.
         \end{mycomment}
 
   \item Add experimental comparisons with more other model-agnostic \\
         interpretability methods to better evaluate R-LIME's effectiveness.
 
         \begin{mycomment}
-          We would like to appriciate your sharp observations.
+          We appreciate your sharp observations.
           We additionally conducted qualitative and quantitative comparisons
           between Anchor and R-LIME,
           which demonstrated that R-LIME generates more informative and
@@ -141,7 +143,7 @@ between their proposed method R-LIME and Anchor. The lack of the comparison
 makes it hard to evaluate the impact of the proposed model.
 
 \begin{mycomment}
-  We would appreciate for your insightful comments.
+  We appreciate your insightful comments.
   We additionally conducted qualitative and quantitative comparisons
   between Anchor and R-LIME,
   which demonstrated that R-LIME generates more informative and
@@ -156,13 +158,12 @@ makes it hard to evaluate the impact of the proposed model.
         organization.
 
         \begin{mycomment}
-          We would like to appriciate for your insightful suggestion.
-          We interpreted your suggestrion to mean that we should move
+          We appreciate your insightful suggestion.
+          We interpreted your suggestion to mean that we should move
           \cref{fig:example} and its explanation to \cref{sec:related-work}.
-          We discussed about the most understandable structure of our paper.
-          And for clarity, we concluded that we should present effectiveness
-          of R-LIME compared to existing methods closely related to our method
-          in \cref{sec:introduction},
+          After discussing the most understandable structure of our paper,
+          we concluded that we should present effectiveness of R-LIME
+          compared to closely related methods in \cref{sec:introduction},
           before we overview other existing methods in \cref{sec:related-work}.
         \end{mycomment}
 
@@ -173,13 +174,13 @@ makes it hard to evaluate the impact of the proposed model.
 
         \begin{mycomment}
           Thank you for your valuable feedback.
-          It is true that we must address theoretical issues for using
-          KL-LUCB algorithm, although our results suggest that its practical
-          effect is negligible.
-          We focus on presenting our novel framework for local interpretability,
-          not on the detailed algorithm.
-          Thus, we leave the issues for future work because of lack of space.
-          But we deeply appreciate for your sharp observations.
+          While our results suggest that the practical effect of using
+          the KL-LUCB algorithm is negligible,
+          we acknowledge the need to address its theoretical issues.
+          Our focus is on presenting our novel framework for local
+          interpretability, not the detailed algorithm.
+          Thus, we leave the issues for future work due to space constraints.
+          However, we deeply appreciate your sharp observations.
         \end{mycomment}
 
   \item The title of the `Challenges and Future Work' section could be more
@@ -187,7 +188,7 @@ makes it hard to evaluate the impact of the proposed model.
 
         \begin{mycomment}
           Thank you for your suggestion. We renamed the section to `Discussion'
-          for clearly reflecting the content.
+          to clearly reflect the content.
         \end{mycomment}
 \end{itemize}
 
@@ -230,25 +231,24 @@ makes it hard to evaluate the impact of the proposed model.
 % 150--250 words.
 \begin{abstract}
   In recent years,
-  complex machine learning models have been introduced
+  complex machine learning models have been widely introduced
   in various industrial fields due to their high accuracy.
   However,
-  their increasing complexity has been a major obstacle to implementation
+  their increasing complexity has been a major obstacle to their implementation
   in sensitive decision-making situations.
   In order to address this problem,
   various post-hoc explanation methods have been proposed,
   but they have not been able to achieve interpretability of
   both the explanation and its scope.
-  We propose a new method, R-LIME,
-  which interprets a complex classifier in an interpretable scope.
-  R-LIME locally and linearly approximates a complex decision boundary
-  of a black-box classifier in a rectangular region
+  We propose R-LIME, a novel method that interprets complex classifiers
+  within an interpretable scope.
+  R-LIME locally and linearly approximates the complex decision boundary
+  of a black-box classifier within a rectangular region
   and maximizes the region as long as the approximation accuracy
   exceeds a given threshold.
   The resulting rectangular region is interpretable for users because it is
   expressed as a conjunction of feature predicates.
-  Through qualitative and quantitative comparisons with the existing method
-  on a real-world dataset,
+  Through qualitative and quantitative comparisons on a real-world dataset,
   we demonstrate that R-LIME provides more reliable and interpretable
   explanations than existing methods.
   % 153 words
@@ -259,20 +259,19 @@ makes it hard to evaluate the impact of the proposed model.
 In recent years,
 complex machine learning models, such as deep neural networks and random forests,
 have been widely introduced in various industrial fields
-due to their significant improvement in accuracy.
+due to their significant improvements in accuracy.
 However,
 their increasing complexity and black-box nature pose challenges,
 particularly in critical decision-making scenarios such as healthcare and finance,
-where the opacity of decision process becomes a major obstacle to implementation.
+where the lack of transparency becomes a major obstacle to implementation.
 In order to address this problem,
-there has been extensive research in the field of post-hoc explanations
-for machine learning models
+extensive research has focused on post-hoc explanations for complex models
 ~\cite{guidotti2018local,ribeiro2016why,ribeiro2018anchors}.
-Existing post-hoc explanation methods are categorized
+Post-hoc explanation methods are categorized
 into \emph{model-dependent} and \emph{model-agnostic} methods
 based on their dependence on the model's structure,
-and the latter are further classified into \emph{global} and \emph{local} methods
-based on their locality in input space~\cite{samek2021explaining}.
+with the latter further classified into \emph{global} and \emph{local} methods
+based on the locality in the input space~\cite{samek2021explaining}.
 \begin{figure}[tbp]
   \def\scale{0.38}
   \centering
@@ -359,7 +358,7 @@ the explanation does not provide details about the influence of each word,
 resulting in less user insight into the model's behavior compared to LIME\@.
 
 To address these limitations,
-we propose a new method called R-LIME (Ruled LIME),
+we propose R-LIME (Ruled LIME),
 which provides both the contributions of each feature to the output
 and the effective scope of the explanation.
 R-LIME linearly approximates a complex decision boundary
@@ -425,7 +424,7 @@ based on their dependence on the model's structure.
 Model-dependent methods,
 such as deep Taylor decomposition (DTD)~\cite{montavon2017explaining}
 and layer-wise relevance propagation (LRP)~\cite{bach2015pixel},
-most of which focus on neural networks and
+primarily focus on neural networks and
 explain the model's behavior using its parameters~\cite{samek2021explaining}.
 While these methods provide detailed explanations
 (e.g., layer-wise explanations for neural networks),
@@ -434,10 +433,10 @@ to apply the same method to models with different structures.
 In contrast,
 model-agnostic methods use only the model's output.
 Although they are applicable to any model,
-they cannot explain the reasoning process inside the model.
+they cannot explain the internal reasoning processes of the model.
 
-Furthermore, model-agnostic methods are categorized into
-\emph{global} and \emph{local} methods based on their locality in input space.
+Model-agnostic methods are further categorized into
+\emph{global} and \emph{local} methods based on their locality in the input space.
 Global methods,
 such as partial dependence plots (PDP)~\cite{friedman2001greedy}
 and accumulated local effects (ALE)~\cite{apley2020visualizing},
@@ -445,13 +444,12 @@ aim to explain the model's behavior across the entire input space.
 However, providing global explanations becomes challenging
 as the model's complexity increases.
 In contrast, local methods,
-such as \hl{indivisual conditional expectation (ICE)}~\cite{goldstein2015peeking},
+such as \hl{individual conditional expectation (ICE)}~\cite{goldstein2015peeking},
 local interpretable model-agnostic explanations
 (LIME)~\cite{ribeiro2016why}, Anchor~\cite{ribeiro2018anchors} and
 \hl{shapley additive explanations (SHAP)}~\cite{lundberg2017unified},
-explain model's behavior in the vicinity of a specific input.
-While they offer explanations more simple and accurate
-than global methods,
+explain the model's behavior in the vicinity of a specific input.
+While they offer explanations simpler and more accurate than global methods,
 the scope of the explanation is limited locally.
 
 \section{Proposed Method}
@@ -492,8 +490,7 @@ the scope of the explanation is limited locally.
 
 \subsection{Previous Work}
 We specifically focus on \emph{local} and \emph{model-agnostic} methods.
-In this section,
-we briefly review existing research on local model-agnostic explanations,
+This section briefly reviews existing research on local model-agnostic explanations,
 particularly focusing on studies closely related to our proposed method.
 
 \subsubsection[LIME]{%
@@ -502,30 +499,29 @@ particularly focusing on studies closely related to our proposed method.
 LIME locally
 approximates a black-box classifier $f: \mathbb{R}^m \to \{0,1\}$
 around a focal point $x \in \mathbb{R}^m$
-by a linear classifier $g: \mathbb{R}^m \to \{0,1\}$
+using a linear classifier $g: \mathbb{R}^m \to \{0,1\}$
 (\cref{fig:lime}).
-The approximation is performed by the following steps:
+The approximation process involves the following steps:
 \begin{enumerate}
-  \item Generating a set of perturbed samples $\mathcal{Z}_p$ around $x$
-        and the set of pseudo-labels $f(\mathcal{Z}_p) = \{f(z) \mid z \in \mathcal{Z}_p\}$.
-        (i) $x$ is converted into a binary vector
-        $x'\in{\{0,1\}}^{m'}$,
-        (ii) perturbed samples are generated by drawing non-zero elements
-        from $x'$ uniformly at random,
-        and (iii) the perturbed samples are converted back to the original space.
-  \item Learning a linear classifier $g$
+  \item Generate a set of perturbed samples $\mathcal{Z}_p$ around $x$
+        and their pseudo-labels $f(\mathcal{Z}_p) = \{f(z) \mid z \in \mathcal{Z}_p\}$.
+        (i) Convert $x$ into a binary vector $x'\in{\{0,1\}}^{m'}$,
+        (ii) generate perturbed samples by randomly drawing non-zero elements
+        from $x'$,
+        and (iii) convert the perturbed samples back to the original space.
+  \item Train a linear classifier $g$
         using $\mathcal{Z}_p$ and $f(\mathcal{Z}_p)$
         by minimizing the following loss function:
         \begin{equation}
           \mathcal{L}(f,g,\pi_x)=\sum_{z\in\mathcal{Z}_p}
           \pi_x(z){\left(f(z)-g(z)\right)}^2,
         \end{equation}
-        where $\pi_x(z)$ is a weight function designed to be larger for samples
-        closer to $x$, typically defined using an exponential kernel.
+        where $\pi_x(z)$ is a weight function that assigns larger weights
+        for samples closer to $x$, typically defined using an exponential kernel.
 \end{enumerate}
 LIME provides valuable insights into the local behavior of the model
-by showing the contribution of each feature to the output $f(x)$.
-However, it does not explicitly indicate the region for generating perturbed samples,
+by showing each feature's contribution to the output $f(x)$.
+However, it does not explicitly define the region for generating perturbed samples,
 making it difficult for users to assess the effective scope of the explanation
 ~\cite{ribeiro2018anchors}.
 
@@ -575,14 +571,14 @@ Thus, the following optimization problem is solved:
 
 \subsection{Overview}
 We propose R-LIME,
-a method that aims to address the limitations of LIME~\cite{ribeiro2016why}
+a novel method designed to address the limitations of LIME~\cite{ribeiro2016why}
 and Anchor~\cite{ribeiro2018anchors}.
-Our method locally approximates the given black-box classifier $f$
-around the focal point $x$ by a linear classifier $g$ similar to LIME,
-but generates the perturbed samples
-from a rectangular region similar to Anchor
-so that the generality of approximation is explicitly provided
-(\cref{fig:rlime}).
+Similar to LIME,
+it locally approximates the black-box classifier $f$
+around the focal point $x$ using a linear classifier $g$,
+and similar to Anchor,
+it generates the perturbed samples for approximation
+from a rectangular region (\cref{fig:rlime}).
 
 Anchor maximizes the coverage of region $A$
 as long as the probability of the output of the black-box classifier $f$ matching $f(x)$
@@ -641,12 +637,13 @@ we can select the rule that enables explanation with high accuracy and generalit
     \input{src/tex/alg4}
   \end{algorithm}
 }
-The algorithm of R-LIME
-is mainly based on that used in Anchor\cite{ribeiro2018anchors}.
+The R-LIME algorithm
+is mainly based on the method used in Anchor\cite{ribeiro2018anchors}.
 For non-convex optimization problems like \cref{eq:main-problem},
 greedy search are often used.
-But greedy methods tend to converge to local optima,
-so we use beam search, which selects multiple candidates at each iteration.
+But greedy methods often converge to local optima,
+so we use beam search, which selects multiple candidates at each iteration
+to improve the search robustness.
 The pseudo-code is shown in \cref{alg:greedy-search}.
 
 \subsubsection{Generating New Candidate Rules}
@@ -670,15 +667,15 @@ By sampling $z\sim\mathcal{D}(\cdot|A_i)$
 and obtaining the reward $\mathbbm{1}_{f(z)=g_i(z)}$ for each trial,
 the algorithm updates $g_i$ using $z$ and $f(z)$ after each trial.
 To efficiently search the rule (arm) with the highest accuracy,
-we employ KL-LUCB algorithm~\cite{kaufmann2013information}.
+we employ the KL-LUCB algorithm~\cite{kaufmann2013information}.
 The pseudo-code is shown in \cref{alg:best-cands}.
-For tolerance $\epsilon\in[0,1]$, KL-LUCB algorithm guarantees below:
+For tolerance $\epsilon\in[0,1]$, the KL-LUCB algorithm guarantees below:
 \begin{equation}
   P(\underset{A\in\cands}{\min}\Prec(A)\ge
   \underset{A'\in\mathcal{A}}{\min}\Prec(A')-\epsilon)\ge1-\delta.
 \end{equation}
 However,
-KL-LUCB algorithm assumes that the reward distribution for each arm
+the KL-LUCB algorithm assumes that the reward distribution for each arm
 remains unchanged,
 while our method updates the classifier $g_i$ with each sampling,
 which may not satisfy the assumption.
@@ -706,7 +703,7 @@ The pseudo-code is presented in \cref{alg:largest-valid-cand}.
 % under the definition of accuracy in \cref{eq:def-prec}. 
 
 \subsection{Computational Complexity}\label{subsec:complexity}
-Post-hoc explanation methods including LIME, Anchor, and R-LIME
+Post-hoc explanation methods including LIME, Anchor and R-LIME
 need to sample a perturbation vector
 and get the output of the black-box model multiple times,
 which is computationally expensive.
@@ -718,7 +715,7 @@ $\mathcal{O}[m\cdot\mathcal{O}_{\mathrm{MAB}[B\cdot m,B]}]$,
 where $\mathcal{O}_{\mathrm{MAB}[B\cdot m,B]}$
 is the expected number of samples
 for best arm identification finding the best $B$ arms from $B\cdot m$ arms.
-For KL-LUCB algorithm~\cite{kaufmann2013information},
+For the KL-LUCB algorithm~\cite{kaufmann2013information},
 \begin{equation}
   \mathcal{O}_{\mathrm{MAB}[B\cdot m,B]}=
   \mathcal{O}\left[\frac{Bm}{\epsilon^2}\log\frac{Bm}{\epsilon^2\delta}\right].
@@ -728,7 +725,7 @@ Then the total expected number of samples for Anchor and R-LIME is bounded by
   \mathcal{O}\left[\frac{Bm^2}{\epsilon^2}\log\frac{Bm}{\epsilon^2\delta}\right].
 \end{equation}
 
-For each iteration of KL-LUCB algorithm, R-LIME needs to update
+For each iteration of the KL-LUCB algorithm, R-LIME needs to update
 the linear classifier $g_i$, which is not required in Anchor.
 If we use logistic regression as the linear classifier and update it
 by stochastic gradient descent (SGD)~\cite{robbins1951stochastic},
@@ -740,7 +737,8 @@ Overall, the computational complexity of R-LIME is comparable to that of Anchor.
 
 \section{Experiments}
 To verify the effectiveness of our method,
-we compared LIME, \hl{Anchor} and R-LIME using a real-world dataset.
+we conducted qualitative and quantitative comparisons of R-LIME
+with LIME and Anchor, using a real-world dataset.
 \hl{Our code for R-LIME is available on GitHub}\footnote{\url{https://github.com/g-ohara/rlime}}.
 
 \newpage
@@ -783,7 +781,7 @@ we compared LIME, \hl{Anchor} and R-LIME using a real-world dataset.
 
 We used the recidivism dataset~\cite{schmidt1988predicting} for our experiments.
 The dataset contains personal information on 9549 prisoners released from
-North Carolina prisons between July 1, 1979, and June 30, 1980.
+North Carolina prisons between July 1, 1979 and June 30, 1980.
 As shown in \cref{tab:rcdv}, the dataset includes 19 items such as
 race (\emph{Race}), gender (\emph{Gender}),
 presence of alcohol dependence (\emph{Alcohol}),
@@ -798,14 +796,14 @@ resulting in 15 features.
 We splitted the dataset into training data (7639 instances) and test data (955 instances),
 and trained a random forest model with 50 trees as the black-box classifier
 using the training data.
-Then, we generate LIME, \hl{Anchor} and R-LIME explanations
+Then, we generate LIME, Anchor and R-LIME explanations
 for two instances extracted from the test data (\cref{fig:instance}).
 For R-LIME, we used logistic regression as the linear approximation model,
 and a multivariate normal distribution estimated from the training data
 as the distribution $\mathcal{D}$.
-\hl{For both Anchor and R-LIME,} the beam width was set to $B=10$,
+For both Anchor and R-LIME, the beam width was set to $B=10$,
 the confidence coefficient to $1-\delta=0.95$,
-and the tolerance of KL-LUCB algorithm to $\epsilon=0.05$.
+and the tolerance of the KL-LUCB algorithm to $\epsilon=0.05$.
 The accuracy threshold $\tau$ was set to $\tau=0.70,0.90$.
 
 This problem setting can be considered as a case
@@ -1069,7 +1067,7 @@ effectively as approximation models depending on how the region is selected.
 }\cref{sec:exp-setting},
 \hl{%
   we generated Anchor and R-LIME explanations
-  for 100 instances from the test data of the recidivism dataset,
+  for 704 instances from the test data of the recidivism dataset,
   under the values of $\tau=0.65,0.70,0.75,0.80,0.85,0.90$.
 }
 
@@ -1154,7 +1152,7 @@ could suppress the excessive expansion of the approximation region.
 For R-LIME,
 the problem of selecting the rule with the highest accuracy is formulated
 as the best arm identification problem in multi-armed bandit framework,
-and solved using KL-LUCB algorithm~\cite{kaufmann2013information}.
+and solved using the KL-LUCB algorithm~\cite{kaufmann2013information}.
 However, this algorithm assumes that the reward distribution remains constant,
 while in R-LIME,
 the reward distribution (accuracy of the linear approximation)
@@ -1173,7 +1171,7 @@ The results in \cref{tab:reward} show a mean deviation of 0.012
 with a standard deviation of 0.017.
 By considering the confidence level $1-\delta=0.95$,
 the deviation was relatively small.
-While there are concerns about the theoretical validity of using KL-LUCB algorithm,
+While there are concerns about the theoretical validity of using the KL-LUCB algorithm,
 our results suggest that the deviation is not significant in practice.
 
 \subsection{\hl{Parameter Selection}}\label{sec:param}
@@ -1211,8 +1209,8 @@ we demonstrated that R-LIME achieves interpretability of both the explanation
 and its application scope,
 and provides explanations more accurate than LIME and more general than Anchor.
 Finally,
-we discussed the instability of behavior against imbalanced label distributions,
-raised questions about the theoretical validity of using KL-LUCB algorithm,
+we discussed the instability of behavior with imbalanced label distributions,
+raised questions about the theoretical validity of using the KL-LUCB algorithm,
 and hyperparameter tuning in practice.
 
 \newpage
