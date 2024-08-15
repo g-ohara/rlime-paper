@@ -1,16 +1,12 @@
 % We import package amsmath before the documentclass to avoid the warning.
 % Command '\usepackage{amsmath}' results in the following warning:
+% ------------------------------
 % Package amsmath Warning: Unable to redefine math accent \vec.
+% ------------------------------
+% cf. https://tex.stackexchange.com/questions/102507/how-to-fix-this-amsmath-warning-about-redefining-vec
 \RequirePackage{amsmath} % for environments such as align
 
 \documentclass[runningheads]{llncs}
-
-% If possible, figure files should be included in EPS format.
-
-% If you use the hyperref package, please uncomment the following two lines
-% to display URLs in blue roman font according to Springer's eBook style:
-%\usepackage{color}
-%\renewcommand\UrlFont{\color{blue}\rmfamily}
 
 % The following code is used to remove the warning with subcaption package:
 % ------------------------------
@@ -27,12 +23,11 @@
 \usepackage{algpseudocode}
 \usepackage{amssymb} % for \mathbb
 \usepackage{array} % for m column type
-% \usepackage{bbm} % for \mathbbm
-\usepackage{dsfont}
-\newcommand{\mathbbm}[1]{\mathds{#1}}
 \usepackage{booktabs} % for \toprule, \midrule, \bottomrule
+
 \usepackage{cleveref} % for \cref
 \usepackage{csvsimple} % for \csvreader
+\usepackage{dsfont} % for \mathds
 \usepackage[T1]{fontenc} % for T1 font encoding
 \usepackage{graphicx} % for \includegraphics
 \usepackage{pgffor} % for \foreach
@@ -47,9 +42,6 @@
 % cf. https://tex.stackexchange.com/questions/10924/underfull-hbox-in-bibliography
 \apptocmd{\sloppy}{\hbadness10000\relax}{}{}
 
-% set the path for figures
-\graphicspath{{./src/img}{./src/experiments}}
-
 % set the label format for subcaption
 \renewcommand\thesubfigure{(\alph{subfigure})}
 
@@ -60,10 +52,6 @@
 
 % import the TeX file containing macro definitions
 \input{src/tex/macro}
-
-% TODO REBUTTAL: Please enter paper ID
-\def\paperID{735} % *** Enter the paper ID here
-
 
 \begin{document}
 \newcommand{\sampleindex}[1]{\ifnum#1=0 \Asample\else\Bsample\fi}
@@ -95,7 +83,8 @@
   Graduate School of Information Sci.\ and Tech.,
   Hokkaido University\\
   Sapporo 060--0814, JAPAN,\\
-  \email{\{genji-ohara, kimura5, mine\}@ist.hokudai.ac.jp}}
+  \email{\{genji-ohara, kimura5, mine\}@ist.hokudai.ac.jp}
+}
 
 \maketitle
 
@@ -149,14 +138,14 @@ based on the locality in the input space~\cite{samek2021explaining}.
   \centering
   \begin{subfigure}[t]{0.55\textwidth}
     \centering
-    \includegraphics[scale=\scale]{example-instance}
+    \includegraphics[scale=\scale]{src/img/example-instance}
     \caption{Focal point.}\label{fig:example-instance}
     \vspace{0.5cm}
   \end{subfigure}
   \begin{subfigure}[t]{0.45\textwidth}
     \begin{subfigure}[t]{\textwidth}
       \centering
-      \includegraphics[scale=\scale]{example-lime}
+      \includegraphics[scale=\scale]{src/img/example-lime}
       \caption{%
         Explanation by LIME\@.
         It provides contributions of each feature to the output,
@@ -166,7 +155,7 @@ based on the locality in the input space~\cite{samek2021explaining}.
     \end{subfigure}
     \begin{subfigure}[t]{\textwidth}
       \centering
-      \includegraphics[scale=\scale]{example-anchor}
+      \includegraphics[scale=\scale]{src/img/example-anchor}
       \caption{%
         Explanation by Anchor.
         It provides the effective scope of the explanation,
@@ -178,7 +167,7 @@ based on the locality in the input space~\cite{samek2021explaining}.
   \begin{subfigure}[t]{0.45\textwidth}
     \centering
     \vspace{-2.24cm}
-    \includegraphics[scale=\scale]{example-rlime}
+    \includegraphics[scale=\scale]{src/img/example-rlime}
     \caption{%
       Explanation by R-LIME\@.
       It provides both contributions of each feature and
@@ -329,7 +318,7 @@ the scope of the explanation is limited locally.
   \centering
   \begin{subfigure}[t]{0.3\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{visual-lime}
+    \includegraphics[width=\textwidth]{src/img/visual-lime}
     \caption{%
       LIME\@: Locally approximates the decision boundary around the focal point.
     }\label{fig:lime}
@@ -337,7 +326,7 @@ the scope of the explanation is limited locally.
   \hspace{0.03\textwidth}
   \begin{subfigure}[t]{0.3\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{visual-anchor}
+    \includegraphics[width=\textwidth]{src/img/visual-anchor}
     \caption{%
       Anchor: Maximizes coverage of a rectangular region
       containing the focal point under accuracy constraints.
@@ -346,7 +335,7 @@ the scope of the explanation is limited locally.
   \hspace{0.03\textwidth}
   \begin{subfigure}[t]{0.3\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{visual-rlime3}
+    \includegraphics[width=\textwidth]{src/img/visual-rlime3}
     \caption{%
       R-LIME\@:
       Maximizes coverage of a rectangular region
@@ -417,7 +406,7 @@ and the generality of the explanation is defined as the ``coverage'' of the rule
 The accuracy $\Prec(A)$ and coverage $\Cov(A)$ of the rule $A$ are defined as follows:
 \begin{align}
   \Prec(A) & =\mathbb{E}_{z\sim\mathcal{D}(z|A)}
-  [\mathbbm{1}_{f(z)=f(x)}], \label{eq:anchor-def-prec} \\
+  [\mathds{1}_{f(z)=f(x)}], \label{eq:anchor-def-prec} \\
   \Cov(A)  & =\mathbb{E}_{z\sim\mathcal{D}(z)}[A(z)],
 \end{align}
 where $\mathcal{D}(z|A)$ is the conditional distribution in the region
@@ -462,7 +451,7 @@ We modify Anchor's definition of accuracy in \cref{eq:anchor-def-prec}
 as follows:
 \begin{equation}
   \Prec(A)=\underset{g\in G}{\max}\ \mathbb{E}_{z\sim\mathcal{D}(z|A)}
-  [\mathbbm{1}_{f(z)=g(z)}], \label{eq:def-prec}
+  [\mathds{1}_{f(z)=g(z)}], \label{eq:def-prec}
 \end{equation}
 where $G$ is a hypothesis space of possible linear classifiers.
 By solving the optimization problem in \cref{eq:main-problem}
@@ -473,9 +462,9 @@ we can select the rule that enables explanation with high accuracy and generalit
 {%
   \begin{figure}[t]
     \centering
-    \includegraphics[width=0.32\textwidth]{visual-rlime1}
-    \includegraphics[width=0.32\textwidth]{visual-rlime2}
-    \includegraphics[width=0.32\textwidth]{visual-rlime3}
+    \includegraphics[width=0.32\textwidth]{src/img/visual-rlime1}
+    \includegraphics[width=0.32\textwidth]{src/img/visual-rlime2}
+    \includegraphics[width=0.32\textwidth]{src/img/visual-rlime3}
     \caption[Overview of the R-LIME algorithm]{%
       Overview of the R-LIME algorithm.
       The progression of the algorithm is illustrated from left to right.
@@ -536,7 +525,7 @@ Each candidate rule $A_i\in\cands$ is considered as an arm,
 and reward of arm $a_i$ follows a Bernoulli distribution
 with $P(X=1)=\Prec(A_i)$.
 By sampling $z\sim\mathcal{D}(\cdot|A_i)$
-and obtaining the reward $\mathbbm{1}_{f(z)=g_i(z)}$ for each trial,
+and obtaining the reward $\mathds{1}_{f(z)=g_i(z)}$ for each trial,
 the algorithm updates $g_i$ using $z$ and $f(z)$ after each trial.
 To efficiently search the rule (arm) with the highest accuracy,
 we employ the KL-LUCB algorithm~\cite{kaufmann2013information}.
@@ -730,7 +719,7 @@ it is crucial for users to appropriately interpret the outputs of black-box mode
         \centering
         \begin{subfigure}[t]{\textwidth}
           \hspace{-10pt}
-          \includegraphics[scale=\scale]{exp1/lime-0012}
+          \includegraphics[scale=\scale]{src/experiments/exp1/lime-0012}
           \caption{LIME}\label{fig:lime-0}
           \vspace{1.0em}
         \end{subfigure}
@@ -738,7 +727,7 @@ it is crucial for users to appropriately interpret the outputs of black-box mode
         \vspace{10pt}
         \begin{subfigure}[t]{\textwidth}
           \centering
-          \includegraphics[scale=0.33]{exp1/anchor-0012-70}  % chktex 8
+          \includegraphics[scale=0.33]{src/experiments/exp1/anchor-0012-70}  % chktex 8
           \caption{Anchor ($\tau=0.70$)}\label{fig:anchor-0-70}
           \vspace{1.0em}
         \end{subfigure}
@@ -746,7 +735,7 @@ it is crucial for users to appropriately interpret the outputs of black-box mode
         \vspace{10pt}
         \begin{subfigure}[t]{\textwidth}
           \centering
-          \includegraphics[scale=0.33]{exp1/anchor-0012-90}  % chktex 8
+          \includegraphics[scale=0.33]{src/experiments/exp1/anchor-0012-90}  % chktex 8
           \caption{Anchor ($\tau=0.90$)}
           \vspace{1.0em}
         \end{subfigure}
@@ -756,7 +745,7 @@ it is crucial for users to appropriately interpret the outputs of black-box mode
         \begin{subfigure}[t]{\textwidth}
           \hspacebase{}
           \hspace{-5pt}
-          \includegraphics[scale=\scale]{exp1/rlime-0012-70}  % chktex 8
+          \includegraphics[scale=\scale]{src/experiments/exp1/rlime-0012-70}  % chktex 8
           \vspacebeforecaption{}
           \caption{R-LIME ($\tau=0.70$)}\label{fig:rlime-0-70}
           \vspacebase{}
@@ -764,7 +753,7 @@ it is crucial for users to appropriately interpret the outputs of black-box mode
         \begin{subfigure}[t]{\textwidth}
           \hspacebase{}
           \hspace{-17pt}
-          \includegraphics[scale=\scale]{exp1/rlime-0012-90}  % chktex 8
+          \includegraphics[scale=\scale]{src/experiments/exp1/rlime-0012-90}  % chktex 8
           \vspacebeforecaption{}
           \caption{R-LIME ($\tau=0.90$)}
           \vspacebase{}
@@ -778,7 +767,7 @@ it is crucial for users to appropriately interpret the outputs of black-box mode
       \begin{subfigure}[t]{0.45\textwidth}
         \begin{subfigure}[t]{\textwidth}
           \hspace{-26.5pt}
-          \includegraphics[scale=\scale]{exp1/lime-0011}
+          \includegraphics[scale=\scale]{src/experiments/exp1/lime-0011}
           \caption{LIME}\label{fig:lime-1}
           \vspace{1.0em}
         \end{subfigure}
@@ -786,7 +775,7 @@ it is crucial for users to appropriately interpret the outputs of black-box mode
         \vspace{10pt}
         \begin{subfigure}[t]{\textwidth}
           \centering
-          \includegraphics[scale=0.33]{exp1/anchor-0011-70}  % chktex 8
+          \includegraphics[scale=0.33]{src/experiments/exp1/anchor-0011-70}  % chktex 8
           \caption{Anchor ($\tau=0.70$)}
           \vspace{1.0em}
         \end{subfigure}
@@ -794,7 +783,7 @@ it is crucial for users to appropriately interpret the outputs of black-box mode
         \vspace{10pt}
         \begin{subfigure}[t]{\textwidth}
           \centering
-          \includegraphics[scale=0.33]{exp1/anchor-0011-90}  % chktex 8
+          \includegraphics[scale=0.33]{src/experiments/exp1/anchor-0011-90}  % chktex 8
           \caption{Anchor ($\tau=0.90$)}
           \vspace{1.0em}
         \end{subfigure}
@@ -804,7 +793,7 @@ it is crucial for users to appropriately interpret the outputs of black-box mode
         \begin{subfigure}[t]{\textwidth}
           \hspacebase{}
           \hspace{-5pt}
-          \includegraphics[scale=\scale]{exp1/rlime-0011-70}  % chktex 8
+          \includegraphics[scale=\scale]{src/experiments/exp1/rlime-0011-70}  % chktex 8
           \vspacebeforecaption{}
           \caption{R-LIME ($\tau=0.90$)}
           \vspacebase{}
@@ -812,7 +801,7 @@ it is crucial for users to appropriately interpret the outputs of black-box mode
         \begin{subfigure}[t]{\textwidth}
           \hspacebase{}
           \hspace{-20pt}
-          \includegraphics[scale=\scale]{exp1/rlime-0011-90}  % chktex 8
+          \includegraphics[scale=\scale]{src/experiments/exp1/rlime-0011-90}  % chktex 8
           \vspacebeforecaption{}
           \caption{R-LIME ($\tau=0.90$)}\label{fig:rlime-1-90}
           \vspacebase{}
@@ -876,7 +865,7 @@ the application scope of this explanation is very narrow, limiting its utility.
 \begin{figure}[t]
   \begin{subfigure}[t]{0.48\textwidth}
     \centering
-    \includegraphics[scale=0.36,valign=t]{exp2/box_plot}
+    \includegraphics[scale=0.36,valign=t]{src/experiments/exp2/box_plot}
     \caption[Comparison of Local Accuracy between R-LIME and LIME]{%
       Comparison of local accuracy between LIME and R-LIME\@.
       R-LIME achieved higher and less variable accuracy compared to LIME\@.
@@ -885,7 +874,7 @@ the application scope of this explanation is very narrow, limiting its utility.
   \hfill
   \begin{subfigure}[t]{0.48\textwidth}
     \centering
-    \includegraphics[scale=0.35,valign=t]{exp2/comp_cov}
+    \includegraphics[scale=0.35,valign=t]{src/experiments/exp2/comp_cov}
     \vspace{3pt}
     \caption[Comparison of Coverage between Anchor and R-LIME]{%
       Comparison of coverage between Anchor and R-LIME\@.
@@ -954,12 +943,12 @@ which cannot capture the decision boundary flexibly and makes its scope narrow.
     \centering
     \begin{subfigure}[t]{\imgwidth}
       \centering
-      \includegraphics[width=0.7\textwidth]{visual-rlime3}
+      \includegraphics[width=0.7\textwidth]{src/img/visual-rlime3}
       \caption{R-LIME for balanced label distribution.}
     \end{subfigure}
     \begin{subfigure}[t]{\imgwidth}
       \centering
-      \includegraphics[width=0.7\textwidth]{visual-rlime-imbalanced}
+      \includegraphics[width=0.7\textwidth]{src/img/visual-rlime-imbalanced}
       \caption{R-LIME for imbalanced label distribution.
       }
     \end{subfigure}
@@ -991,7 +980,7 @@ In addition to \cref{eq:const-prec}, adding a constraint like
 \begin{equation}
   {%
     \left(
-    \mathbb{E}_{z\sim\mathcal{D}(z\mid A)}[\mathbbm{1}_{f(z)=1}]-\frac{1}{2}
+    \mathbb{E}_{z\sim\mathcal{D}(z\mid A)}[\mathds{1}_{f(z)=1}]-\frac{1}{2}
     \right)
   }^2<\mu
 \end{equation}
