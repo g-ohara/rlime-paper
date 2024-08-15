@@ -27,10 +27,11 @@
 \usepackage{algpseudocode}
 \usepackage{amssymb} % for \mathbb
 \usepackage{array} % for m column type
-\usepackage{bbm} % for \mathbbm
+% \usepackage{bbm} % for \mathbbm
+\usepackage{dsfont}
+\newcommand{\mathbbm}[1]{\mathds{#1}}
 \usepackage{booktabs} % for \toprule, \midrule, \bottomrule
 \usepackage{cleveref} % for \cref
-\usepackage{color,soul} % for \hl
 \usepackage{csvsimple} % for \csvreader
 \usepackage[T1]{fontenc} % for T1 font encoding
 \usepackage{graphicx} % for \includegraphics
@@ -65,137 +66,8 @@
 
 
 \begin{document}
-\begin{center}
-  % smaller title font only for rebuttal
-  % additional two empty lines at the end of the title
-  \vspace*{-22pt}
-  \begin{tabular}[t]{c}{
-      \large\bf
-      Paper ID \paperID{}
-    }
-  \end{tabular}
-  \par
-  % additional small space at the end of the author name
-  % additional empty line at the end of the title block
-\end{center}
-We deeply appreciate all the reviewers who made sharp and valuable comments
-on our paper and gave us the opportunity to submit a revised version.
-We have done our best for the revision according to their comments as shown below.
-We also thank in advance all the reviewers for reconsidering
-our revised paper's suitability for the conference.
-
-\section*{Summary of revisions}
-We appreciate all the reviewers for their clear and insightful
-comments.
-We have improved our paper based on their comments.
-The major revision points are listed as follows:
-\begin{itemize}
-  \item We mentioned the names of other existing methods in \cref{sec:related-work}.
-  \item We added discussion about parameter selection in \cref{sec:param}.
-  \item We conducted qualitative and quantitative comparisons
-        between Anchor and R-LIME in \cref{sec:exp-qual,sec:exp-anchor}.
-  \item We renamed the section `Challenges and Future Work' to `Discussion'.
-\end{itemize}
-Please see below for a point-by-point response to each reviewer's comments.
-
-\newenvironment{mycomment}{
-  \vspace{10pt}\hspace{.02\textwidth}\begin{minipage}{.92\textwidth}
-    }{\end{minipage}}
-
-\section*{Responding to Reviewer \#1}
-Suggestions for Rebuttal:
-\begin{enumerate}
-  \setlength{\itemsep}{15pt}
-  \item Offer guidance on how to select optimal parameters for different
-        datasets and models.
-
-        \begin{mycomment}
-          We appreciate your suggestion.
-          We added \cref{sec:param} to provide guidance on
-          how parameters should be selected in practice.
-        \end{mycomment}
-
-  \item Include a discussion of other model-agnostic interpretability methods,
-        such as SHAP, to provide a more comprehensive overview.
-
-        \begin{mycomment}
-          Thank you for your valuable suggestion.
-          Although we acknowledge the importance of including an overview of
-          other model-agnostic interpretability methods,
-          due to space constraints, we only mentioned the names of some
-          other methods in \cref{sec:related-work}.
-        \end{mycomment}
-
-  \item Add experimental comparisons with more other model-agnostic \\
-        interpretability methods to better evaluate R-LIME's effectiveness.
-
-        \begin{mycomment}
-          We appreciate your sharp observations.
-          We additionally conducted qualitative and quantitative comparisons
-          between Anchor and R-LIME,
-          which demonstrated that R-LIME generates more informative and
-          general explanations than Anchor (see \cref{sec:exp-qual,sec:exp-anchor}).
-        \end{mycomment}
-\end{enumerate}
-\section*{Responding to Reviewer \#4}
-The authors should kindly explain why there is not a quantitative comparison
-between their proposed method R-LIME and Anchor. The lack of the comparison
-makes it hard to evaluate the impact of the proposed model.
-
-\begin{mycomment}
-  We appreciate your insightful comments.
-  We additionally conducted qualitative and quantitative comparisons
-  between Anchor and R-LIME,
-  which demonstrated that R-LIME generates more informative and
-  general explanations than Anchor (see \cref{sec:exp-qual,sec:exp-anchor}).
-\end{mycomment}
-
-\section*{Responding to Reviewer \#5}
-\begin{itemize}
-  \setlength{\itemsep}{15pt}
-  \item It would be beneficial to move the comparison of R-LIME with Anchor
-        and LIME to the Related Work section for improved clarity and
-        organization.
-
-        \begin{mycomment}
-          We appreciate your insightful suggestion.
-          We interpreted your suggestion to mean that we should move
-          \cref{fig:example} and its explanation to \cref{sec:related-work}.
-          After discussing the most understandable structure of our paper,
-          we concluded that we should present effectiveness of R-LIME
-          compared to closely related methods in \cref{sec:introduction},
-          before we overview other existing methods in \cref{sec:related-work}.
-        \end{mycomment}
-
-  \item The authors should consider exploring a more compatible method than the
-        KL-LUCB algorithm to achieve higher accuracy. Although the experimental
-        results suggest a minor effect, there may be potential underlying issues
-        that need to be addressed.
-
-        \begin{mycomment}
-          Thank you for your valuable feedback.
-          While our results suggest that the practical effect of using
-          the KL-LUCB algorithm is negligible,
-          we acknowledge the need to address its theoretical issues.
-          Our focus is on presenting our novel framework for local
-          interpretability, not the detailed algorithm.
-          Thus, we leave the issues for future work due to space constraints.
-          However, we deeply appreciate your sharp observations.
-        \end{mycomment}
-
-  \item The title of the `Challenges and Future Work' section could be more
-        aptly replaced with `Discussion' to better reflect the content.
-
-        \begin{mycomment}
-          Thank you for your suggestion. We renamed the section to `Discussion'
-          to clearly reflect the content.
-        \end{mycomment}
-\end{itemize}
-
 \newcommand{\sampleindex}[1]{\ifnum#1=0 \Asample\else\Bsample\fi}
 \def\AB#1{\ifnum#1=0 A\else B\fi}
-
-\def\paper{
 
 % The title of the paper
 \title{%
@@ -255,7 +127,7 @@ makes it hard to evaluate the impact of the proposed model.
   \keywords{Interpretable machine learning \and Local surrogate model}
 \end{abstract}
 
-\section{Introduction}\label{sec:introduction}
+\section{Introduction}
 In recent years,
 complex machine learning models, such as deep neural networks and random forests,
 have been widely introduced in various industrial fields
@@ -371,7 +243,7 @@ is shown in \cref{fig:example-rlime}.
 It is clear that users can apply the insights derived from the explanation
 only to the sentences containing the word ``not''.
 
-\section{Related Work}\label{sec:related-work}
+\section{Related Work}
 \begin{figure}[tbp]
   \centering
   \def\w{2.5}
@@ -444,10 +316,10 @@ aim to explain the model's behavior across the entire input space.
 However, providing global explanations becomes challenging
 as the model's complexity increases.
 In contrast, local methods,
-such as \hl{individual conditional expectation (ICE)}~\cite{goldstein2015peeking},
+such as individual conditional expectation (ICE)~\cite{goldstein2015peeking},
 local interpretable model-agnostic explanations
 (LIME)~\cite{ribeiro2016why}, Anchor~\cite{ribeiro2018anchors} and
-\hl{shapley additive explanations (SHAP)}~\cite{lundberg2017unified},
+shapley additive explanations (SHAP)~\cite{lundberg2017unified},
 explain the model's behavior in the vicinity of a specific input.
 While they offer explanations simpler and more accurate than global methods,
 the scope of the explanation is limited locally.
@@ -739,10 +611,10 @@ Overall, the computational complexity of R-LIME is comparable to that of Anchor.
 To verify the effectiveness of our method,
 we conducted qualitative and quantitative comparisons of R-LIME
 with LIME and Anchor, using a real-world dataset.
-\hl{Our code for R-LIME is available on GitHub}\footnote{\url{https://github.com/g-ohara/rlime}}.
+Our code for R-LIME is available on GitHub\footnote{\url{https://github.com/g-ohara/rlime}}.
 
 \newpage
-\subsection{Qualitative Evaluation}\label{sec:exp-qual}
+\subsection{Qualitative Evaluation}
 \subsubsection{Experimental Setup}\label{sec:exp-setting}
 {%
   \renewcommand{\arraystretch}{1.05}
@@ -812,7 +684,7 @@ Since such decisions can have a significant impact on a person's life,
 it is crucial for users to appropriately interpret the outputs of black-box models.
   {%
 
-    \def\dir{src/experiments/exp1/ver1/examples/output}
+    \def\dir{src/experiments/exp1/}
     \def\Asample{0012}
     \def\Bsample{0011}
 
@@ -848,7 +720,7 @@ it is crucial for users to appropriately interpret the outputs of black-box mode
 
   {%
     \def\scale{0.315}
-    \def\dir{exp1/ver1/examples/output}
+    \def\dir{exp1/}
     \def\imgwidth{0.3\textwidth}
     \def\hspacebase{\hspace{-1.5em}}
     \def\vspacebase{\vspace{0.5em}}
@@ -858,7 +730,7 @@ it is crucial for users to appropriately interpret the outputs of black-box mode
         \centering
         \begin{subfigure}[t]{\textwidth}
           \hspace{-10pt}
-          \includegraphics[scale=\scale]{exp1/ver1/examples/output/lime-0012}
+          \includegraphics[scale=\scale]{exp1/lime-0012}
           \caption{LIME}\label{fig:lime-0}
           \vspace{1.0em}
         \end{subfigure}
@@ -866,16 +738,16 @@ it is crucial for users to appropriately interpret the outputs of black-box mode
         \vspace{10pt}
         \begin{subfigure}[t]{\textwidth}
           \centering
-          \includegraphics[scale=0.33]{exp1/ver2/examples/anchor-0012-70}  % chktex 8
-          \caption{\hl{Anchor ($\tau=0.70$)}}\label{fig:anchor-0-70}
+          \includegraphics[scale=0.33]{exp1/anchor-0012-70}  % chktex 8
+          \caption{Anchor ($\tau=0.70$)}\label{fig:anchor-0-70}
           \vspace{1.0em}
         \end{subfigure}
 
         \vspace{10pt}
         \begin{subfigure}[t]{\textwidth}
           \centering
-          \includegraphics[scale=0.33]{exp1/ver2/examples/anchor-0012-90}  % chktex 8
-          \caption{\hl{Anchor ($\tau=0.90$)}}
+          \includegraphics[scale=0.33]{exp1/anchor-0012-90}  % chktex 8
+          \caption{Anchor ($\tau=0.90$)}
           \vspace{1.0em}
         \end{subfigure}
       \end{subfigure}
@@ -884,7 +756,7 @@ it is crucial for users to appropriately interpret the outputs of black-box mode
         \begin{subfigure}[t]{\textwidth}
           \hspacebase{}
           \hspace{-5pt}
-          \includegraphics[scale=\scale]{exp1/ver1/examples/output/newlime-0012-70}  % chktex 8
+          \includegraphics[scale=\scale]{exp1/rlime-0012-70}  % chktex 8
           \vspacebeforecaption{}
           \caption{R-LIME ($\tau=0.70$)}\label{fig:rlime-0-70}
           \vspacebase{}
@@ -892,7 +764,7 @@ it is crucial for users to appropriately interpret the outputs of black-box mode
         \begin{subfigure}[t]{\textwidth}
           \hspacebase{}
           \hspace{-17pt}
-          \includegraphics[scale=\scale]{exp1/ver1/examples/output/newlime-0012-90}  % chktex 8
+          \includegraphics[scale=\scale]{exp1/rlime-0012-90}  % chktex 8
           \vspacebeforecaption{}
           \caption{R-LIME ($\tau=0.90$)}
           \vspacebase{}
@@ -906,7 +778,7 @@ it is crucial for users to appropriately interpret the outputs of black-box mode
       \begin{subfigure}[t]{0.45\textwidth}
         \begin{subfigure}[t]{\textwidth}
           \hspace{-26.5pt}
-          \includegraphics[scale=\scale]{exp1/ver1/examples/output/lime-0011}
+          \includegraphics[scale=\scale]{exp1/lime-0011}
           \caption{LIME}\label{fig:lime-1}
           \vspace{1.0em}
         \end{subfigure}
@@ -914,16 +786,16 @@ it is crucial for users to appropriately interpret the outputs of black-box mode
         \vspace{10pt}
         \begin{subfigure}[t]{\textwidth}
           \centering
-          \includegraphics[scale=0.33]{exp1/ver2/examples/anchor-0011-70}  % chktex 8
-          \caption{\hl{Anchor ($\tau=0.70$)}}
+          \includegraphics[scale=0.33]{exp1/anchor-0011-70}  % chktex 8
+          \caption{Anchor ($\tau=0.70$)}
           \vspace{1.0em}
         \end{subfigure}
 
         \vspace{10pt}
         \begin{subfigure}[t]{\textwidth}
           \centering
-          \includegraphics[scale=0.33]{exp1/ver2/examples/anchor-0011-90}  % chktex 8
-          \caption{\hl{Anchor ($\tau=0.90$)}}
+          \includegraphics[scale=0.33]{exp1/anchor-0011-90}  % chktex 8
+          \caption{Anchor ($\tau=0.90$)}
           \vspace{1.0em}
         \end{subfigure}
       \end{subfigure}
@@ -932,7 +804,7 @@ it is crucial for users to appropriately interpret the outputs of black-box mode
         \begin{subfigure}[t]{\textwidth}
           \hspacebase{}
           \hspace{-5pt}
-          \includegraphics[scale=\scale]{exp1/ver1/examples/output/newlime-0011-70}  % chktex 8
+          \includegraphics[scale=\scale]{exp1/rlime-0011-70}  % chktex 8
           \vspacebeforecaption{}
           \caption{R-LIME ($\tau=0.90$)}
           \vspacebase{}
@@ -940,7 +812,7 @@ it is crucial for users to appropriately interpret the outputs of black-box mode
         \begin{subfigure}[t]{\textwidth}
           \hspacebase{}
           \hspace{-20pt}
-          \includegraphics[scale=\scale]{exp1/ver1/examples/output/newlime-0011-90}  % chktex 8
+          \includegraphics[scale=\scale]{exp1/rlime-0011-90}  % chktex 8
           \vspacebeforecaption{}
           \caption{R-LIME ($\tau=0.90$)}\label{fig:rlime-1-90}
           \vspacebase{}
@@ -975,19 +847,16 @@ the black-box model,
 they do not explicitly indicate the application scope of the explanations,
 leaving users unable to determine to which prisoners the explanations are applicable.
 
-\hl{%
-  Anchor provides conditions for the model's output to be fixed with high
-  probability.
-  For example,
-  the explanation for instance A under $\tau=0.70$
-} (\cref{fig:anchor-0-70})
-\hl{%
-  means that the model will predict with 75.66 \% probability
-  that the prisoner will commit no more crimes
-  when a prisoner is older than 33 and has one prior offense.
-  Although it clearly provides the explanation's application scope,
-  it does not provide details about how these conditions affect the model's output.
-}
+Anchor provides conditions for the model's output to be fixed with high
+probability.
+For example,
+the explanation for instance A under $\tau=0.70$
+(\cref{fig:anchor-0-70})
+means that the model will predict with 75.66 \% probability
+that the prisoner will commit no more crimes
+when a prisoner is older than 33 and has one prior offense.
+Although it clearly provides the explanation's application scope,
+it does not provide details about how these conditions affect the model's output.
 
 In contrast to LIME and Anchor,
 R-LIME provides both contribution of each feature to the output and
@@ -1016,14 +885,12 @@ the application scope of this explanation is very narrow, limiting its utility.
   \hfill
   \begin{subfigure}[t]{0.48\textwidth}
     \centering
-    \includegraphics[scale=0.35,valign=t]{exp2b/comp_cov}
+    \includegraphics[scale=0.35,valign=t]{exp2/comp_cov}
     \vspace{3pt}
     \caption[Comparison of Coverage between Anchor and R-LIME]{%
-      \hl{%
-        Comparison of coverage between Anchor and R-LIME\@.
-        R-LIME achieved higher coverage compared to Anchor
-        for almost values of $\tau$, especially for relatively small $\tau$.
-      }
+      Comparison of coverage between Anchor and R-LIME\@.
+      R-LIME achieved higher coverage compared to Anchor
+      for almost values of $\tau$, especially for relatively small $\tau$.
     }\label{fig:coverage}
   \end{subfigure}
   \caption{Comparison of existing methods (LIME, Anchor) and R-LIME.}
@@ -1057,35 +924,30 @@ the variability in the accuracy of LIME widens.
 This indicates that the linear classifiers learned by LIME may not function
 effectively as approximation models depending on how the region is selected.
 
-\subsection{\hl{Quantitative Evaluation: Anchor vs. R-LIME}}\label{sec:exp-anchor}
-\subsubsection{\hl{Experimental Setup}}
-\hl{%
-  To demonstrate that R-LIME explanations are more general than Anchor,
-  we conducted a comparison of the coverage of explanations
-  between Anchor and R-LIME\@.
-  Under the same settings as in
-}\cref{sec:exp-setting},
-\hl{%
-  we generated Anchor and R-LIME explanations
-  for 704 instances from the test data of the recidivism dataset,
-  under the values of $\tau=0.65,0.70,0.75,0.80,0.85,0.90$.
-}
+\subsection{Quantitative Evaluation: Anchor vs. R-LIME}
+\subsubsection{Experimental Setup}
+To demonstrate that R-LIME explanations are more general than Anchor,
+we conducted a comparison of the coverage of explanations
+between Anchor and R-LIME\@.
+Under the same settings as in
+\cref{sec:exp-setting},
+we generated Anchor and R-LIME explanations
+for 704 instances from the test data of the recidivism dataset,
+under the values of $\tau=0.65,0.70,0.75,0.80,0.85,0.90$.
 
-\subsubsection{\hl{Experimental Results}}
-\hl{The results are presented in} \cref{fig:coverage},
-\hl{%
-  showing the coverage of the explanations by Anchor and R-LIME\@.
-  The coverage of explanations generated by R-LIME is higher compared to Anchor
-  for almost values of $\tau$, especially for relatively small $\tau$.
-  It is because of the flexibility of the linear approximation models learned by
-  R-LIME, which captures the decision boundary more precisely.
-  In contrast,
-  Anchor uses only the intervals of each feature discretized in advance,
-  which cannot capture the decision boundary flexibly and makes its scope narrow.
-}
+\subsubsection{Experimental Results}
+The results are presented in \cref{fig:coverage},
+showing the coverage of the explanations by Anchor and R-LIME\@.
+The coverage of explanations generated by R-LIME is higher compared to Anchor
+for almost values of $\tau$, especially for relatively small $\tau$.
+It is because of the flexibility of the linear approximation models learned by
+R-LIME, which captures the decision boundary more precisely.
+In contrast,
+Anchor uses only the intervals of each feature discretized in advance,
+which cannot capture the decision boundary flexibly and makes its scope narrow.
 
 
-\section{\hl{Discussion}}
+\section{Discussion}
  {%
   \def\imgwidth{0.47\textwidth}
   \begin{figure}[t]
@@ -1174,21 +1036,19 @@ the deviation was relatively small.
 While there are concerns about the theoretical validity of using the KL-LUCB algorithm,
 our results suggest that the deviation is not significant in practice.
 
-\subsection{\hl{Parameter Selection}}\label{sec:param}
+\subsection{Parameter Selection}
 
-\hl{In} \cref{subsec:complexity},
-\hl{%
-  we discussed about the computational complexity of R-LIME,
-  which depends on some hyperparameters.
-  R-LIME requires the hyperparameters to be selected by users,
-  such as the threshold of accuracy $\tau$, beam width $B$, tolerance $\epsilon$
-  and confidence level $\delta$.
-  $B$ should be large and $\epsilon$ and $\delta$ should be small for
-  accurate results, as long as the computational cost is acceptable.
-  On the other hand, $\tau$ should be carefully selected by users,
-  sometimes interactively, considering the tradeoff between
-  the accuracy and generality of generated explanation.
-}
+In \cref{subsec:complexity},
+we discussed about the computational complexity of R-LIME,
+which depends on some hyperparameters.
+R-LIME requires the hyperparameters to be selected by users,
+such as the threshold of accuracy $\tau$, beam width $B$, tolerance $\epsilon$
+and confidence level $\delta$.
+$B$ should be large and $\epsilon$ and $\delta$ should be small for
+accurate results, as long as the computational cost is acceptable.
+On the other hand, $\tau$ should be carefully selected by users,
+sometimes interactively, considering the tradeoff between
+the accuracy and generality of generated explanation.
 
 \section{Conclusion}
 Existing methods for
@@ -1215,16 +1075,6 @@ and hyperparameter tuning in practice.
 
 \newpage
 \bibliographystyle{src/style/splncs04}
-\bibliography{src/myref/myref}
-}
-
-% Reset page number and typeset title
-\newpage
-\setcounter{page}{1}
-\paper{}
-\renewcommand{\hl}[1]{#1}
-\newpage
-\setcounter{page}{1}
-\paper{}
+\bibliography{src/ref}
 
 \end{document}
